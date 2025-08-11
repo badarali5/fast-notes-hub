@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import {
   BookOpen,
   Upload,
@@ -302,6 +302,10 @@ export default function Dashboard() {
             ))}
           </div>
         </div>
+        <p className="text-sm text-blue-700 mt-1">
+          Click on any resource card or the &quot;View PDF&quot; button to open files
+          in a new tab.
+        </p>
       </main>
     </div>
   )
