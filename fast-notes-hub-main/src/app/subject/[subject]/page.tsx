@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { useSearchParams, useParams } from "next/navigation"
-import { supabase } from "@/lib/supabase"
+import { useState, useEffect } from "react";
+import { useSearchParams, useParams } from "next/navigation";
+import { supabase } from "@/lib/supabase";
 import {
   ArrowLeft,
   Eye,
@@ -11,27 +11,27 @@ import {
   BookOpen,
   Upload,
   File,
-} from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface Resource {
-  id: string
-  title: string
-  description: string
-  subject: string
-  semester: string
-  type: "notes" | "papers" | "slides"
-  file_name: string
-  url: string
-  created_at: string
+  id: string;
+  title: string;
+  description: string;
+  subject: string;
+  semester: string;
+  type: "notes" | "papers" | "slides";
+  file_name: string;
+  url: string;
+  created_at: string;
 }
 
-const tabTypes = ["notes", "papers", "slides"] as const
-type TabType = typeof tabTypes[number]
-type ResourcesMap = Record<TabType, Resource[]>
+const tabTypes = ["notes", "papers", "slides"] as const;
+type TabType = typeof tabTypes[number];
+type ResourcesMap = Record<TabType, Resource[]>;
 
 function ResourceCard({ resource }: { resource: Resource }) {
   return (
@@ -51,7 +51,7 @@ function ResourceCard({ resource }: { resource: Resource }) {
               </div>
               <p className="text-sm text-gray-600 mb-1">{resource.description}</p>
               <Badge variant="outline" className="text-xs">
-                {resource.file_name.split(".").pop()?.toUpperCase()} • Uploaded for{" "}
+                {resource.file_name.split(".").pop()?.toUpperCase()} &bull; Uploaded for{" "}
                 {resource.subject}
               </Badge>
             </div>
@@ -74,63 +74,63 @@ function ResourceCard({ resource }: { resource: Resource }) {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
 
 export default function SubjectPage() {
-  const params = useParams()
-  const searchParams = useSearchParams()
+  const params = useParams();
+  const searchParams = useSearchParams();
 
-  const subject = (params.subject as string)?.trim() || ""
-  const semester = searchParams.get("semester")?.trim() || ""
+  const subject = (params.subject as string)?.trim() || "";
+  const semester = searchParams.get("semester")?.trim() || "";
 
   const [resources, setResources] = useState<ResourcesMap>({
     notes: [],
     papers: [],
     slides: [],
-  })
-  const [activeTab, setActiveTab] = useState<TabType>("notes")
-  const [isLoading, setIsLoading] = useState(true)
-  const [errorMsg, setErrorMsg] = useState<string | null>(null)
+  });
+  const [activeTab, setActiveTab] = useState<TabType>("notes");
+  const [isLoading, setIsLoading] = useState(true);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchResources() {
-      setIsLoading(true)
-      setErrorMsg(null)
+      setIsLoading(true);
+      setErrorMsg(null);
 
       if (!subject || !semester) {
-        setErrorMsg("Missing subject or semester in URL.")
-        setIsLoading(false)
-        return
+        setErrorMsg("Missing subject or semester in URL.");
+        setIsLoading(false);
+        return;
       }
 
       const { data, error } = await supabase
         .from("uploads")
         .select("*")
         .ilike("subject", subject) // case-insensitive
-        .eq("semester", semester)
+        .eq("semester", semester);
 
       if (error) {
-        console.error("Error fetching resources:", error)
-        setErrorMsg("Unable to load resources. Please try again later.")
-        setIsLoading(false)
-        return
+        console.error("Error fetching resources:", error);
+        setErrorMsg("Unable to load resources. Please try again later.");
+        setIsLoading(false);
+        return;
       }
 
-      const grouped: ResourcesMap = { notes: [], papers: [], slides: [] }
+      const grouped: ResourcesMap = { notes: [], papers: [], slides: [] };
 
       for (const r of data || []) {
         if (tabTypes.includes(r.type)) {
-          grouped[r.type as TabType].push(r as Resource)
+          grouped[r.type as TabType].push(r as Resource);
         }
       }
 
-      setResources(grouped)
-      setIsLoading(false)
+      setResources(grouped);
+      setIsLoading(false);
     }
 
-    fetchResources()
-  }, [subject, semester])
+    fetchResources();
+  }, [subject, semester]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -153,7 +153,7 @@ export default function SubjectPage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            🧠 {subject} – Semester {semester}
+            🧠 {subject} &ndash; Semester {semester}
           </h1>
           <p className="text-gray-600">
             Access all your study materials for {subject}
@@ -168,7 +168,7 @@ export default function SubjectPage() {
               </h3>
             </div>
             <p className="text-sm text-blue-700 mt-1">
-              Click on any resource card or the "View PDF" button to open files
+              Click on any resource card or the &quot;View PDF&quot; button to open files
               in a new tab.
             </p>
           </div>
@@ -233,5 +233,5 @@ export default function SubjectPage() {
         </Tabs>
       </main>
     </div>
-  )
+  );
 }
