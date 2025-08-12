@@ -250,4 +250,93 @@
   }
 }
 
-/* end enhanced mobile polish */
+/* --- Subject Page: Extra Mobile Tightening --- */
+@media (max-width: 640px) {
+  /* Reduce main subject page header and section spacing */
+  .subject-header,
+  .subject-main-header {
+    margin-bottom: 0.75rem !important;
+    padding-bottom: 0.25rem !important;
+  }
+  .subject-title,
+  .subject-main-header h1,
+  .subject-main-header .text-3xl {
+    font-size: 1.1rem !important;
+    margin-bottom: 0.25rem !important;
+  }
+  .subject-main-header p,
+  .subject-header p {
+    font-size: 0.9rem !important;
+    margin-bottom: 0.25rem !important;
+  }
+
+  /* Reduce card padding and margin */
+  .subject-card,
+  .group.border-2,
+  .card,
+  .CardContent,
+  .CardHeader {
+    padding: 0.5rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+  .group .p-4,
+  .CardContent.p-4 {
+    padding: 0.5rem !important;
+  }
+
+  /* Reduce gap between cards and grid items */
+  .grid,
+  .grid-cols-1,
+  .gap-4,
+  .gap-6 {
+    gap: 0.4rem !important;
+  }
+
+  /* Tabs: reduce padding and font size */
+  .TabsList,
+  .tabs-list {
+    gap: 0.15rem !important;
+    padding: 0.15rem !important;
+  }
+  .TabsTrigger,
+  .tabs-trigger {
+    padding: 0.35rem 0.15rem !important;
+    font-size: 0.85rem !important;
+  }
+
+  /* Reduce badge and icon size */
+  .Badge,
+  .badge,
+  .text-xs {
+    font-size: 0.65rem !important;
+    padding: 0.15rem 0.3rem !important;
+  }
+  .h-4.w-4,
+  .h-5.w-5,
+  svg {
+    width: 0.95rem !important;
+    height: 0.95rem !important;
+  }
+
+  /* Buttons: smaller and tighter */
+  .Button,
+  button,
+  .inline-flex.items-center {
+    padding: 0.35rem 0.7rem !important;
+    font-size: 0.95rem !important;
+    min-height: 2rem !important;
+  }
+
+  /* Remove extra margin from bottom of last card */
+  .subject-card:last-child,
+  .card:last-child {
+    margin-bottom: 0 !important;
+  }
+
+  /* Remove extra vertical space in tab content */
+  .TabsContent,
+  .tabs-content {
+    padding-top: 0.25rem !important;
+    padding-bottom: 0.25rem !important;
+  }
+}

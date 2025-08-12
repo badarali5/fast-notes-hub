@@ -60,13 +60,26 @@ const tabTypes = ["notes", "papers", "slides"] as const;
 type TabType = typeof tabTypes[number];
 type ResourcesMap = Record<TabType, Resource[]>;
 
+function isMobile() {
+  if (typeof window === "undefined") return false;
+  return /iPhone|iPad|iPod|Android/i.test(window.navigator.userAgent);
+}
+
 function ResourceCard({ resource }: { resource: Resource }) {
+  const openPdf = () => {
+    let url = resource.url;
+    if (isMobile() && url.endsWith(".pdf")) {
+      url = `https://docs.google.com/viewer?url=${encodeURIComponent(url)}`;
+    }
+    window.open(url, "_blank");
+  };
+
   return (
     <Card className="hover:shadow-md transition-shadow duration-200 cursor-pointer group border-2 hover:border-blue-300">
       <CardContent className="p-4">
         <div
           className="cursor-pointer"
-          onClick={() => window.open(resource.url, "_blank")}
+          onClick={openPdf}
         >
           <div className="flex items-start justify-between mb-3">
             <div className="flex-1">
@@ -85,7 +98,7 @@ function ResourceCard({ resource }: { resource: Resource }) {
           </div>
           <div className="mt-2 p-2 bg-blue-50 rounded-lg border border-blue-200 group-hover:bg-blue-100 transition-colors">
             <p className="text-xs text-blue-700 text-center font-medium">
-              📱 Click anywhere on this card to view PDF in new tab
+              📱 Click anywhere on this card to view PDF
             </p>
           </div>
         </div>
@@ -94,7 +107,7 @@ function ResourceCard({ resource }: { resource: Resource }) {
             size="sm"
             variant="outline"
             className="w-full group-hover:bg-blue-50 group-hover:border-blue-300 transition-colors"
-            onClick={() => window.open(resource.url, "_blank")}
+            onClick={openPdf}
           >
             <Eye className="h-4 w-4 mr-1" /> View PDF
           </Button>
@@ -198,8 +211,8 @@ export default function SubjectPage() {
               </h3>
             </div>
             <p className="text-sm text-blue-700 mt-1">
-              Click on any resource card or the &quot;View PDF&quot; button to open files
-              in a new tab.
+              Click on any resource card or the &quot;View PDF&quot; button
+              to open files in a new tab.
             </p>
           </div>
         </div>
@@ -244,18 +257,8 @@ export default function SubjectPage() {
                 <div className="text-center py-12">
                   <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                   <h3 className="text-lg font-medium text-gray-900 mb-2">
-                    No {tab} available for {subject}
+                    No {tab} are yet available for {subjectFullName}
                   </h3>
-                  <p className="text-gray-500 mb-4">
-                    Be the first to upload study materials!
-                  </p>
-                  <a
-                    href="/upload"
-                    className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                  >
-                    <Upload className="h-4 w-4 mr-2" />
-                    Upload {tab}
-                  </a>
                 </div>
               )}
             </TabsContent>
