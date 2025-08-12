@@ -1,10 +1,10 @@
 "use client";
-import { useState , useEffect} from "react"; 
+import { useState } from "react"; 
+import { redirect } from "next/navigation";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
-import { redirect, useRouter } from "next/navigation";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
+const supabase = createServerComponentClient({ cookies });
 
 export default function UploadPage() {
   const [files, setFiles] = useState<File[]>([]);
@@ -17,23 +17,8 @@ export default function UploadPage() {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [currentFileIndex, setCurrentFileIndex] = useState(0);
 
-  const supabase = createClientComponentClient();
-  const router = useRouter();
-
-  useEffect(() => {
-    const checkAccess = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user || user.email !== "badaralinaqvi512@gmail.com") {
-        alert("❌ Only admin can access this page.");
-        router.push("/");
-      }
-    };
-    checkAccess();
-  }, [supabase, router]);
-
-
   const handleUpload = async () => {
-  
+
     if (files.length === 0) {
       alert("Please select at least one file first");
       return;
