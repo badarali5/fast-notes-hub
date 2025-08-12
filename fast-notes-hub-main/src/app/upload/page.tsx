@@ -1,10 +1,6 @@
 "use client";
 import { useState } from "react"; 
-import { redirect } from "next/navigation";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
-
-const supabase = createServerComponentClient({ cookies });
+import { supabase } from "@/lib/supabase";
 
 export default function UploadPage() {
   const [files, setFiles] = useState<File[]>([]);
