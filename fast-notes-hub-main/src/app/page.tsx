@@ -85,6 +85,7 @@ export default function Dashboard() {
   const [searchResults, setSearchResults] = useState<SearchResult[]>([])
   const [isSearching, setIsSearching] = useState(false)
   const [showResults, setShowResults] = useState(false)
+  const [message, setMessage] = useState("");
 
   const handleSearch = async (query: string) => {
     if (!query.trim()) {
@@ -118,6 +119,16 @@ export default function Dashboard() {
       setIsSearching(false)
     }
   }
+
+   const handleUploadClick = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+      setMessage("Only verified users allowed");
+      return;
+    }
+    setMessage("");
+  };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value
@@ -204,7 +215,8 @@ export default function Dashboard() {
             <div className="flex items-center space-x-4">
               
               <a href="/upload">
-                <Button className="bg-blue-600 hover:bg-blue-700 cursor-pointer">
+                <Button onClick={handleUploadClick} className="bg-blue-600 hover:bg-blue-700 cursor-pointer">
+                  {message && <p style={{ color: "red" }}>{message}</p>}
                   <Upload className="h-4 w-4 mr-2" />
                   Upload Files
                 </Button>

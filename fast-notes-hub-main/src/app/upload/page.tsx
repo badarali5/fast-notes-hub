@@ -1,6 +1,9 @@
 "use client";
-import { useState } from "react";
-import { supabase } from "@/lib/supabase"; 
+import { useState } from "react"; 
+import { redirect } from "next/navigation";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { cookies } from "next/headers";
+
 
 export default function UploadPage() {
   const [files, setFiles] = useState<File[]>([]);
@@ -15,12 +18,20 @@ export default function UploadPage() {
 
   const handleUpload = async () => {
 
-    const { data: { user } } = await supabase.auth.getUser();
 
-    if (!user) {
-    alert("You must be logged in to upload files.");
-    return;
-    }
+  const supabase = createServerComponentClient({ cookies });
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  if (!session) {
+    redirect("/login");
+  }
+  const allowedEmail = "badaralinaqvi512@gmail.com"; 
+  if (session.user.email !== allowedEmail) {
+    redirect("/dashboard");
+  }
 
     if (files.length === 0) {
       alert("Please select at least one file first");
