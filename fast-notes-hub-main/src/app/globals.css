@@ -120,3 +120,111 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* ---------- FAST Notes Hub — Mobile polish (paste at end of globals.css) ---------- */
+/* Mobile only tweaks (phones up to 640px) */
+@media (max-width: 640px) {
+  /* 1) Stack header content and shrink header text */
+  header .max-w-7xl > div > .flex {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.5rem !important;
+  }
+  header .max-w-7xl .text-2xl {
+    font-size: 1.125rem !important;
+  }
+
+  /* 2) Reduce horizontal padding site-wide for mobile */
+  header .max-w-7xl,
+  main.max-w-7xl {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+  }
+
+  /* 3) Reduce hero / section heading sizes so they don't overflow */
+  main h1.text-3xl {
+    font-size: 1.25rem !important;
+    line-height: 1.25 !important;
+  }
+  main h2.text-3xl {
+    font-size: 1.25rem !important;
+  }
+
+  /* 4) Make tab triggers wrap nicely and reduce spacing */
+  .grid.w-full.grid-cols-3,
+  .TabsList, /* fallback if custom class exists */ 
+  .tabs-list {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 0.25rem !important;
+  }
+  .TabsTrigger, .tabs-trigger {
+    padding: 0.5rem 0.25rem !important;
+    font-size: 0.9rem !important;
+  }
+
+  /* 5) Cards: make padding slightly smaller and ensure full width */
+  .group.border-2, .hover\:shadow-md {
+    padding: 0.5rem !important;
+  }
+  .group .p-4 {
+    padding: 0.75rem !important;
+  }
+  .grid.grid-cols-1.md\:grid-cols-2,
+  .grid.grid-cols-1 {
+    grid-template-columns: 1fr !important; /* force single column on narrow screens */
+  }
+
+  /* 6) Truncate long titles/file names rather than wrapping */
+  .truncate {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    display: block !important;
+  }
+  h4.font-medium, .font-medium {
+    font-size: 0.95rem !important;
+  }
+
+  /* 7) Shrink icons and badge text so rows don't overflow */
+  .h-5.w-5, .h-4.w-4, svg {
+    height: 1rem !important;
+    width: 1rem !important;
+  }
+  .text-xs { font-size: 0.7rem !important; }
+
+  /* 8) Buttons and inputs - reduce padding & font-size for comfortable mobile tap targets */
+  .inline-flex.items-center.px-4.py-2,
+  button.w-full.py-2,
+  .pl-12.py-4 {
+    padding: 0.45rem 0.75rem !important;
+    font-size: 0.95rem !important;
+  }
+
+  /* 9) Upload page container - make full width, keep it centered */
+  .max-w-md.mx-auto {
+    width: calc(100% - 1rem) !important;
+    margin-left: 0.5rem !important;
+    margin-right: 0.5rem !important;
+  }
+
+  /* 10) File list height control (upload page) */
+  .max-h-32 {
+    max-height: 10rem !important;
+  }
+
+  /* 11) Reduce large grid gaps on mobile */
+  .gap-6 { gap: 0.5rem !important; }
+  .gap-4 { gap: 0.5rem !important; }
+
+  /* 12) Helpful small-touch optimization for links that are flex rows */
+  a.flex.items-center.space-x-3 {
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+  }
+
+  /* 13) Make the small helper text slightly smaller */
+  p.text-sm { font-size: 0.85rem !important; }
+}
+
+/* end mobile polish */
