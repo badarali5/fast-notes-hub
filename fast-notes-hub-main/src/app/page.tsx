@@ -303,17 +303,11 @@ export default function Dashboard() {
           </div>
         </div>
         <p className="text-sm text-blue-700 mt-1">
-          Click on any resource card or the &quot;View PDF&quot; button to open files
-          in a new tab.
+          Remaining semesters will be added soon. Stay tuned!
         </p>
       </main>
     </div>
-    // src/app/page.tsx
-  
+
   );
-  return (
-    <main style={{ padding: 40 }}>
-      <h1>FAST Notes Hub — Static Test</h1>
-      <p>If you see this, root (/) works — problem was app code crashing.</p>
-    </main>)
 }
+

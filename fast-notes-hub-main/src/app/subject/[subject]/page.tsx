@@ -81,8 +81,8 @@ export default function SubjectPage() {
   const params = useParams();
   const searchParams = useSearchParams();
 
-  const subject = (params.subject as string)?.trim() || "";
-  const semester = searchParams.get("semester")?.trim() || "";
+  const subject = (params?.subject as string)?.trim() || "";
+  const semester = searchParams?.get("semester")?.trim() || "";
 
   const [resources, setResources] = useState<ResourcesMap>({
     notes: [],
