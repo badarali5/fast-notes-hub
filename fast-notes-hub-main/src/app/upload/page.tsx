@@ -14,6 +14,14 @@ export default function UploadPage() {
   const [currentFileIndex, setCurrentFileIndex] = useState(0);
 
   const handleUpload = async () => {
+
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+    alert("You must be logged in to upload files.");
+    return;
+    }
+
     if (files.length === 0) {
       alert("Please select at least one file first");
       return;
