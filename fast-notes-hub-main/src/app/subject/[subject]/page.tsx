@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { title } from "process";
 
 interface Resource {
   id: string;
@@ -153,10 +154,10 @@ export default function SubjectPage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            🧠 {subject} &ndash; Semester {semester}
+            🧠 {title} &ndash; Semester {semester}
           </h1>
           <p className="text-gray-600">
-            Access all your study materials for {subject}
+            Access all your study materials for {title}
           </p>
 
           {/* Instructions */}
