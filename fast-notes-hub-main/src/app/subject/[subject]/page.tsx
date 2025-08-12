@@ -16,7 +16,33 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { title } from "process";
+
+const subjectFullNames: Record<string, string> = {
+  NS1001: "Applied Physics",
+  MT1003: "Calculus and Analytical Geometry",
+  SS1012: "Functional English",
+  SS1013: "Ideology and Constitution of Pakistan",
+  CL1000: "Introduction to Information and Communication Technology",
+  CS1002: "Programming Fundamentals",
+  CS1004: "Object Oriented Programming",
+  MT1008: "Multivariable Calculus",
+  EE1005: "Digital Logic Design",
+  SS1014: "Expository Writing",
+  SS1007: "Islamic Studies/Ethics",
+  SS2043: "Civics and Community Engagement",
+  EE2003: "Computer Organization and Assembly Language",
+  CS2001: "Data Structures and Algorithms",
+  CS1005: "Discrete Structures",
+  SE1001: "Introduction to Software Engineering",
+  MT1004: "Linear Algebra",
+  SSX21: "Social Science Elective - I",
+  CS2005: "Database Systems",
+  CS2006: "Operating Systems",
+  MT2005: "Probability and Statistics",
+  SE2004: "Software Design and Architecture",
+  SE2001: "Software Requirements Engineering",
+  // Add more as needed
+};
 
 interface Resource {
   id: string;
@@ -84,6 +110,9 @@ export default function SubjectPage() {
 
   const subject = (params?.subject as string)?.trim() || "";
   const semester = searchParams?.get("semester")?.trim() || "";
+
+  // Get the full name from the mapping, fallback to code if not found
+  const subjectFullName = subjectFullNames[subject.toUpperCase()] || subject;
 
   const [resources, setResources] = useState<ResourcesMap>({
     notes: [],
@@ -154,10 +183,10 @@ export default function SubjectPage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            🧠 {title} &ndash; Semester {semester}
+            🧠 {subjectFullName} &ndash; Semester {semester}
           </h1>
           <p className="text-gray-600">
-            Access all your study materials for {title}
+            Access all your study materials for {subjectFullName}
           </p>
 
           {/* Instructions */}
