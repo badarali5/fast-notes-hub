@@ -66,8 +66,8 @@ function ResourceCard({ resource }: { resource: Resource }) {
   }
 
   return (
-    <Card className="hover:shadow-xl transition-all duration-200 cursor-pointer group border border-gray-800 bg-gray-900 hover:border-blue-500 hover:bg-gray-800">
-      <CardContent className="p-4">
+    <Card className="hover:shadow-xl transition-all duration-200 cursor-pointer group border border-gray-800 bg-gray-900 hover:border-blue-500 hover:bg-gray-800 mt-8">
+      <CardContent className="p-4 ">
         <div className="cursor-pointer" onClick={openPdf}>
           <div className="flex items-start justify-between mb-3">
             <div className="flex-1">
@@ -213,7 +213,7 @@ export default function SubjectPage() {
     grid grid-cols-1
     gap-2
     sm:grid-cols-3
-    sm:gap-2
+    sm:gap-3
   "
           >
             <TabsTrigger
@@ -224,13 +224,13 @@ export default function SubjectPage() {
             </TabsTrigger>
             <TabsTrigger
               value="papers"
-              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400"
+              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 px-2 py-2 text-sm"
             >
               <BookOpen className="h-4 w-4 mr-1" /> Past Papers ({resources.papers.length})
             </TabsTrigger>
             <TabsTrigger
               value="slides"
-              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400"
+              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 px-2 py-2 text-sm"
             >
               <Presentation className="h-4 w-4 mr-1" /> Slides ({resources.slides.length})
             </TabsTrigger>
