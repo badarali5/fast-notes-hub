@@ -35,12 +35,13 @@ export default function UploadPage() {
 
     // Validate that the subject matches the expected format
     const validSubjects = [
+      "CS1002", 
       "NS1001",
       "MT1003",
       "SS1012",
       "SS1013",
       "CL1000",
-      "CS1002", // Semester 1
+      // Semester 1
       "SS2043",
       "EE1005",
       "SS1014",
@@ -281,12 +282,13 @@ export default function UploadPage() {
           >
             <option value="">Select Subject</option>
             <optgroup label="Semester 1">
+              <option value="CS1002">CS1002 - Programming Fundamentals</option>
               <option value="NS1001">NS1001 - Applied Physics</option>
               <option value="MT1003">MT1003 - Calculus and Analytical Geometry</option>
               <option value="SS1012">SS1012 - Functional English</option>
               <option value="SS1013">SS1013 - Ideology and Constitution of Pakistan</option>
               <option value="CL1000">CL1000 - Introduction to Information and Communication Technology</option>
-              <option value="CS1002">CS1002 - Programming Fundamentals</option>
+              
             </optgroup>
             <optgroup label="Semester 2">
               <option value="CS1004">CS1004 - Object Oriented Programming</option>

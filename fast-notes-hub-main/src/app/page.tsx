@@ -27,12 +27,12 @@ const semesters = [
     id: 1,
     title: "Semester 1",
     subjects: [
+      { value: "CS1002", fullName: "Programming Fundamentals", icon: Code },
       { value: "NS1001", fullName: "Applied Physics", icon: Code },
       { value: "MT1003", fullName: "Calculus and Analytical Geometry", icon: Code },
       { value: "SS1012", fullName: "Functional English", icon: Code },
       { value: "SS1013", fullName: "Ideology and Constitution of Pakistan", icon: Code },
       { value: "CL1000", fullName: "Introduction to Information and Communication Technology", icon: Code },
-      { value: "CS1002", fullName: "Programming Fundamentals", icon: Code },
     ],
   },
   {

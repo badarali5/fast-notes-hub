@@ -204,10 +204,21 @@ export default function SubjectPage() {
 
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={(val) => setActiveTab(val as TabType)} className="w-full">
-          <TabsList className="grid w-full grid-cols-3 mb-8 bg-gray-900 border border-gray-800">
+          <TabsList
+            className="
+    w-full
+    mb-8
+    bg-gray-900
+    border border-gray-800
+    grid grid-cols-1
+    gap-2
+    sm:grid-cols-3
+    sm:gap-2
+  "
+          >
             <TabsTrigger
               value="notes"
-              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400"
+              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 px-2 py-2 text-sm"
             >
               <FileText className="h-4 w-4 mr-1" /> Notes ({resources.notes.length})
             </TabsTrigger>
@@ -246,12 +257,6 @@ export default function SubjectPage() {
                   <h3 className="text-lg font-medium text-white mb-2">
                     No {tab} are yet available for {subjectFullName}
                   </h3>
-                  <p className="text-gray-400">
-                    Be the first to upload {tab} for this subject!
-                    <a href="/upload" className="text-blue-400 hover:text-blue-300 ml-1">
-                      Upload files here
-                    </a>
-                  </p>
                 </div>
               )}
             </TabsContent>
