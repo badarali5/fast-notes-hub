@@ -205,7 +205,7 @@ export default function SubjectPage() {
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={(val) => setActiveTab(val as TabType)} className="w-full">
           <TabsList
-            className="w-full mb-8 bg-gray-900 border border-gray-800 grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-2"
+            className="w-full mb-8 bg-gray-900 border border-gray-800 grid grid-cols-3 gap-2"
           >
             <TabsTrigger
               value="notes"
