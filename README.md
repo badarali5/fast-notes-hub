@@ -1,8 +1,9 @@
 # 📚 FAST Notes Hub
 
-**Your one-stop platform for all FAST-NU student academic resources — notes, past papers,
+**Your one-stop platform for all FAST-NU student academic resources — notes, past papers,**
 
-and slides — categorized into a single site: [**fast-notes-hub.vercel.app**](https://fast-notes-hub.vercel.app)
+**and slides — categorized into a single site: 
+[**fast-notes-hub.vercel.app**](https://fast-notes-hub.vercel.app)**
 
 This project solves a **real pain point**:
 
