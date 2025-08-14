@@ -66,7 +66,7 @@ function ResourceCard({ resource }: { resource: Resource }) {
   }
 
   return (
-    <Card className="hover:shadow-xl transition-all duration-200 cursor-pointer group border border-gray-800 bg-gray-900 hover:border-blue-500 hover:bg-gray-800 mt-8">
+    <Card className="hover:shadow-xl transition-all duration-200 cursor-pointer group border border-gray-800 bg-gray-900 hover:border-blue-500 hover:bg-gray-800 mt-24">
       <CardContent className="p-4 ">
         <div className="cursor-pointer" onClick={openPdf}>
           <div className="flex items-start justify-between mb-3">
@@ -205,16 +205,7 @@ export default function SubjectPage() {
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={(val) => setActiveTab(val as TabType)} className="w-full">
           <TabsList
-            className="
-    w-full
-    mb-8
-    bg-gray-900
-    border border-gray-800
-    grid grid-cols-1
-    gap-2
-    sm:grid-cols-3
-    sm:gap-3
-  "
+            className="w-full mb-8 bg-gray-900 border border-gray-800 grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-2 px-2 py-2"
           >
             <TabsTrigger
               value="notes"
