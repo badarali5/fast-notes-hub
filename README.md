@@ -49,3 +49,7 @@ This project solves a **real pain point**:
 
 ---
 
+## 📸 Preview
+<img width="1076" height="629" alt="image" src="https://github.com/user-attachments/assets/62c2cb51-d63f-47e6-9a44-a02789b29e2d" />
+
+
