@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { supabase } from "@/lib/supabase"
+import { toast } from "sonner"
 
 interface SearchResult {
   id: string
@@ -188,12 +189,15 @@ export default function Dashboard() {
               <h1 className="text-2xl font-bold text-white">FAST Notes Hub</h1>
             </div>
             <div className="flex items-center space-x-4">
-              <a href="/upload">
-                <Button className="bg-blue-600 hover:bg-blue-700 text-white cursor-pointer shadow-lg">
+              <button
+                type="button"
+                onClick={() => toast.error("Only admin can upload")}
+              >
+                <Button className="bg-blue-600 hover:bg-blue-700 cursor-pointer">
                   <Upload className="h-4 w-4 mr-2" />
                   Upload Files
                 </Button>
-              </a>
+              </button>
             </div>
           </div>
         </div>
