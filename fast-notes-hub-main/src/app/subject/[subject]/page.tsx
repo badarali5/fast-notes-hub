@@ -205,23 +205,23 @@ export default function SubjectPage() {
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={(val) => setActiveTab(val as TabType)} className="w-full">
           <TabsList
-            className="w-full mb-8 bg-gray-900 border border-gray-800 grid grid-cols-3 gap-2"
+            className="w-full mb-8 bg-gray-900 border border-gray-800 grid grid-cols-3 gap-2 text-align-center"
           >
             <TabsTrigger
               value="notes"
-              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 px-2 py-2 text-sm"
+              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 px-2 py-2 text-sm align-center flex items-center"
             >
               <FileText className="h-4 w-4 mr-1" /> Notes ({resources.notes.length})
             </TabsTrigger>
             <TabsTrigger
               value="papers"
-              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 px-2 py-2 text-sm"
+              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 px-2 py-2 text-sm align-center flex items-center"
             >
               <BookOpen className="h-4 w-4 mr-1" /> Past Papers ({resources.papers.length})
             </TabsTrigger>
             <TabsTrigger
               value="slides"
-              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 px-4 py-3 text-sm .mb-4"
+              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 px-4 py-3 text-sm align-center flex items-center"
             >
               <Presentation className="h-4 w-4 mr-1" /> Slides ({resources.slides.length})
             </TabsTrigger>
