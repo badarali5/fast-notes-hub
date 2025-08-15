@@ -305,7 +305,7 @@ export default function UploadPage() {
               <option value="CS1005">CS1005 - Discrete Structures</option>
               <option value="SE1001">SE1001 - Introduction to Software Engineering</option>
               <option value="MT1004">MT1004 - Linear Algebra</option>
-              <option value="SSX21">SSX21 - Social Science Elective - I</option>
+              <option value="CS3005">CS3005 - Theory Of Automata</option>
             </optgroup>
             <optgroup label="Semester 4">
               <option value="CS2005">CS2005 - Database Systems</option>

@@ -28,7 +28,7 @@ const subjectFullNames: Record<string, string> = {
   CS1005: "Discrete Structures",
   SE1001: "Introduction to Software Engineering",
   MT1004: "Linear Algebra",
-  SSX21: "Social Science Elective - I",
+  CS3005: "Theory Of Automata",
   CS2005: "Database Systems",
   CS2006: "Operating Systems",
   MT2005: "Probability and Statistics",

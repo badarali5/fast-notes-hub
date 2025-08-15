@@ -57,7 +57,7 @@ const semesters = [
       { value: "CS1005", fullName: "Discrete Structures", icon: Code },
       { value: "SE1001", fullName: "Introduction to Software Engineering", icon: Code },
       { value: "MT1004", fullName: "Linear Algebra", icon: Code },
-      { value: "SSX21", fullName: "Social Science Elective - I", icon: Code },
+      { value: "CS3005", fullName: "Theory Of Automata", icon: Code },
     ],
   },
   {
