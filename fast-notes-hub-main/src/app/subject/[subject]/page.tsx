@@ -119,6 +119,10 @@ export default function SubjectPage() {
   const [activeTab, setActiveTab] = useState<TabType>("notes")
   const [isLoading, setIsLoading] = useState(true)
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
+  const [searchQuery, setSearchQuery] = useState("")
+  const [searchResults, setSearchResults] = useState<Resource[]>([])
+  const [isSearching, setIsSearching] = useState(false)
+  const [showResults, setShowResults] = useState(false)
 
   useEffect(() => {
     async function fetchResources() {
@@ -166,6 +170,54 @@ export default function SubjectPage() {
     fetchResources()
   }, [subject, semester])
 
+  const handleSearch = async (query: string) => {
+    if (!query.trim()) {
+      setSearchResults([])
+      setShowResults(false)
+      return
+    }
+    setIsSearching(true)
+    setShowResults(true)
+
+    try {
+      const { data, error } = await supabase
+        .from("uploads")
+        .select("*")
+        .eq("subject", subject)
+        .eq("semester", semester)
+        .or(
+          `title.ilike.%${query}%,description.ilike.%${query}%,type.ilike.%${query}%`
+        )
+        .order("created_at", { ascending: false })
+        .limit(10)
+
+      if (error) {
+        setSearchResults([])
+      } else {
+        setSearchResults(data || [])
+      }
+    } catch {
+      setSearchResults([])
+    } finally {
+      setIsSearching(false)
+    }
+  }
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value
+    setSearchQuery(query)
+
+    // Debounce search
+    setTimeout(() => {
+      handleSearch(query)
+    }, 300)
+  }
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    handleSearch(searchQuery)
+  }
+
   return (
     <div className="min-h-screen bg-black">
       {/* Header */}
@@ -185,6 +237,68 @@ export default function SubjectPage() {
 
       {/* Main */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* --- Add Search UI here --- */}
+        <div className="text-center mb-12">
+          <form onSubmit={handleSearchSubmit} className="max-w-2xl mx-auto relative">
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 h-5 w-5" />
+            <Input
+              type="text"
+              value={searchQuery}
+              onChange={handleSearchChange}
+              placeholder="🔍 Search notes, papers, slides, subjects..."
+              className="pl-12 py-4 text-lg border-2 border-gray-800 focus:border-blue-500 rounded-xl shadow-lg bg-gray-900 text-white placeholder:text-gray-500"
+            />
+          </form>
+        </div>
+
+        {/* --- Add Search Results UI here --- */}
+        {showResults && (
+          <div className="mb-12">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-2xl font-semibold text-white">
+                🔍 Search Results
+                {isSearching && <span className="ml-2 text-blue-400">(Searching...)</span>}
+              </h3>
+              {searchResults.length > 0 && (
+                <Button
+                  variant="outline"
+                  className="border-gray-700 text-gray-300 hover:bg-gray-800 hover:border-blue-500"
+                  onClick={() => {
+                    setSearchQuery("")
+                    setSearchResults([])
+                    setShowResults(false)
+                  }}
+                >
+                  Clear Search
+                </Button>
+              )}
+            </div>
+
+            {isSearching ? (
+              <div className="text-center py-12">
+                <div className="w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                <p className="text-gray-400">Searching...</p>
+              </div>
+            ) : searchResults.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {searchResults.map((res) => (
+                  <ResourceCard key={res.id} resource={res} />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <FileText className="h-12 w-12 text-gray-500 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-white mb-2">
+                  No resources found for your search.
+                </h3>
+                <p className="text-gray-400 text-sm">
+                  Try adjusting your search query or check back later.
+                </p>
+              </div>
+            )}
+          </div>
+        )}
+
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-white mb-2">
             🧠 {subjectFullName} &ndash; Semester {semester}
