@@ -3,11 +3,12 @@
 import { useState, useEffect } from "react"
 import { useSearchParams, useParams } from "next/navigation"
 import { supabase } from "@/lib/supabase"
-import { ArrowLeft, Eye, FileText, Presentation, BookOpen, File } from "lucide-react"
+import { ArrowLeft, Eye, FileText, Presentation, BookOpen, File, Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Input } from "@/components/ui/input"
 
 const subjectFullNames: Record<string, string> = {
   NS1001: "Applied Physics",
