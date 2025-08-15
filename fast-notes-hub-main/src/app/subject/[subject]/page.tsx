@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { useSearchParams, useParams } from "next/navigation"
 import { supabase } from "@/lib/supabase"
-import { ArrowLeft, Eye, FileText, Presentation, BookOpen, File, Search } from "lucide-react"
+import { ArrowLeft, Eye, FileText, Presentation, BookOpen, File, Search, Code } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -34,6 +34,16 @@ const subjectFullNames: Record<string, string> = {
   MT2005: "Probability and Statistics",
   SE2004: "Software Design and Architecture",
   SE2001: "Software Requirements Engineering",
+  // Semester V
+  AI2002: "Artificial Intelligence",
+  CS2009: "Design and Analysis of Algorithms",
+  SE3004: "Software Construction and Development",
+  SE3002: "Software Quality Engineering",
+  SS2007: "Technical and Business Writing",
+  // Semester VI
+  CS3001: "Computer Networks",
+  SE4002: "Fundamentals of Software Project Management",
+  CS3006: "Parallel and Distributed Computing",
 }
 
 interface Resource {
@@ -368,7 +378,104 @@ export default function SubjectPage() {
             </TabsContent>
           ))}
         </Tabs>
+
+        {/* Semesters Navigation - New Addition */}
+        <div className="mt-12">
+          <h2 className="text-xl font-semibold text-white mb-4">📚 Explore by Semester</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {semesters.map((sem) => (
+              <div key={sem.id} className="bg-gray-900 p-4 rounded-lg border border-gray-800">
+                <h3 className="text-lg font-medium text-white mb-2">{sem.title}</h3>
+                <div className="flex flex-wrap gap-2">
+                  {sem.subjects.map((sub) => (
+                    <Button
+                      key={sub.value}
+                      variant="outline"
+                      className="border-gray-700 text-gray-300 hover:bg-gray-800 hover:border-blue-500 flex-1"
+                      onClick={() => {
+                        // Navigate to the subject page for the selected semester and subject
+                        window.location.href = `/${sub.value.toLowerCase()}?semester=${sem.id}`
+                      }}
+                    >
+                      <sub.icon className="h-4 w-4 mr-1" />
+                      {sub.fullName}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Semester Select Dropdown - New Addition */}
+        <div className="mt-8">
+          <h2 className="text-xl font-semibold text-white mb-4">📅 Select Semester</h2>
+          <div className="relative">
+            <select
+              value={semester}
+              onChange={(e) => {
+                const sem = e.target.value
+                if (sem) {
+                  window.location.href = `/${subject}?semester=${sem}`
+                }
+              }}
+              className="block appearance-none w-full bg-gray-900 border border-gray-800 text-white py-3 px-4 pr-8 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              <option value="">Select a semester</option>
+              <optgroup label="Semester 5">
+                <option value="AI2002">AI2002 - Artificial Intelligence</option>
+                <option value="CS2009">CS2009 - Design and Analysis of Algorithms</option>
+                <option value="SE3004">SE3004 - Software Construction and Development</option>
+                <option value="SE3002">SE3002 - Software Quality Engineering</option>
+                <option value="SS2007">SS2007 - Technical and Business Writing</option>
+              </optgroup>
+              <optgroup label="Semester 6">
+                <option value="CS3001">CS3001 - Computer Networks</option>
+                <option value="SE4002">SE4002 - Fundamentals of Software Project Management</option>
+                <option value="CS3006">CS3006 - Parallel and Distributed Computing</option>
+              </optgroup>
+            </select>
+            <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+              <svg
+                className="h-5 w-5 text-gray-400"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
       </main>
     </div>
   )
 }
+
+const semesters = [
+  {
+    id: 5,
+    title: "Semester 5",
+    subjects: [
+      { value: "AI2002", fullName: "Artificial Intelligence", icon: Code },
+      { value: "CS2009", fullName: "Design and Analysis of Algorithms", icon: Code },
+      { value: "SE3004", fullName: "Software Construction and Development", icon: Code },
+      { value: "SE3002", fullName: "Software Quality Engineering", icon: Code },
+      { value: "SS2007", fullName: "Technical and Business Writing", icon: Code },
+    ],
+  },
+  {
+    id: 6,
+    title: "Semester 6",
+    subjects: [
+      { value: "CS3001", fullName: "Computer Networks", icon: Code },
+      { value: "SE4002", fullName: "Fundamentals of Software Project Management", icon: Code },
+      { value: "CS3006", fullName: "Parallel and Distributed Computing", icon: Code },
+    ],
+  },
+]

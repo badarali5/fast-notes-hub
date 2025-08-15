@@ -65,6 +65,7 @@ export default function UploadPage() {
       "SE3004",
       "SE3002",
       "SS2012", // Semester 5
+      "SS2007", // Semester 6
     ]
     if (!validSubjects.includes(subject)) {
       alert("Please select a valid subject")
@@ -313,6 +314,18 @@ export default function UploadPage() {
               <option value="SE2004">SE2004 - Software Design and Architecture</option>
               <option value="SE2001">SE2001 - Software Requirements Engineering</option>
             </optgroup>
+            <optgroup label="Semester 5">
+              <option value="AI2002">AI2002 - Artificial Intelligence</option>
+              <option value="CS2009">CS2009 - Design and Analysis of Algorithms</option>
+              <option value="SE3004">SE3004 - Software Construction and Development</option>
+              <option value="SE3002">SE3002 - Software Quality Engineering</option>
+              <option value="SS2007">SS2007 - Technical and Business Writing</option>
+            </optgroup>
+            <optgroup label="Semester 6">
+              <option value="CS3001">CS3001 - Computer Networks</option>
+              <option value="SE4002">SE4002 - Fundamentals of Software Project Management</option>
+              <option value="CS3006">CS3006 - Parallel and Distributed Computing</option>
+            </optgroup>
           </select>
           <select
             value={semester}
@@ -327,6 +340,8 @@ export default function UploadPage() {
             <option value="2">Semester 2 </option>
             <option value="3">Semester 3 </option>
             <option value="4">Semester 4 </option>
+            <option value="5">Semester 5 </option>
+            <option value="6">Semester 6 </option>
           </select>
           <select
             value={type}

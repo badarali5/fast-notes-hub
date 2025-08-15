@@ -71,6 +71,26 @@ const semesters = [
       { value: "SE2001", fullName: "Software Requirements Engineering", icon: Code },
     ],
   },
+  {
+    id: 5,
+    title: "Semester 5",
+    subjects: [
+      { value: "AI2002", fullName: "Artificial Intelligence", icon: Code },
+      { value: "CS2009", fullName: "Design and Analysis of Algorithms", icon: Code },
+      { value: "SE3004", fullName: "Software Construction and Development", icon: Code },
+      { value: "SE3002", fullName: "Software Quality Engineering", icon: Code },
+      { value: "SS2007", fullName: "Technical and Business Writing", icon: Code },
+    ],
+  },
+  {
+    id: 6,
+    title: "Semester 6",
+    subjects: [
+      { value: "CS3001", fullName: "Computer Networks", icon: Code },
+      { value: "SE4002", fullName: "Fundamentals of Software Project Management", icon: Code },
+      { value: "CS3006", fullName: "Parallel and Distributed Computing", icon: Code },
+    ],
+  },
 ]
 
 export default function Dashboard() {
