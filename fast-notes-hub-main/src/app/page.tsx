@@ -189,13 +189,12 @@ export default function Dashboard() {
               <h1 className="text-2xl font-bold text-white">FAST Notes Hub</h1>
             </div>
             <div className="flex items-center space-x-4">
-              <Button
-  onClick={() => toast.error("Only admin can upload")}
-  className="bg-blue-600 hover:bg-blue-700 cursor-pointer"
->
-  <Upload className="h-4 w-4 mr-2" />
-  Upload Files
-</Button>
+              <a href="/upload">
+  <Button className="bg-blue-600 hover:bg-blue-700 cursor-pointer">
+    <Upload className="h-4 w-4 mr-2" />
+    Upload Files
+  </Button>
+</a> 
 
             </div>
           </div>
