@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Input } from "@/components/ui/input"
 
 const subjectFullNames: Record<string, string> = {
   NS1001: "Applied Physics",
@@ -34,13 +33,11 @@ const subjectFullNames: Record<string, string> = {
   MT2005: "Probability and Statistics",
   SE2004: "Software Design and Architecture",
   SE2001: "Software Requirements Engineering",
-  // Semester V
   AI2002: "Artificial Intelligence",
   CS2009: "Design and Analysis of Algorithms",
   SE3004: "Software Construction and Development",
   SE3002: "Software Quality Engineering",
   SS2007: "Technical and Business Writing",
-  // Semester VI
   CS3001: "Computer Networks",
   SE4002: "Fundamentals of Software Project Management",
   CS3006: "Parallel and Distributed Computing",
@@ -232,7 +229,7 @@ export default function SubjectPage() {
     <div className="min-h-screen bg-black">
       {/* Header */}
       <header className="bg-gray-900 shadow-lg border-b border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col items-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-cols">
           <button
             onClick={() => window.history.back()}
             className="flex items-center space-x-2 text-blue-400 hover:text-blue-300 self-start mb-4"
@@ -266,17 +263,18 @@ export default function SubjectPage() {
             className="w-full mb-8 bg-gray-900 border border-gray-800 grid grid-cols-3 gap-2 flex items-center justify-center"
           >
             <TabsTrigger
-              value="notes"
-              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-sm flex items-center justify-center"
-            >
-              <FileText className="h-4 w-4 mr-1" /> Notes ({resources.notes.length})
-            </TabsTrigger>
-            <TabsTrigger
               value="papers"
               className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-sm flex items-center justify-center"
             >
               <BookOpen className="h-4 w-4 mr-1" /> Past Papers ({resources.papers.length})
             </TabsTrigger>
+            <TabsTrigger
+              value="notes"
+              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-sm flex items-center justify-center"
+            >
+              <FileText className="h-4 w-4 mr-1" /> Notes ({resources.notes.length})
+            </TabsTrigger>
+            
             <TabsTrigger
               value="slides"
               className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-sm flex items-center justify-center"
