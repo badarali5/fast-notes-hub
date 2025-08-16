@@ -312,11 +312,11 @@ export default function Dashboard() {
           </div>
         </div>
         <p className="text-sm text-blue-400 mt-1">
-          Remaining semesters will be added soon. Stay tuned!
-          Subjects may be misplaced according to semesters but resources are available for them.
+          Remaining semesters will be added soon. Stay tuned!</p>
+          <p className="text-sm text-blue-400 mt-1">Subjects may be misplaced according to semesters but resources are available for them.
         </p>
         <p className="text-sm text-blue-400 mt-1">
-          If you want to share any resources like past papers, notes and slides, kindly send it to this email: <a href="mailto:fastnoteshub@gmail.com" className="text-blue-400 underline">fastnoteshub@gmail.com</a></p>
+          If you want to share any resources like past papers, notes and slides, kindly send it to this email: <a href="mailto:fastnoteshub@gmail.com" className="text-red-400 underline">fastnoteshub@gmail.com</a></p>
       </main>
     </div>
   )

@@ -123,7 +123,7 @@ export default function SubjectPage() {
     papers: [],
     slides: [],
   })
-  const [activeTab, setActiveTab] = useState<TabType>("notes")
+  const [activeTab, setActiveTab] = useState<TabType>("papers")
   const [isLoading, setIsLoading] = useState(true)
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
   const [searchQuery, setSearchQuery] = useState("")
@@ -229,7 +229,7 @@ export default function SubjectPage() {
     <div className="min-h-screen bg-black">
       {/* Header */}
       <header className="bg-gray-900 shadow-lg border-b border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-cols">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col items-center">
           <button
             onClick={() => window.history.back()}
             className="flex items-center space-x-2 text-blue-400 hover:text-blue-300 self-start mb-4"
@@ -263,17 +263,19 @@ export default function SubjectPage() {
             className="w-full mb-8 bg-gray-900 border border-gray-800 grid grid-cols-3 gap-2 flex items-center justify-center"
           >
             <TabsTrigger
-              value="papers"
-              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-sm flex items-center justify-center"
-            >
-              <BookOpen className="h-4 w-4 mr-1" /> Past Papers ({resources.papers.length})
-            </TabsTrigger>
-            <TabsTrigger
               value="notes"
               className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-sm flex items-center justify-center"
             >
               <FileText className="h-4 w-4 mr-1" /> Notes ({resources.notes.length})
             </TabsTrigger>
+            
+            <TabsTrigger
+              value="papers"
+              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-sm flex items-center justify-center"
+            >
+              <BookOpen className="h-4 w-4 mr-1" /> Past Papers ({resources.papers.length})
+            </TabsTrigger>
+            
             
             <TabsTrigger
               value="slides"
@@ -293,11 +295,9 @@ export default function SubjectPage() {
               ) : errorMsg ? (
                 <div className="text-center py-12 text-red-400">{errorMsg}</div>
               ) : resources[tab].length > 0 ? (
-                <div className="flex flex-wrap justify-center gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
                   {resources[tab].map((res) => (
-                    <div key={res.id} className="w-full sm:w-[400px] max-w-full flex-shrink-0">
-                      <ResourceCard resource={res} />
-                    </div>
+                    <ResourceCard key={res.id} resource={res} />
                   ))}
                 </div>
               ) : (
