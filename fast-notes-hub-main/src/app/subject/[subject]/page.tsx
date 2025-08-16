@@ -232,27 +232,22 @@ export default function SubjectPage() {
     <div className="min-h-screen bg-black">
       {/* Header */}
       <header className="bg-gray-900 shadow-lg border-b border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <button
-              onClick={() => window.history.back()}
-              className="flex items-center space-x-2 text-blue-400 hover:text-blue-300"
-            >
-              <ArrowLeft className="h-5 w-5" />
-              <span>Back to Home Page</span>
-            </button>
-          </div>
-        </div>
-      </header>
-
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col items-center">
+          <button
+            onClick={() => window.history.back()}
+            className="flex items-center space-x-2 text-blue-400 hover:text-blue-300 self-start mb-4"
+          >
+            <ArrowLeft className="h-5 w-5" />
+            <span>Back to Home Page</span>
+          </button>
+          <h1 className="text-3xl font-bold text-white mb-2 text-center">
             🧠 {subjectFullName} &ndash; Semester {semester}
           </h1>
-          <p className="text-gray-400">Access all your study materials for {subjectFullName}</p>
-
+          <p className="text-gray-400 text-center mb-2">
+            Access all your study materials for {subjectFullName}
+          </p>
           {/* Instructions */}
-          <div className="mt-4 p-4 bg-gray-900 border border-gray-800 rounded-lg">
+          <div className="mt-4 p-4 bg-gray-900 border border-gray-800 rounded-lg w-full max-w-2xl mx-auto">
             <div className="flex items-center space-x-2">
               <File className="h-5 w-5 text-blue-400" />
               <h3 className="font-medium text-blue-300">📖 PDF Viewing Instructions</h3>
@@ -262,27 +257,29 @@ export default function SubjectPage() {
             </p>
           </div>
         </div>
+      </header>
 
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={(val) => setActiveTab(val as TabType)} className="w-full">
           <TabsList
-            className="w-full mb-8 bg-gray-900 border border-gray-800 grid grid-cols-3 gap-2 flex items-center justify-between"
+            className="w-full mb-8 bg-gray-900 border border-gray-800 grid grid-cols-3 gap-2 flex items-center justify-center"
           >
             <TabsTrigger
               value="notes"
-              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-sm align-center flex items-center"
+              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-sm flex items-center justify-center"
             >
               <FileText className="h-4 w-4 mr-1" /> Notes ({resources.notes.length})
             </TabsTrigger>
             <TabsTrigger
               value="papers"
-              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-sm align-center flex items-center"
+              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-sm flex items-center justify-center"
             >
               <BookOpen className="h-4 w-4 mr-1" /> Past Papers ({resources.papers.length})
             </TabsTrigger>
             <TabsTrigger
               value="slides"
-              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-sm align-center flex items-center"
+              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-sm flex items-center justify-center"
             >
               <Presentation className="h-4 w-4 mr-1" /> Slides ({resources.slides.length})
             </TabsTrigger>
@@ -314,8 +311,9 @@ export default function SubjectPage() {
                 </div>
               )}
             </TabsContent>
-            ))}
-          </Tabs>
-        </div>
-    )
-  }
+          ))}
+        </Tabs>
+      </div>
+    </div>
+  )
+}
