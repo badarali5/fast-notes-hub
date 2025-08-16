@@ -298,9 +298,11 @@ export default function SubjectPage() {
               ) : errorMsg ? (
                 <div className="text-center py-12 text-red-400">{errorMsg}</div>
               ) : resources[tab].length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="flex flex-wrap justify-center gap-6">
                   {resources[tab].map((res) => (
-                    <ResourceCard key={res.id} resource={res} />
+                    <div key={res.id} className="w-full sm:w-[400px] max-w-full flex-shrink-0">
+                      <ResourceCard resource={res} />
+                    </div>
                   ))}
                 </div>
               ) : (
@@ -315,4 +317,4 @@ export default function SubjectPage() {
             ))}
           </Tabs>
         </div>
-    )}
+    )
