@@ -53,7 +53,7 @@ export default function UploadPage() {
       "CS1005",
       "SE1001",
       "MT1004",
-      "SSX21", // Semester 3
+      "CS3005", // Semester 3
       "CS2005",
       "CS2006",
       "SS1015",
