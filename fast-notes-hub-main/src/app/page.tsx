@@ -199,124 +199,135 @@ export default function Dashboard() {
   )
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-800">
       {/* Header */}
       <header className="bg-gray-900 shadow-lg border-b border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <BookOpen className="h-8 w-8 text-blue-400" />
-              <h1 className="text-2xl font-bold text-white">FAST Notes Hub</h1>
-            </div>
-            <div className="flex items-center space-x-4">
-              <a href="/upload">
-  <Button className="bg-blue-600 hover:bg-blue-700 cursor-pointer">
-    <Upload className="h-4 w-4 mr-2" />
-    Upload Files
-  </Button>
-</a> 
-
-            </div>
-          </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-3">
+          <BookOpen className="h-8 w-8 text-blue-500" />
+          <h1 className="text-2xl font-extrabold text-white tracking-tight">FAST Notes Hub</h1>
         </div>
+        <div>
+          <a href="/upload">
+          <Button className="bg-blue-600 hover:bg-blue-700 font-semibold shadow-md">
+            <Upload className="h-4 w-4 mr-2" />
+            Upload Resources
+          </Button>
+          </a>
+        </div>
+        </div>
+      </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Global Search */}
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-white mb-6">Welcome to Your Control Room</h2>
-          <form onSubmit={handleSearchSubmit} className="max-w-2xl mx-auto relative">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 h-5 w-5" />
-            <Input
-              type="text"
-              value={searchQuery}
-              onChange={handleSearchChange}
-              placeholder="🔍 Search notes, papers, slides, subjects..."
-              className="pl-12 py-4 text-lg border-2 border-gray-800 focus:border-blue-500 rounded-xl shadow-lg bg-gray-900 text-white placeholder:text-gray-500"
-            />
-          </form>
-        </div>
-
-        {/* Search Results */}
-        {showResults && (
-          <div className="mb-12">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-2xl font-semibold text-white">
-                🔍 Search Results
-                {isSearching && <span className="ml-2 text-blue-400">(Searching...)</span>}
-              </h3>
-              {searchResults.length > 0 && (
-                <p className="text-gray-400">
-                  Found {searchResults.length} result{searchResults.length !== 1 ? "s" : ""}
-                </p>
-              )}
-            </div>
-
-            {isSearching ? (
-              <div className="text-center py-12">
-                <div className="w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                <p className="text-gray-400">Searching...</p>
-              </div>
-            ) : searchResults.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {searchResults.map((result) => (
-                  <SearchResultCard key={result.id} result={result} />
-                ))}
-              </div>
-            ) : searchQuery.trim() ? (
-              <div className="text-center py-12">
-                <Search className="h-12 w-12 text-gray-500 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-white mb-2">No results found</h3>
-                <p className="text-gray-400">Try searching for different keywords or browse by semester below</p>
-              </div>
-            ) : null}
-          </div>
-        )}
-
-        {/* Semester Cards */}
-        <div className="mb-12">
-          <h3 className="text-2xl font-semibold text-white mb-6">📚 Your Semesters</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {semesters.map((semester) => (
-              <Card
-                key={semester.id}
-                className="hover:shadow-xl transition-all duration-200 border border-gray-800 bg-gray-900 hover:border-blue-500 hover:bg-gray-800"
-              >
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-lg font-semibold text-blue-400">📚 {semester.title}</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  {semester.subjects.map((subject) => {
-                    const IconComponent = subject.icon
-                    return (
-                      <a
-                        key={subject.value}
-                        href={`/subject/${subject.value?.toLowerCase()}?semester=${semester.id}`}
-                        className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-800 transition-colors duration-150 group cursor-pointer"
-                      >
-                        <div className="flex items-center gap-4">
-                          {IconComponent && (
-                            <IconComponent className="h-5 w-5 flex-shrink-0 text-blue-400 group-hover:text-blue-300" />
-                          )}
-                          <div className="flex flex-col">
-                            <div className="font-medium text-white group-hover:text-blue-300">{subject.value}</div>
-                            <div className="text-sm text-gray-400">{subject.fullName}</div>
-                          </div>
-                        </div>
-                      </a>
-                    )
-                  })}
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-        <p className="text-sm text-blue-400 mt-1">
-          Remaining semesters will be added soon. Stay tuned!</p>
-          <p className="text-sm text-blue-400 mt-1">Subjects may be misplaced according to semesters but resources are available for them.
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      {/* Global Search */}
+      <section className="text-center mb-14">
+        <h2 className="text-3xl font-bold text-white mb-4">Your Academic Resource Center</h2>
+        <p className="text-gray-400 mb-6 text-lg">
+        Find notes, past papers, slides, and more. Search by keyword or browse by semester.
         </p>
-        <p className="text-sm text-blue-400 mt-1">
-          If you want to share any resources like past papers, notes and slides, kindly send it to this email: <a href="mailto:fastnoteshub@gmail.com" className="text-red-400 underline">fastnoteshub@gmail.com</a></p>
+        <form onSubmit={handleSearchSubmit} className="max-w-2xl mx-auto relative">
+        <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 h-5 w-5" />
+        <Input
+          type="text"
+          value={searchQuery}
+          onChange={handleSearchChange}
+          placeholder="🔍 Search notes, papers, slides, subjects..."
+          className="pl-12 py-4 text-lg border-2 border-gray-800 focus:border-blue-500 rounded-xl shadow-lg bg-gray-900 text-white placeholder:text-gray-500"
+        />
+        </form>
+      </section>
+
+      {/* Search Results */}
+      {showResults && (
+        <section className="mb-14">
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-2xl font-semibold text-white flex items-center gap-2">
+          <Search className="h-6 w-6 text-blue-400" />
+          Search Results
+          {isSearching && <span className="ml-2 text-blue-400 animate-pulse">(Searching...)</span>}
+          </h3>
+          {searchResults.length > 0 && (
+          <span className="text-gray-400">
+            {searchResults.length} result{searchResults.length !== 1 ? "s" : ""}
+          </span>
+          )}
+        </div>
+        {isSearching ? (
+          <div className="text-center py-12">
+          <div className="w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-400">Searching...</p>
+          </div>
+        ) : searchResults.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {searchResults.map((result) => (
+            <SearchResultCard key={result.id} result={result} />
+          ))}
+          </div>
+        ) : searchQuery.trim() ? (
+          <div className="text-center py-12">
+          <Search className="h-12 w-12 text-gray-500 mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-white mb-2">No results found</h3>
+          <p className="text-gray-400">Try different keywords or browse by semester below.</p>
+          </div>
+        ) : null}
+        </section>
+      )}
+
+      {/* Semester Cards */}
+      <section className="mb-14">
+        <h3 className="text-2xl font-semibold text-white mb-6">📚 Browse by Semester</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {semesters.map((semester) => (
+          <Card
+          key={semester.id}
+          className="hover:shadow-2xl transition-all duration-200 border border-gray-800 bg-gray-900 hover:border-blue-500 hover:bg-gray-800"
+          >
+          <CardHeader className="pb-3">
+            <CardTitle className="text-lg font-semibold text-blue-400">📚 {semester.title}</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {semester.subjects.map((subject) => {
+            const IconComponent = subject.icon
+            return (
+              <a
+              key={subject.value}
+              href={`/subject/${subject.value?.toLowerCase()}?semester=${semester.id}`}
+              className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-800 transition-colors duration-150 group cursor-pointer"
+              >
+              <div className="flex items-center gap-4">
+                {IconComponent && (
+                <IconComponent className="h-5 w-5 flex-shrink-0 text-blue-400 group-hover:text-blue-300" />
+                )}
+                <div className="flex flex-col">
+                <span className="font-medium text-white group-hover:text-blue-300">{subject.value}</span>
+                <span className="text-sm text-gray-400">{subject.fullName}</span>
+                </div>
+              </div>
+              </a>
+            )
+            })}
+          </CardContent>
+          </Card>
+        ))}
+        </div>
+      </section>
+
+      {/* Info & Contact */}
+      <section className="bg-gray-900 rounded-xl p-6 shadow-lg mb-8">
+        <h4 className="text-lg font-semibold text-blue-400 mb-2">Stay Updated</h4>
+        <ul className="list-disc list-inside text-gray-300 space-y-1 mb-2">
+        <li>More semesters will be added soon.</li>
+        <li>Subjects may be misplaced by semester, but resources are available for all.</li>
+        </ul>
+        <p className="text-gray-300 mb-2">
+        Want to contribute notes, past papers, or slides? Email us at{" "}
+        <a href="mailto:fastnoteshub@gmail.com" className="text-red-400 underline font-medium">
+          fastnoteshub@gmail.com
+        </a>
+        </p>
+      </section>
       </main>
     </div>
   )

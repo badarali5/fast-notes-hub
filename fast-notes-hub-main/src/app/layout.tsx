@@ -15,9 +15,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "FAST Notes Hub",
-  description: "The Control Room for FAST students - Access notes, papers, and slides",
+  title: "FAST Notes Hub - Past Papers & Notes",
+  description: "One place for FAST students to find past papers, notes & slides by semester.",
 };
+
 
 export default function RootLayout({
   children,
