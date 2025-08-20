@@ -126,10 +126,6 @@ export default function SubjectPage() {
   const [activeTab, setActiveTab] = useState<TabType>("papers")
   const [isLoading, setIsLoading] = useState(true)
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
-  const [searchQuery, setSearchQuery] = useState("")
-  const [searchResults, setSearchResults] = useState<Resource[]>([])
-  const [isSearching, setIsSearching] = useState(false)
-  const [showResults, setShowResults] = useState(false)
 
   useEffect(() => {
     async function fetchResources() {
@@ -176,54 +172,6 @@ export default function SubjectPage() {
 
     fetchResources()
   }, [subject, semester])
-
-  const handleSearch = async (query: string) => {
-    if (!query.trim()) {
-      setSearchResults([])
-      setShowResults(false)
-      return
-    }
-    setIsSearching(true)
-    setShowResults(true)
-
-    try {
-      const { data, error } = await supabase
-        .from("uploads")
-        .select("*")
-        .eq("subject", subject)
-        .eq("semester", semester)
-        .or(
-          `title.ilike.%${query}%,description.ilike.%${query}%,type.ilike.%${query}%`
-        )
-        .order("created_at", { ascending: false })
-        .limit(10)
-
-      if (error) {
-        setSearchResults([])
-      } else {
-        setSearchResults(data || [])
-      }
-    } catch {
-      setSearchResults([])
-    } finally {
-      setIsSearching(false)
-    }
-  }
-
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const query = e.target.value
-    setSearchQuery(query)
-
-    // Debounce search
-    setTimeout(() => {
-      handleSearch(query)
-    }, 300)
-  }
-
-  const handleSearchSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    handleSearch(searchQuery)
-  }
 
   return (
     <div className="min-h-screen bg-black">
@@ -295,9 +243,14 @@ export default function SubjectPage() {
               ) : errorMsg ? (
                 <div className="text-center py-12 text-red-400">{errorMsg}</div>
               ) : resources[tab].length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6 justify-items-center">
                   {resources[tab].map((res) => (
-                    <ResourceCard key={res.id} resource={res} />
+                    <div
+                      key={res.id}
+                      className="w-full sm:w-[340px] lg:w-[370px] max-w-full flex-shrink-0"
+                    >
+                      <ResourceCard resource={res} />
+                    </div>
                   ))}
                 </div>
               ) : (

@@ -323,7 +323,7 @@ export default function Dashboard() {
         </ul>
         <p className="text-gray-300 mb-2">
         Want to contribute notes, past papers, or slides? Email us at{" "}
-        <a href="mailto:fastnoteshub@gmail.com" className="text-red-400 underline font-medium">
+        <a href="mailto:fastnoteshub@gmail.com" className="text-blue-400 underline font-medium">
           fastnoteshub@gmail.com
         </a>
         </p>
