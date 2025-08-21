@@ -176,16 +176,16 @@ export default function SubjectPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-800">
       {/* Header */}
-      <header className="bg-gray-900 shadow-lg border-b border-gray-800">
+      <header className="bg-gray-900 shadow-lg border-b border-gray-800 relative">
         <div className="max-w-4xl mx-auto px-4 py-8 flex flex-col items-center">
           <button
             onClick={() => window.history.back()}
-            className="flex space-x-2 text-blue-400 hover:text-blue-300 self-start mb-4 font-medium"
+            className="flex items-center space-x-2 text-blue-400 hover:text-blue-300 font-medium absolute left-4 top-8"
           >
             <ArrowLeft className="h-5 w-5" />
             <span>Back to Home Page</span>
           </button>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-white mb-2 text-center tracking-tight">
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-white mb-2 text-center tracking-tight mt-4">
             🧠 {subjectFullName} &ndash; Semester {semester}
           </h1>
           <p className="text-gray-400 text-center mb-2 text-lg">
