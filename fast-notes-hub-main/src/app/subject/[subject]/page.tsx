@@ -180,7 +180,7 @@ export default function SubjectPage() {
         <div className="max-w-4xl mx-auto px-4 py-8 flex flex-col items-center">
           <button
             onClick={() => window.history.back()}
-            className="flex items-center space-x-2 text-blue-400 hover:text-blue-300 self-start mb-4 font-medium"
+            className="flex space-x-2 text-blue-400 hover:text-blue-300 self-start mb-4 font-medium"
           >
             <ArrowLeft className="h-5 w-5" />
             <span>Back to Home Page</span>
