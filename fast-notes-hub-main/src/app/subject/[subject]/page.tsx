@@ -177,8 +177,8 @@ export default function SubjectPage() {
     <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-800">
       {/* Header */}
       <header className="bg-gray-900 shadow-lg border-b border-gray-800 w-full">
-        <div className="max-w-4xl mx-auto px-4 py-6 flex flex-col gap-4 w-full">
-          <div className="flex items-center w-full">
+        <div className="max-w-4xl mx-auto px-4 py-6 flex flex-col w-full">
+          <div className="flex items-center w-full mb-4">
             <button
               onClick={() => window.history.back()}
               className="flex items-center space-x-2 text-blue-400 hover:text-blue-300 font-medium"
@@ -187,16 +187,16 @@ export default function SubjectPage() {
               <span>Back to Home Page</span>
             </button>
           </div>
-          <h1 className="text-2xl sm:text-4xl font-extrabold text-white text-center tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-white text-center tracking-tight mb-2">
             🧠 {subjectFullName} &ndash; Semester {semester}
           </h1>
-          <p className="text-gray-400 text-center text-base sm:text-lg">
+          <p className="text-gray-400 text-center text-base sm:text-lg mb-4">
             Access all your study materials for {subjectFullName}
           </p>
-          <div className="mt-2 p-4 bg-gray-900 border border-gray-800 rounded-xl w-full max-w-xl mx-auto shadow">
+          <div className="p-4 bg-gray-900 border border-gray-800 rounded-xl w-full max-w-xl mx-auto shadow mb-4">
             <div className="flex items-center space-x-2 mb-2">
               <File className="h-5 w-5 text-blue-400" />
-              <h3 className="font-semibold text-blue-300">PDF Viewing Instructions</h3>
+              <h3 className="font-semibold text-blue-300 text-base">PDF Viewing Instructions</h3>
             </div>
             <p className="text-sm text-blue-300">
               Click on any resource card or the "View PDF" button to open files in a new tab.
@@ -205,27 +205,27 @@ export default function SubjectPage() {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <main className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-6">
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={(val) => setActiveTab(val as TabType)} className="w-full">
           <TabsList
-            className="w-full mb-10 bg-gray-900 border border-gray-800 grid grid-cols-3 gap-2 rounded-xl flex items-center justify-center "
+            className="w-full mb-6 bg-gray-900 border border-gray-800 grid grid-cols-3 gap-2 rounded-xl overflow-x-auto"
           >
             <TabsTrigger
               value="notes"
-              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-base font-medium flex items-center justify-center rounded-lg py-3 transition"
+              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-sm font-medium flex items-center justify-center rounded-lg py-2 transition"
             >
               <FileText className="h-4 w-4 mr-1" /> Notes ({resources.notes.length})
             </TabsTrigger>
             <TabsTrigger
               value="papers"
-              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-base font-medium flex items-center justify-center rounded-lg py-3 transition"
+              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-sm font-medium flex items-center justify-center rounded-lg py-2 transition"
             >
               <BookOpen className="h-4 w-4 mr-1" /> Past Papers ({resources.papers.length})
             </TabsTrigger>
             <TabsTrigger
               value="slides"
-              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-base font-medium flex items-center justify-center rounded-lg py-3 transition"
+              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-sm font-medium flex items-center justify-center rounded-lg py-2 transition"
             >
               <Presentation className="h-4 w-4 mr-1" /> Slides ({resources.slides.length})
             </TabsTrigger>
@@ -241,7 +241,7 @@ export default function SubjectPage() {
               ) : errorMsg ? (
                 <div className="text-center py-12 text-red-400">{errorMsg}</div>
               ) : resources[tab].length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 justify-items-center">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {resources[tab].map((res) => (
                     <div
                       key={res.id}
