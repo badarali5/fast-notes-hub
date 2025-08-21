@@ -331,6 +331,18 @@ export default function Dashboard() {
         </p>
       </section>
       
+      <a
+  href="/apk/app-release.apk"
+  download
+  className="fixed bottom-6 right-6 z-50 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg w-16 h-16 flex items-center justify-center transition-all duration-200"
+  title="Download Android APK"
+  aria-label="Download Android APK"
+>
+  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <circle cx="12" cy="12" r="11" stroke="currentColor" strokeWidth="2" fill="none"/>
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 16v-8m0 8l-4-4m4 4l4-4" />
+  </svg>
+</a>
       </main>
     </div>
   )
