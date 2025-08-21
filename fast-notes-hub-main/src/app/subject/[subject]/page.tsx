@@ -206,19 +206,19 @@ export default function SubjectPage() {
           >
             <TabsTrigger
               value="notes"
-              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-sm font-medium flex items-center justify-center rounded-lg py-2 transition"
+              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-sm font-medium flex items-center justify-center rounded-lg px-3 transition"
             >
               <FileText className="h-4 w-4 mr-1" /> Notes ({resources.notes.length})
             </TabsTrigger>
             <TabsTrigger
               value="papers"
-              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-sm font-medium flex items-center justify-center rounded-lg py-2 transition"
+              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-sm font-medium flex items-center justify-center rounded-lg px-3 transition"
             >
               <BookOpen className="h-4 w-4 mr-1" /> Past Papers ({resources.papers.length})
             </TabsTrigger>
             <TabsTrigger
               value="slides"
-              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-sm font-medium flex items-center justify-center rounded-lg py-2 transition"
+              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-sm font-medium flex items-center justify-center rounded-lg px-3 transition"
             >
               <Presentation className="h-4 w-4 mr-1" /> Slides ({resources.slides.length})
             </TabsTrigger>
