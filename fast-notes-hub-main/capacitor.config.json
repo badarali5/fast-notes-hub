@@ -1,0 +1,6 @@
+{
+  "appId": "com.faststudent.portal",
+  "appName": "Fast Notes Hub",
+  "webDir": "out",
+  "bundledWebRuntime": false
+}
