@@ -185,7 +185,7 @@ export default function SubjectPage() {
             <ArrowLeft className="h-5 w-5" />
             <span>Back to Home Page</span>
           </button>
-          <h1 className="mt-4 text-3xl sm:text-4xl font-extrabold text-white mb-2 text-center tracking-tight mt-4">
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-white mb-2 text-center tracking-tight mt-4 top-6">
             🧠 {subjectFullName} &ndash; Semester {semester}
           </h1>
           <p className="text-gray-400 text-center mb-2 text-lg">
