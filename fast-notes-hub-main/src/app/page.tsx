@@ -223,10 +223,12 @@ export default function Dashboard() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       {/* Global Search */}
       <section className="text-center mb-14">
-        <h2 className="text-3xl font-bold text-white mb-4">Your Academic Resource Center</h2>
-        <p className="text-gray-400 mb-6 text-lg">
-        Find notes, past papers, slides, and more. Search by keyword or browse by semester.
-        </p>
+        <h2 className="text-3xl font-bold text-white mb-4">
+  Fast Access for FAST Students 🚀</h2>
+<p className="text-gray-400 mb-6 text-lg">
+  Past papers, notes, slides &dash; all in one place. Search by keyword or browse by semester.
+</p>
+
         <form onSubmit={handleSearchSubmit} className="max-w-2xl mx-auto relative">
         <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 h-5 w-5" />
         <Input
