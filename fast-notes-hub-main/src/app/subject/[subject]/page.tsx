@@ -175,35 +175,28 @@ export default function SubjectPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-800">
-      {/* Header */}
       <header className="bg-gray-900 shadow-lg border-b border-gray-800 w-full">
-        <div className="max-w-4xl mx-auto px-4 py-6 flex flex-col w-full">
-          <div className="flex items-center w-full mb-4">
-            <button
-              onClick={() => window.history.back()}
-              className="flex items-center space-x-2 text-blue-400 hover:text-blue-300 font-medium"
-            >
-              <ArrowLeft className="h-5 w-5" />
-              <span>Back to Home Page</span>
-            </button>
-          </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white text-center tracking-tight mb-2">
-            🧠 {subjectFullName} &ndash; Semester {semester}
-          </h1>
-          <p className="text-gray-400 text-center text-base sm:text-lg mb-4">
-            Access all your study materials for {subjectFullName}
-          </p>
-          <div className="p-4 bg-gray-900 border border-gray-800 rounded-xl w-full max-w-xl mx-auto shadow mb-4">
-            <div className="flex items-center space-x-2 mb-2">
-              <File className="h-5 w-5 text-blue-400" />
-              <h3 className="font-semibold text-blue-300 text-base">PDF Viewing Instructions</h3>
-            </div>
-            <p className="text-sm text-blue-300">
-              Click on any resource card or the "View PDF" button to open files in a new tab.
-            </p>
-          </div>
-        </div>
-      </header>
+  <div className="max-w-4xl mx-auto px-4 py-6">
+    <div className="flex items-center w-full mb-6">
+      <button
+        onClick={() => window.history.back()}
+        className="flex items-center space-x-2 text-blue-400 hover:text-blue-300 font-medium"
+      >
+        <ArrowLeft className="h-5 w-5" />
+        <span>Back to Home Page</span>
+      </button>
+    </div>
+    <div className="text-center">
+      <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mb-3">
+        🧠 {subjectFullName} – Semester {semester}
+      </h1>
+      <p className="text-gray-400 text-base sm:text-lg">
+        Access all your study materials for {subjectFullName}
+      </p>
+    </div>
+  </div>
+</header>
+
 
       <main className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-6">
         {/* Tabs */}
