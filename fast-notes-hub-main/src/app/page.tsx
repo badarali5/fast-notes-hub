@@ -226,7 +226,7 @@ export default function Dashboard() {
         <h2 className="text-3xl font-bold text-white mb-4">
   Fast Access for FAST Students 🚀</h2>
 <p className="text-gray-400 mb-6 text-lg">
-  Past papers, notes, slides &dash; all in one place. Search by keyword or browse by semester.
+  Past papers, notes, slides - all in one place. Search by keyword or browse by semester.
 </p>
 
         <form onSubmit={handleSearchSubmit} className="max-w-2xl mx-auto relative">
