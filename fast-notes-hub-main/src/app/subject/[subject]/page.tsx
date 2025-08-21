@@ -176,25 +176,24 @@ export default function SubjectPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-800">
       {/* Header */}
-      <header className="bg-gray-900 shadow-lg border-b border-gray-800 relative">
-        <div className="max-w-4xl mx-auto px-4 py-8 flex flex-col items-center">
-          <button
-            onClick={() => window.history.back()}
-            className="flex items-center space-x-2 text-blue-400 hover:text-blue-300 font-medium absolute left-4 top-4"
-          >
-            <ArrowLeft className="h-5 w-5" />
-            <span>Back to Home Page</span>
-          </button>
-          {/* Add a gap below the button for better UX */}
-          <div className="h-10" /> {/* 10 = 2.5rem vertical space */}
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-white mb-2 text-center tracking-tight mt-4">
+      <header className="bg-gray-900 shadow-lg border-b border-gray-800 w-full">
+        <div className="max-w-4xl mx-auto px-4 py-6 flex flex-col gap-4 w-full">
+          <div className="flex items-center w-full">
+            <button
+              onClick={() => window.history.back()}
+              className="flex items-center space-x-2 text-blue-400 hover:text-blue-300 font-medium"
+            >
+              <ArrowLeft className="h-5 w-5" />
+              <span>Back to Home Page</span>
+            </button>
+          </div>
+          <h1 className="text-2xl sm:text-4xl font-extrabold text-white text-center tracking-tight">
             🧠 {subjectFullName} &ndash; Semester {semester}
           </h1>
-          <p className="text-gray-400 text-center mb-2 text-lg">
+          <p className="text-gray-400 text-center text-base sm:text-lg">
             Access all your study materials for {subjectFullName}
           </p>
-          {/* Instructions */}
-          <div className="mt-4 p-4 bg-gray-900 border border-gray-800 rounded-xl w-full max-w-xl mx-auto shadow">
+          <div className="mt-2 p-4 bg-gray-900 border border-gray-800 rounded-xl w-full max-w-xl mx-auto shadow">
             <div className="flex items-center space-x-2 mb-2">
               <File className="h-5 w-5 text-blue-400" />
               <h3 className="font-semibold text-blue-300">PDF Viewing Instructions</h3>
