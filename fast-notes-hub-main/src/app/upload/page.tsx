@@ -65,7 +65,10 @@ export default function UploadPage() {
       "SE3004",
       "SE3002",
       "SS2012", // Semester 5
-      "SS2007", // Semester 6
+      "SS2007",
+      "CS3001", 
+      "SE4002", 
+      "CS3006",  // Semester 6
     ]
     if (!validSubjects.includes(subject)) {
       alert("Please select a valid subject")
