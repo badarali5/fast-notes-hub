@@ -359,8 +359,7 @@ export default function Dashboard() {
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 16v-8m0 8l-4-4m4 4l4-4" />
     </svg>
   </span>
-  <span className="absolute bottom-20 right-0 bg-gray-900 text-white text-xs px-3 py-2 rounded 
-  shadow-lg opacity-0 group-hover:opacity-100 transition pointer-events-none whitespace-nowrap font-semibold">
+  <span className="absolute right-20 top-1/2 -translate-y-1/2 bg-gray-900 text-white text-xs px-3 py-2 rounded shadow-lg opacity-0 group-hover:opacity-100 transition pointer-events-none whitespace-nowrap font-semibold">
     Download Android APK
   </span>
 </a>
