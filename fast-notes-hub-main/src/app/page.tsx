@@ -216,7 +216,7 @@ export default function Dashboard() {
             <Upload className="h-4 w-4 mr-2" />
             Upload
           </Button>
-          <span className="absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-3 py-2 rounded shadow-lg opacity-0 group-hover:opacity-100 transition pointer-events-none whitespace-nowrap z-50">
+          <span className="absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-3 py-2 rounded shadow-lg opacity-0 group-hover:opacity-100 transition pointer-events-none whitespace-nowrap z-50 group">
             Only admin can upload
           </span>
         </div>
@@ -337,7 +337,7 @@ export default function Dashboard() {
       
       <a
   href="/apk/app-debug.apk"
-  className="fixed bottom-6 right-6 z-50 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg w-16 h-16 flex items-center justify-center transition-all duration-200"
+  className="fixed bottom-6 right-6 z-50 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg w-16 h-16 flex items-center justify-center transition-all duration-200 group"
   title="Download Android APK"
   aria-label="Download Android APK"
 >
