@@ -200,7 +200,6 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-800">
-      {/* Header */}
       <header className="bg-gray-900 shadow-lg border-b border-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex items-center justify-between">
@@ -208,18 +207,22 @@ export default function Dashboard() {
           <BookOpen className="h-8 w-8 text-blue-500" />
           <h1 className="text-2xl font-extrabold text-white tracking-tight">FAST Notes Hub</h1>
         </div>
-        <div className="relative group">
-          <Button
-            className="bg-blue-600 text-white font-semibold shadow-md sm:px-6 opacity-60 pointer-events-none cursor-not-allowed"
-            disabled
-          >
-            <Upload className="h-4 w-4 mr-2" />
-            Upload
-          </Button>
-          <span className="absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-3 py-2 rounded shadow-lg opacity-0 group-hover:opacity-100 transition pointer-events-none whitespace-nowrap z-50">
-            Only admin can upload
-          </span>
-        </div>
+        <div className="relative group inline-block">
+  <Button
+    className="bg-blue-600 text-white font-semibold shadow-md sm:px-6 
+    opacity-50 cursor-not-allowed"
+    disabled
+  >
+    <Upload className="h-4 w-4 mr-2" />
+    Upload
+  </Button>
+  <span className="absolute -top-10 left-1/2 -translate-x-1/2 
+    bg-gray-900 text-white text-xs px-3 py-2 rounded shadow-lg 
+    opacity-0 group-hover:opacity-100 transition pointer-events-none whitespace-nowrap z-50">
+    Only admin can upload
+  </span>
+</div>
+
         </div>
       </div>
       </header>
@@ -337,14 +340,23 @@ export default function Dashboard() {
       
       <a
   href="/apk/app-debug.apk"
-  className="fixed bottom-6 right-6 z-50 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg w-16 h-16 flex items-center justify-center transition-all duration-200 group"
+  className="fixed bottom-6 right-6 z-50 bg-gray-900 hover:bg-gray-800 text-white rounded-full shadow-lg w-16 h-16 flex items-center justify-center transition-all duration-200 group"
   title="Download Android APK"
   aria-label="Download Android APK"
+  style={{ transformOrigin: "center" }}
 >
-  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    <circle cx="12" cy="12" r="11" stroke="currentColor" strokeWidth="2" fill="none"/>
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 16v-8m0 8l-4-4m4 4l4-4" />
-  </svg>
+  <span className="flex items-center justify-center w-full h-full transition-transform duration-300 group-hover:scale-110">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="h-8 w-8 transition-transform duration-500 group-hover:rotate-[360deg]"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <circle cx="12" cy="12" r="11" stroke="currentColor" strokeWidth="2" fill="none"/>
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 16v-8m0 8l-4-4m4 4l4-4" />
+    </svg>
+  </span>
   <span className="absolute bottom-20 right-0 bg-gray-900 text-white text-xs px-3 py-2 rounded shadow-lg opacity-0 group-hover:opacity-100 transition pointer-events-none whitespace-nowrap font-semibold">
     Download Android APK
   </span>
