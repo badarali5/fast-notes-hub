@@ -210,7 +210,7 @@ export default function Dashboard() {
         </div>
         <div className="relative group">
           <Button
-            className="bg-blue-600 text-white font-semibold shadow-md sm:px-6 cursor-not-allowed opacity-60 pointer-events-none"
+            className="bg-blue-600 text-white font-semibold shadow-md sm:px-6 opacity-60 pointer-events-none"
             disabled
           >
             <Upload className="h-4 w-4 mr-2" />
