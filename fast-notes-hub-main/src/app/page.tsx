@@ -208,13 +208,18 @@ export default function Dashboard() {
           <BookOpen className="h-8 w-8 text-blue-500" />
           <h1 className="text-2xl font-extrabold text-white tracking-tight">FAST Notes Hub</h1>
         </div>
-        <div>
-          <a href="/upload">
-          <Button className="bg-blue-600 hover:bg-blue-700 font-semibold shadow-md">
+        <div className="relative group">
+          <Button
+            className="bg-blue-600 text-white font-semibold shadow-md sm:px-6 cursor-not-allowed opacity-60 pointer-events-none"
+            disabled
+          >
             <Upload className="h-4 w-4 mr-2" />
-            Upload Resources
+            Upload
           </Button>
-          </a>
+          {/* Tooltip */}
+          <span className="absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-3 py-2 rounded shadow-lg opacity-0 group-hover:opacity-100 transition pointer-events-none whitespace-nowrap z-50">
+            Only admin can upload
+          </span>
         </div>
         </div>
       </div>
@@ -341,6 +346,9 @@ export default function Dashboard() {
     <circle cx="12" cy="12" r="11" stroke="currentColor" strokeWidth="2" fill="none"/>
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 16v-8m0 8l-4-4m4 4l4-4" />
   </svg>
+  <span className="absolute bottom-20 right-0 bg-gray-900 text-white text-xs px-3 py-2 rounded shadow-lg opacity-0 group-hover:opacity-100 transition pointer-events-none whitespace-nowrap">
+    Download Android APK
+  </span>
 </a>
       </main>
     </div>
