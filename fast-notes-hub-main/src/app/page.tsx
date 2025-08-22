@@ -208,7 +208,7 @@ export default function Dashboard() {
           <h1 className="text-2xl font-extrabold text-white tracking-tight">FAST Notes Hub</h1>
         </div>
         <div className="relative group">
-  <div className="pointer-events-auto">
+  {/* <div className="pointer-events-auto">
     <Button
       className="bg-blue-600 text-white font-semibold shadow-md sm:px-6 
       opacity-50 cursor-not-allowed"
@@ -221,7 +221,7 @@ export default function Dashboard() {
     bg-gray-900 text-white text-xs px-3 py-2 rounded shadow-lg 
     opacity-0 group-hover:opacity-100 transition pointer-events-none whitespace-nowrap z-50">
     Only admin can upload
-  </span>
+  </span> */}
 </div>
 
 
