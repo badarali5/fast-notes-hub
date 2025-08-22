@@ -335,23 +335,20 @@ export default function Dashboard() {
         </p>
       </section>
       
-      <a 
-  href="/apk/app-debug.apk" 
-  download="App-debug.apk"
-  className="relative group"
+      <a
+  href="/apk/app-debug.apk"
+  className="fixed bottom-6 right-6 z-50 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg w-16 h-16 flex items-center justify-center transition-all duration-200 group"
+  title="Download Android APK"
+  aria-label="Download Android APK"
 >
-  <div 
-    className="flex items-center justify-center bg-blue-600 text-white shadow-lg" 
-    style={{ borderRadius: "50%", width: "50px", height: "50px" }}
-  >
-    <i className="fa fa-arrow-down" style={{ paddingLeft: "0px" }}></i>
-  </div>
-
-  <span className="absolute bottom-16 right-0 bg-gray-900 text-white text-xs px-3 py-2 rounded shadow-lg opacity-0 group-hover:opacity-100 transition pointer-events-none whitespace-nowrap">
+  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <circle cx="12" cy="12" r="11" stroke="currentColor" strokeWidth="2" fill="none"/>
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 16v-8m0 8l-4-4m4 4l4-4" />
+  </svg>
+  <span className="absolute bottom-20 right-0 bg-gray-900 text-white text-xs px-3 py-2 rounded shadow-lg opacity-0 group-hover:opacity-100 transition pointer-events-none whitespace-nowrap font-semibold">
     Download Android APK
   </span>
 </a>
-
       </main>
     </div>
   )
