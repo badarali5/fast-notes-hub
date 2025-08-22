@@ -332,7 +332,7 @@ export default function Dashboard() {
       </section>
       
       <a
-  href="/apk/app-release.apk"
+  href="/apk/app-debug.apk"
   className="fixed bottom-6 right-6 z-50 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg w-16 h-16 flex items-center justify-center transition-all duration-200"
   title="Download Android APK"
   aria-label="Download Android APK"
