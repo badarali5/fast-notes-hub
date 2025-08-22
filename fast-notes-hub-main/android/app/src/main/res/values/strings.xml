@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<resources>
-    <string name="app_name">Fast Notes Hub</string>
-    <string name="title_activity_main">Fast Notes Hub</string>
-    <string name="package_name">com.faststudent.portal</string>
-    <string name="custom_url_scheme">com.faststudent.portal</string>
-</resources>
