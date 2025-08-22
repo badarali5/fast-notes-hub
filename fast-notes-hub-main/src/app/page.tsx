@@ -347,10 +347,12 @@ export default function Dashboard() {
   aria-label="Download Android APK"
   style={{ transformOrigin: "center" }}
 >
-  <span className="flex items-center justify-center w-full h-full transition-transform duration-600 group-hover:scale-110">
+  <span className="flex items-center justify-center w-full h-full 
+  transition-transform duration-600 group-hover:scale-110">
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className="h-8 w-8 transition-transform duration-500 group-hover:rotate-[360deg]"
+      className="h-8 w-8 transition-transform duration-500 
+      group-hover:rotate-[360deg]"
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"
