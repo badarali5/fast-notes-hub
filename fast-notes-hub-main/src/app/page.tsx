@@ -345,12 +345,12 @@ export default function Dashboard() {
 
         <a
           href="/apk/fast-notes-hub.apk"
-          className="fixed bottom-6 right-6 z-50 bg-gray-900 hover:bg-gray-800 text-white rounded-full shadow-lg w-16 h-16 flex items-center justify-center transition-all duration-200 group"
+          className="fixed bottom-6 right-6 z-50 bg-gray-900 hover:bg-gray-800 text-white border border-gray-800 rounded-full shadow-lg w-16 h-16 flex items-center justify-center transition-all duration-200 group ring-0 hover:ring-2 hover:ring-blue-500"
           title="Download Android APK"
           aria-label="Download Android APK"
           style={{ transformOrigin: "center" }}
         >
-          <span className="flex items-center justify-center w-full h-full transition-transform duration-600 group-hover:scale-110">
+          <span className="flex items-center justify-center w-full h-full transition-transform duration-300 group-hover:scale-110">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-8 w-8 transition-transform duration-500 group-hover:rotate-[360deg]"
@@ -374,7 +374,7 @@ export default function Dashboard() {
               />
             </svg>
           </span>
-          <span className="absolute right-20 top-1/2 -translate-y-1/2 bg-gray-900 text-white text-xs px-3 py-2 rounded shadow-lg opacity-0 group-hover:opacity-100 transition pointer-events-none whitespace-nowrap font-semibold">
+          <span className="absolute right-20 top-1/2 -translate-y-1/2 bg-gray-900 text-white text-xs px-3 py-2 rounded shadow-lg opacity-0 group-hover:opacity-100 transition pointer-events-none whitespace-nowrap font-semibold border border-gray-800">
             Download Android APK
           </span>
         </a>
