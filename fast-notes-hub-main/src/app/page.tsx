@@ -213,12 +213,12 @@ export default function Dashboard() {
                 href="https://www.linkedin.com/in/badar-ali-07bb36282/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-gray-900 hover:bg-gray-800 text-blue-400 border border-gray-800 rounded-lg px-4 py-2 font-semibold shadow transition-all duration-200 flex items-center gap-2"
+                className="bg-gray-900 hover:bg-gray-800 text-blue-400 border border-gray-800 rounded-lg px-3 py-2 sm:px-4 sm:py-2 font-semibold shadow transition-all duration-200 w-full sm:w-auto text-center"
+                style={{ minWidth: "120px" }}
               >
-                <Button className="h-5 w-5 text-blue-400" >
-                  About Developer
-                </Button>
+                About Developer
               </a>
+              
             </div>
           </div>
         </div>
