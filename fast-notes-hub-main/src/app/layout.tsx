@@ -28,7 +28,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark">
-      <head>
         {/* Google Analytics */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-V62L1WS0JE"
@@ -42,7 +41,7 @@ export default function RootLayout({
             gtag('config', 'G-V62L1WS0JE');
           `}
         </Script>
-      </head>
+    
       <body className={`${geistSans.className} bg-black text-white`}>
         {children}
         <Toaster />
