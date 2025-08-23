@@ -341,7 +341,7 @@ export default function Dashboard() {
       </section>
       
       <a
-  href="/apk/app-debug.apk"
+  href="/apk/fast-notes-hub.apk"
   className="fixed bottom-6 right-6 z-50 bg-gray-900 hover:bg-gray-800 text-white rounded-full shadow-lg w-16 h-16 flex items-center justify-center transition-all duration-200 group"
   title="Download Android APK"
   aria-label="Download Android APK"
