@@ -291,7 +291,7 @@ export default function Dashboard() {
             {semesters.map((semester) => (
               <Card
                 key={semester.id}
-                className="hover:shadow-2xl transition-all duration-200 border border-gray-800 bg-gray-900 hover:border-blue-500 hover:bg-gray-800"
+                className="hover:shadow-2xl transition-all duration-200 border border-gray-800 bg-gray-900"
               >
                 <CardHeader className="pb-3">
                   <CardTitle className="text-lg font-semibold text-blue-400">
@@ -309,10 +309,10 @@ export default function Dashboard() {
                       >
                         <div className="flex items-center gap-4">
                           {IconComponent && (
-                            <IconComponent className="h-5 w-5 flex-shrink-0 text-blue-400 hover:bg-gray-800" />
+                            <IconComponent className="h-5 w-5 flex-shrink-0 text-blue-400 hover:bg-gray-800 hover:border-blue-500 " />
                           )}
                           <div className="flex flex-col">
-                            <span className="font-medium text-white hover:bg-gray-800">
+                            <span className="font-medium text-white hover:bg-gray-800 hover:border-blue-500">
                               {subject.value}
                             </span>
                             <span className="text-sm text-gray-400">{subject.fullName}</span>
