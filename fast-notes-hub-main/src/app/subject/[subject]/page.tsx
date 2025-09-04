@@ -226,7 +226,7 @@ export default function SubjectPage() {
             >
               <Presentation className="h-4 w-4 mr-1" /> Slides ({resources.slides.length})
             </TabsTrigger>
-          </TabsList>
+          
 
           {/* Notes Tab Content */}
           <TabsContent value="notes" className="space-y-4">
@@ -325,7 +325,7 @@ export default function SubjectPage() {
               </TabsContent>
             </Tabs>
           </TabsContent>
-
+          </TabsList>
           {/* Slides Tab Content */}
           <TabsContent value="slides" className="space-y-4">
             {isLoading ? (
