@@ -309,10 +309,10 @@ export default function Dashboard() {
                       >
                         <div className="flex items-center gap-4">
                           {IconComponent && (
-                            <IconComponent className="h-5 w-5 flex-shrink-0 text-blue-400 group-hover:text-blue-300" />
+                            <IconComponent className="h-5 w-5 flex-shrink-0 text-blue-400 hover:bg-gray-800" />
                           )}
                           <div className="flex flex-col">
-                            <span className="font-medium text-white group-hover:text-blue-300">
+                            <span className="font-medium text-white hover:bg-gray-800">
                               {subject.value}
                             </span>
                             <span className="text-sm text-gray-400">{subject.fullName}</span>
