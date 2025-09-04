@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useState } from "react"
-import { BookOpen, Upload, Search, Code, Database, Cpu, File, Eye } from "lucide-react"
+import { BookOpen, Upload, Search, Code, Database, Cpu, File, Eye, Presentation } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -152,50 +152,124 @@ export default function Dashboard() {
     handleSearch(searchQuery)
   }
 
-  const SearchResultCard = ({ result }: { result: SearchResult }) => (
-    <Card className="hover:shadow-xl transition-all duration-200 cursor-pointer group border border-gray-800 bg-gray-900 hover:border-blue-500 hover:bg-gray-800">
-      <CardContent className="p-4">
-        <div
-          className="cursor-pointer"
-          onClick={() => {
-            window.open(result.url, "_blank")
-          }}
-        >
-          <div className="flex items-start justify-between mb-3">
-            <div className="flex-1">
-              <div className="flex items-center space-x-2 mb-1">
-                <File className="h-4 w-4 text-blue-400" />
-                <h4 className="font-medium text-white group-hover:text-blue-400 transition-colors">{result.title}</h4>
-              </div>
-              <div className="flex items-center space-x-2 mb-2">
-                <Badge variant="outline" className="text-xs border-gray-700 bg-gray-800 text-gray-300">
-                  {result.subject}
-                </Badge>
-                <Badge variant="secondary" className="text-xs bg-gray-800 text-gray-300">
-                  {result.type.charAt(0).toUpperCase() + result.type.slice(1)}
-                </Badge>
-              </div>
-            </div>
-          </div>
-          <div className="mt-2 p-2 bg-gray-800 rounded-lg border border-gray-700 group-hover:bg-gray-700 transition-colors">
-            <p className="text-xs text-blue-300 text-center font-medium">📱 Click to view PDF in new tab</p>
-          </div>
-        </div>
-        <div className="mt-3">
-          <Button
-            size="sm"
-            variant="outline"
-            className="w-full border-gray-700 bg-gray-900 text-gray-300 hover:bg-gray-800 hover:border-blue-500 hover:text-blue-400 transition-colors"
+  // Helper: subject code to full name
+  const subjectFullNames: Record<string, string> = {
+    NS1001: "Applied Physics",
+    MT1003: "Calculus and Analytical Geometry",
+    SS1012: "Functional English",
+    SS1013: "Ideology and Constitution of Pakistan",
+    CL1000: "Introduction to Information and Communication Technology",
+    CS1002: "Programming Fundamentals",
+    CS1004: "Object Oriented Programming",
+    MT1008: "Multivariable Calculus",
+    EE1005: "Digital Logic Design",
+    SS1014: "Expository Writing",
+    SS1007: "Islamic Studies/Ethics",
+    SS2043: "Civics and Community Engagement",
+    EE2003: "Computer Organization and Assembly Language",
+    CS2001: "Data Structures and Algorithms",
+    CS1005: "Discrete Structures",
+    SE1001: "Introduction to Software Engineering",
+    MT1004: "Linear Algebra",
+    CS3005: "Theory Of Automata",
+    CS2005: "Database Systems",
+    CS2006: "Operating Systems",
+    MT2005: "Probability and Statistics",
+    SE2004: "Software Design and Architecture",
+    SE2001: "Software Requirements Engineering",
+    AI2002: "Artificial Intelligence",
+    CS2009: "Design and Analysis of Algorithms",
+    SE3004: "Software Construction and Development",
+    SE3002: "Software Quality Engineering",
+    SS2007: "Technical and Business Writing",
+    CS3001: "Computer Networks",
+    SE4002: "Fundamentals of Software Project Management",
+    CS3006: "Parallel and Distributed Computing",
+    "SS-2002": "Fundamentals of Economics",
+    "MG-1001": "Fundamentals of Management",
+    "AF-1001": "Fundamentals of Accounting",
+  };
+
+  // Helper: highlight search query in text
+  function highlight(text: string, query: string) {
+    if (!query) return text;
+    const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "gi");
+    return text.split(regex).map((part, i) =>
+      regex.test(part) ? <mark key={i} className="bg-blue-900 text-blue-300 rounded px-1 py-0.5">{part}</mark> : part
+    );
+  }
+
+  // Helper: file type icon
+  function getTypeIcon(type: string) {
+    switch (type) {
+      case "notes": return <File className="h-4 w-4 text-green-400 mr-1" />;
+      case "papers": return <BookOpen className="h-4 w-4 text-blue-400 mr-1" />;
+      case "slides": return <Presentation className="h-4 w-4 text-purple-400 mr-1" />;
+      default: return <File className="h-4 w-4 text-gray-400 mr-1" />;
+    }
+  }
+
+  const SearchResultCard = ({ result }: { result: SearchResult }) => {
+    const subjectCode = result.subject?.toUpperCase();
+    const subjectName = subjectFullNames[subjectCode] || result.subject;
+    return (
+      <Card className="hover:shadow-2xl transition-all duration-200 cursor-pointer group border border-gray-800 bg-gray-900 hover:border-blue-500 hover:bg-gray-800">
+        <CardContent className="p-4">
+          <div
+            className="cursor-pointer"
             onClick={() => {
               window.open(result.url, "_blank")
             }}
           >
-            <Eye className="h-4 w-4 mr-1" /> View PDF
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
-  )
+            <div className="flex items-start justify-between mb-2">
+              <div className="flex-1">
+                <div className="flex items-center space-x-2 mb-1">
+                  {getTypeIcon(result.type)}
+                  <h4 className="font-semibold text-white group-hover:text-blue-400 transition-colors text-base line-clamp-2">
+                    {highlight(result.title, searchQuery)}
+                  </h4>
+                </div>
+                <div className="flex flex-wrap items-center gap-2 mb-2">
+                  <Badge variant="outline" className="text-xs border-gray-700 bg-gray-800 text-gray-300">
+                    {subjectCode}
+                  </Badge>
+                  <Badge variant="secondary" className="text-xs bg-gray-800 text-gray-300">
+                    {subjectName}
+                  </Badge>
+                  <Badge variant="secondary" className="text-xs bg-gray-800 text-blue-300 border border-blue-700">
+                    Semester {result.semester}
+                  </Badge>
+                  <Badge variant="secondary" className="text-xs bg-gray-800 text-purple-300 border border-purple-700">
+                    {result.type.charAt(0).toUpperCase() + result.type.slice(1)}
+                  </Badge>
+                </div>
+              </div>
+            </div>
+            {result.description && (
+              <div className="mb-2 text-gray-400 text-xs line-clamp-2">
+                {highlight(result.description, searchQuery)}
+              </div>
+            )}
+            <div className="mt-2 p-2 bg-gray-800 rounded-lg border border-gray-700 group-hover:bg-gray-700 transition-colors">
+              <p className="text-xs text-blue-300 text-center font-medium">📱 Click to view PDF in new tab</p>
+            </div>
+          </div>
+          <div className="mt-3">
+            <Button
+              size="sm"
+              variant="outline"
+              className="w-full border-gray-700 bg-gray-900 text-gray-300 hover:bg-gray-800 hover:border-blue-500 hover:text-blue-400 transition-colors"
+              onClick={() => {
+                window.open(result.url, "_blank")
+              }}
+            >
+              <Eye className="h-4 w-4 mr-1" /> View PDF
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-800">
