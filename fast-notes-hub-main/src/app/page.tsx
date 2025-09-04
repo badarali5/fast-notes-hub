@@ -291,7 +291,7 @@ export default function Dashboard() {
             {semesters.map((semester) => (
               <Card
                 key={semester.id}
-                className="hover:shadow-2xl transition-all duration-200 border border-gray-800 bg-gray-900"
+                className="group hover:shadow-2xl transition-all duration-300 border border-gray-800 bg-gray-900 hover:border-blue-500 hover:bg-gray-950 hover:scale-[1.03]"
               >
                 <CardHeader className="pb-3">
                   <CardTitle className="text-lg font-semibold text-blue-400">
@@ -305,17 +305,17 @@ export default function Dashboard() {
                       <a
                         key={subject.value}
                         href={`/subject/${subject.value?.toLowerCase()}?semester=${semester.id}`}
-                        className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-800 transition-colors duration-150 group cursor-pointer"
+                        className="flex items-center space-x-3 p-3 rounded-lg transition-all duration-200 group cursor-pointer bg-gray-900 hover:bg-blue-950/70 hover:scale-[1.04] hover:shadow-lg border border-transparent hover:border-blue-400"
                       >
                         <div className="flex items-center gap-4">
                           {IconComponent && (
-                            <IconComponent className="h-5 w-5 flex-shrink-0 text-blue-400 hover:bg-gray-800 hover:border-blue-500 " />
+                            <IconComponent className="h-5 w-5 flex-shrink-0 text-blue-400 group-hover:text-blue-300 transition-colors duration-200" />
                           )}
                           <div className="flex flex-col">
-                            <span className="font-medium text-white hover:bg-gray-800 hover:border-blue-500">
+                            <span className="font-medium text-white group-hover:text-blue-300 transition-colors duration-200">
                               {subject.value}
                             </span>
-                            <span className="text-sm text-gray-400">{subject.fullName}</span>
+                            <span className="text-sm text-gray-400 group-hover:text-blue-200 transition-colors duration-200">{subject.fullName}</span>
                           </div>
                         </div>
                       </a>
@@ -335,10 +335,14 @@ export default function Dashboard() {
             <li>Subjects may be misplaced by semester, but resources are available for all.</li>
           </ul>
           <p className="text-gray-300 mb-2">
-            Want to contribute notes, past papers, or slides? Email us at{" "}
+            Want to contribute notes, past papers, or slides, or have any suggestions? Email us at{" "}
             <a
-              href="mailto:fastnoteshub@gmail.com"
+              href="#"
               className="text-blue-400 underline font-medium"
+              onClick={e => {
+                e.preventDefault();
+                window.open('https://mail.google.com/mail/?view=cm&fs=1&to=fastnoteshub@gmail.com', '_blank');
+              }}
             >
               fastnoteshub@gmail.com
             </a>

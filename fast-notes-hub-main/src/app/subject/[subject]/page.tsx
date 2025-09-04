@@ -98,7 +98,7 @@ function ResourceCard({ resource }: { resource: Resource }) {
           <Button
             size="sm"
             variant="outline"
-            className="w-full border-gray-700 bg-gray-900 text-gray-300 hover:bg-gray-800 hover:border-blue-500 hover:text-blue-400 transition-colors"
+            className="w-full border-gray-700 bg-gray-900 text-gray-300 hover:bg-gray-800 hover:border-blue-500 hover:text-blue-400 transition-colors cursor-pointer"
             onClick={openPdf}
           >
             <Eye className="h-4 w-4 mr-1" /> View PDF
@@ -184,7 +184,7 @@ export default function SubjectPage() {
     <div className="flex items-center w-full mb-6">
       <button
         onClick={() => window.history.back()}
-        className="flex items-center space-x-2 text-blue-400 hover:text-blue-300 font-medium"
+              className="flex items-center space-x-2 text-blue-400 hover:text-blue-300 font-medium cursor-pointer"
       >
         <ArrowLeft className="h-5 w-5" />
         <span>Back to Home Page</span>
@@ -210,19 +210,19 @@ export default function SubjectPage() {
           >
             <TabsTrigger
               value="notes"
-              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-1 sm:px-3 sm:py-2 transition"
+              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-1 sm:px-3 sm:py-2 transition cursor-pointer"
             >
               <FileText className="h-4 w-4 mr-1" /> Notes ({resources.notes.length})
             </TabsTrigger>
             <TabsTrigger
               value="papers"
-              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-1 sm:px-3 sm:py-2 transition"
+              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-1 sm:px-3 sm:py-2 transition cursor-pointer"
             >
               <BookOpen className="h-4 w-4 mr-1" /> Past Papers ({resources.papers.length})
             </TabsTrigger>
             <TabsTrigger
               value="slides"
-              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-1 sm:px-3 sm:py-2 transition"
+              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-1 sm:px-3 sm:py-2 transition cursor-pointer"
             >
               <Presentation className="h-4 w-4 mr-1" /> Slides ({resources.slides.length})
             </TabsTrigger>
@@ -260,25 +260,25 @@ export default function SubjectPage() {
           <TabsContent value="papers" className="space-y-4">
             <div className="w-full mb-6 flex flex-wrap justify-center gap-2 rounded-xl">
               <button
-                className={`data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-1 sm:px-3 sm:py-2 transition ${papersSubTab === 'final' ? 'bg-gray-800 text-blue-300' : ''}`}
+                className={`data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-1 sm:px-3 sm:py-2 transition cursor-pointer ${papersSubTab === 'final' ? 'bg-gray-800 text-blue-300' : ''}`}
                 onClick={() => setPapersSubTab('final')}
               >
                 <BookOpen className="h-4 w-4 mr-1" /> Final Theory
               </button>
               <button
-                className={`data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-1 sm:px-3 sm:py-2 transition ${papersSubTab === 'mid' ? 'bg-gray-800 text-blue-300' : ''}`}
+                className={`data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-1 sm:px-3 sm:py-2 transition cursor-pointer ${papersSubTab === 'mid' ? 'bg-gray-800 text-blue-300' : ''}`}
                 onClick={() => setPapersSubTab('mid')}
               >
                 <BookOpen className="h-4 w-4 mr-1" /> Mid Theory
               </button>
               <button
-                className={`data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-1 sm:px-3 sm:py-2 transition ${papersSubTab === 'finalLab' ? 'bg-gray-800 text-blue-300' : ''}`}
+                className={`data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-1 sm:px-3 sm:py-2 transition cursor-pointer ${papersSubTab === 'finalLab' ? 'bg-gray-800 text-blue-300' : ''}`}
                 onClick={() => setPapersSubTab('finalLab')}
               >
                 <BookOpen className="h-4 w-4 mr-1" /> Final Lab
               </button>
               <button
-                className={`data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-1 sm:px-3 sm:py-2 transition ${papersSubTab === 'midLab' ? 'bg-gray-800 text-blue-300' : ''}`}
+                className={`data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-1 sm:px-3 sm:py-2 transition cursor-pointer ${papersSubTab === 'midLab' ? 'bg-gray-800 text-blue-300' : ''}`}
                 onClick={() => setPapersSubTab('midLab')}
               >
                 <BookOpen className="h-4 w-4 mr-1" /> Mid Lab
@@ -294,10 +294,11 @@ export default function SubjectPage() {
                 <div className="text-center py-12 text-red-400">{errorMsg}</div>
               ) : (() => {
                 // Filter and sort by number descending
-                const filtered = resources.papers.filter(res =>
-                  (/final/i.test(res.title) || /final/i.test(res.file_name)) &&
-                  !/lab/i.test(res.title) && !/lab/i.test(res.file_name)
-                );
+                const filtered = resources.papers.filter(res => {
+                  const isFinal = /final/i.test(res.title) || /final/i.test(res.file_name);
+                  const isLab = /lab/i.test(res.title) || /lab/i.test(res.file_name);
+                  return isFinal && !isLab;
+                });
                 const extractNumber = (str: string) => {
                   const match = str.match(/\d+/g);
                   return match ? Math.max(...match.map(Number)) : -1;
@@ -333,10 +334,11 @@ export default function SubjectPage() {
                 <div className="text-center py-12 text-red-400">{errorMsg}</div>
               ) : (() => {
                 // Filter and sort by number descending
-                const filtered = resources.papers.filter(res =>
-                  (/mid/i.test(res.title) || /mid/i.test(res.file_name)) &&
-                  !/lab/i.test(res.title) && !/lab/i.test(res.file_name)
-                );
+                const filtered = resources.papers.filter(res => {
+                  const isMid = /mid/i.test(res.title) || /mid/i.test(res.file_name);
+                  const isLab = /lab/i.test(res.title) || /lab/i.test(res.file_name);
+                  return isMid && !isLab;
+                });
                 const extractNumber = (str: string) => {
                   const match = str.match(/\d+/g);
                   return match ? Math.max(...match.map(Number)) : -1;
@@ -372,10 +374,11 @@ export default function SubjectPage() {
                 <div className="text-center py-12 text-red-400">{errorMsg}</div>
               ) : (() => {
                 // Filter and sort by number descending
-                const filtered = resources.papers.filter(res =>
-                  (/final/i.test(res.title) || /final/i.test(res.file_name)) &&
-                  (/lab/i.test(res.title) || /lab/i.test(res.file_name))
-                );
+                const filtered = resources.papers.filter(res => {
+                  const isFinal = /final/i.test(res.title) || /final/i.test(res.file_name);
+                  const isLab = /lab/i.test(res.title) || /lab/i.test(res.file_name);
+                  return isFinal && isLab;
+                });
                 const extractNumber = (str: string) => {
                   const match = str.match(/\d+/g);
                   return match ? Math.max(...match.map(Number)) : -1;
@@ -411,10 +414,11 @@ export default function SubjectPage() {
                 <div className="text-center py-12 text-red-400">{errorMsg}</div>
               ) : (() => {
                 // Filter and sort by number descending
-                const filtered = resources.papers.filter(res =>
-                  (/mid/i.test(res.title) || /mid/i.test(res.file_name)) &&
-                  (/lab/i.test(res.title) || /lab/i.test(res.file_name))
-                );
+                const filtered = resources.papers.filter(res => {
+                  const isMid = /mid/i.test(res.title) || /mid/i.test(res.file_name);
+                  const isLab = /lab/i.test(res.title) || /lab/i.test(res.file_name);
+                  return isMid && isLab;
+                });
                 const extractNumber = (str: string) => {
                   const match = str.match(/\d+/g);
                   return match ? Math.max(...match.map(Number)) : -1;
