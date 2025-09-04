@@ -56,7 +56,7 @@ interface Resource {
 }
 
 
-const tabTypes = ["notes", "papers", "final", "mid", "slides"] as const;
+const tabTypes = ["notes", "papers", "slides"] as const;
 type TabType = (typeof tabTypes)[number];
 type ResourcesMap = Record<"notes" | "papers" | "slides", Resource[]>;
 
@@ -125,6 +125,7 @@ export default function SubjectPage() {
     slides: [],
   });
   const [activeTab, setActiveTab] = useState<TabType>("papers");
+  const [papersSubTab, setPapersSubTab] = useState<"final" | "mid">("final");
   const [isLoading, setIsLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
@@ -218,18 +219,6 @@ export default function SubjectPage() {
               className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-1 sm:px-3 sm:py-2 transition"
             >
               <BookOpen className="h-4 w-4 mr-1" /> Past Papers ({resources.papers.length})
-              <TabsTrigger
-              value="final"
-              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-1 sm:px-3 sm:py-2 transition"
-            >
-              <BookOpen className="h-4 w-4 mr-1" /> Final
-             </TabsTrigger>
-            <TabsTrigger
-              value="mid"
-              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-1 sm:px-3 sm:py-2 transition"
-            >
-              <BookOpen className="h-4 w-4 mr-1" /> Mid
-            </TabsTrigger>
             </TabsTrigger>
             <TabsTrigger
               value="slides"
@@ -239,32 +228,58 @@ export default function SubjectPage() {
             </TabsTrigger>
           </TabsList>
 
-          {tabTypes.map((tab) => {
-            let tabResources: Resource[] = [];
-            if (tab === "final") {
-              tabResources = resources.papers.filter(
-                (res) => /final/i.test(res.title) || /final/i.test(res.file_name)
-              );
-            } else if (tab === "mid") {
-              tabResources = resources.papers.filter(
-                (res) => /mid/i.test(res.title) || /mid/i.test(res.file_name)
-              );
-            } else if (tab === "papers" || tab === "notes" || tab === "slides") {
-              tabResources = resources[tab];
-            }
+          {/* Notes Tab Content */}
+          <TabsContent value="notes" className="space-y-4">
+            {isLoading ? (
+              <div className="text-center py-12">
+                <div className="w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                <p className="text-gray-400">Loading notes...</p>
+              </div>
+            ) : errorMsg ? (
+              <div className="text-center py-12 text-red-400">{errorMsg}</div>
+            ) : resources.notes.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {resources.notes.map((res) => (
+                  <div
+                    key={res.id}
+                    className="w-full sm:w-[340px] lg:w-[370px] max-w-full flex-shrink-0"
+                  >
+                    <ResourceCard resource={res} />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <FileText className="h-12 w-12 text-gray-500 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-white mb-2">
+                  No notes are yet available for {subjectFullName}
+                </h3>
+              </div>
+            )}
+          </TabsContent>
 
-            return (
-              <TabsContent key={tab} value={tab} className="space-y-4">
+          {/* Past Papers Tab Content with sub-tabs */}
+          <TabsContent value="papers" className="space-y-4">
+            <Tabs value={papersSubTab} onValueChange={(val) => setPapersSubTab(val as "final" | "mid") }>
+              <TabsList className="mb-4 flex justify-center gap-2 bg-gray-800 border border-gray-700 rounded-lg">
+                <TabsTrigger value="final" className="data-[state=active]:bg-gray-700 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium rounded-lg px-3 py-2 transition">
+                  Final
+                </TabsTrigger>
+                <TabsTrigger value="mid" className="data-[state=active]:bg-gray-700 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium rounded-lg px-3 py-2 transition">
+                  Mid
+                </TabsTrigger>
+              </TabsList>
+              <TabsContent value="final">
                 {isLoading ? (
                   <div className="text-center py-12">
                     <div className="w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                    <p className="text-gray-400">Loading {tab}...</p>
+                    <p className="text-gray-400">Loading final papers...</p>
                   </div>
                 ) : errorMsg ? (
                   <div className="text-center py-12 text-red-400">{errorMsg}</div>
-                ) : tabResources.length > 0 ? (
+                ) : resources.papers.filter(res => /final/i.test(res.title) || /final/i.test(res.file_name)).length > 0 ? (
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {tabResources.map((res) => (
+                    {resources.papers.filter(res => /final/i.test(res.title) || /final/i.test(res.file_name)).map((res) => (
                       <div
                         key={res.id}
                         className="w-full sm:w-[340px] lg:w-[370px] max-w-full flex-shrink-0"
@@ -277,13 +292,71 @@ export default function SubjectPage() {
                   <div className="text-center py-12">
                     <FileText className="h-12 w-12 text-gray-500 mx-auto mb-4" />
                     <h3 className="text-lg font-medium text-white mb-2">
-                      No {tab} are yet available for {subjectFullName}
+                      No final papers are yet available for {subjectFullName}
                     </h3>
                   </div>
                 )}
               </TabsContent>
-            );
-          })}
+              <TabsContent value="mid">
+                {isLoading ? (
+                  <div className="text-center py-12">
+                    <div className="w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                    <p className="text-gray-400">Loading mid papers...</p>
+                  </div>
+                ) : errorMsg ? (
+                  <div className="text-center py-12 text-red-400">{errorMsg}</div>
+                ) : resources.papers.filter(res => /mid/i.test(res.title) || /mid/i.test(res.file_name)).length > 0 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {resources.papers.filter(res => /mid/i.test(res.title) || /mid/i.test(res.file_name)).map((res) => (
+                      <div
+                        key={res.id}
+                        className="w-full sm:w-[340px] lg:w-[370px] max-w-full flex-shrink-0"
+                      >
+                        <ResourceCard resource={res} />
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-12">
+                    <FileText className="h-12 w-12 text-gray-500 mx-auto mb-4" />
+                    <h3 className="text-lg font-medium text-white mb-2">
+                      No mid papers are yet available for {subjectFullName}
+                    </h3>
+                  </div>
+                )}
+              </TabsContent>
+            </Tabs>
+          </TabsContent>
+
+          {/* Slides Tab Content */}
+          <TabsContent value="slides" className="space-y-4">
+            {isLoading ? (
+              <div className="text-center py-12">
+                <div className="w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                <p className="text-gray-400">Loading slides...</p>
+              </div>
+            ) : errorMsg ? (
+              <div className="text-center py-12 text-red-400">{errorMsg}</div>
+            ) : resources.slides.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {resources.slides.map((res) => (
+                  <div
+                    key={res.id}
+                    className="w-full sm:w-[340px] lg:w-[370px] max-w-full flex-shrink-0"
+                  >
+                    <ResourceCard resource={res} />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <FileText className="h-12 w-12 text-gray-500 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-white mb-2">
+                  No slides are yet available for {subjectFullName}
+                </h3>
+              </div>
+            )}
+          </TabsContent>
         </Tabs>
       </main>
     </div>
