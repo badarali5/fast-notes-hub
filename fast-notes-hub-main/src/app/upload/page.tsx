@@ -312,9 +312,9 @@ export default function UploadPage() {
               <option value="SE1001">SE1001 - Introduction to Software Engineering</option>
               <option value="MT1004">MT1004 - Linear Algebra</option>
               <option value="CS3005">CS3005 - Theory Of Automata</option>
-              <option value="SS-2002">SS-2002 - Fundamentals of Economics</option>
-              <option value="MG-1001">MG-1001 - Fundamentals of Management</option>
-              <option value="AF-1001">AF-1001 - Fundamentals of Accounting</option>
+              <option value="SS2002">SSS2002 - Fundamentals of Economics</option>
+              <option value="MG1001">MGG1001 - Fundamentals of Management</option>
+              <option value="AF1001">AFF1001 - Fundamentals of Accounting</option>
             </optgroup>
             <optgroup label="Semester 4">
               <option value="CS2005">CS2005 - Database Systems</option>

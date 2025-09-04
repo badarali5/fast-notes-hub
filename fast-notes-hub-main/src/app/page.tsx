@@ -213,60 +213,54 @@ export default function Dashboard() {
     const subjectCode = result.subject?.toUpperCase();
     const subjectName = subjectFullNames[subjectCode] || result.subject;
     return (
-      <Card className="hover:shadow-2xl transition-all duration-200 cursor-pointer group border border-gray-800 bg-gray-900 hover:border-blue-500 hover:bg-gray-800">
-        <CardContent className="p-4">
-          <div
-            className="cursor-pointer"
-            onClick={() => {
-              window.open(result.url, "_blank")
-            }}
-          >
-            <div className="flex items-start justify-between mb-2">
-              <div className="flex-1">
-                <div className="flex items-center space-x-2 mb-1">
-                  {getTypeIcon(result.type)}
-                  <h4 className="font-semibold text-white group-hover:text-blue-400 transition-colors text-base line-clamp-2">
-                    {highlight(result.title, searchQuery)}
-                  </h4>
-                </div>
-                <div className="flex flex-wrap items-center gap-2 mb-2">
-                  <Badge variant="outline" className="text-xs border-gray-700 bg-gray-800 text-gray-300">
-                    {subjectCode}
-                  </Badge>
-                  <Badge variant="secondary" className="text-xs bg-gray-800 text-gray-300">
-                    {subjectName}
-                  </Badge>
-                  <Badge variant="secondary" className="text-xs bg-gray-800 text-blue-300 border border-blue-700">
-                    Semester {result.semester}
-                  </Badge>
-                  <Badge variant="secondary" className="text-xs bg-gray-800 text-purple-300 border border-purple-700">
-                    {result.type.charAt(0).toUpperCase() + result.type.slice(1)}
-                  </Badge>
-                </div>
+      <Card
+        className="group border border-gray-800 bg-gradient-to-br from-gray-900 via-gray-950 to-gray-900 hover:border-blue-500 hover:shadow-blue-900/40 shadow-lg hover:shadow-2xl transition-all duration-200 cursor-pointer relative overflow-hidden"
+        onClick={() => window.open(result.url, "_blank")}
+      >
+        {/* Animated blue glow on hover */}
+        <span className="absolute inset-0 pointer-events-none group-hover:shadow-[0_0_40px_10px_rgba(59,130,246,0.15)] transition-all duration-300 rounded-xl" />
+        <CardContent className="p-5 flex flex-col h-full">
+          <div className="flex items-center gap-3 mb-2">
+            <span className="flex items-center justify-center rounded-full bg-gray-800 border border-blue-700 w-10 h-10 group-hover:bg-blue-950/60 transition-all">
+              {getTypeIcon(result.type)}
+            </span>
+            <div className="flex-1 min-w-0">
+              <h4 className="font-bold text-white text-lg group-hover:text-blue-400 transition-colors line-clamp-2">
+                {highlight(result.title, searchQuery)}
+              </h4>
+              <div className="flex flex-wrap items-center gap-2 mt-1">
+                <Badge variant="outline" className="text-xs border-gray-700 bg-gray-800 text-gray-300">
+                  {subjectCode}
+                </Badge>
+                <Badge variant="secondary" className="text-xs bg-gray-800 text-gray-300">
+                  {subjectName}
+                </Badge>
+                <Badge variant="secondary" className="text-xs bg-gray-800 text-blue-300 border border-blue-700">
+                  Semester {result.semester}
+                </Badge>
+                <Badge variant="secondary" className="text-xs bg-gray-800 text-purple-300 border border-purple-700">
+                  {result.type.charAt(0).toUpperCase() + result.type.slice(1)}
+                </Badge>
               </div>
-            </div>
-            {result.description && (
-              <div className="mb-2 text-gray-400 text-xs line-clamp-2">
-                {highlight(result.description, searchQuery)}
-              </div>
-            )}
-            <div className="mt-2 p-2 bg-gray-800 rounded-lg border border-gray-700 group-hover:bg-gray-700 transition-colors">
-              <p className="text-xs text-blue-300 text-center font-medium">📱 Click to view PDF in new tab</p>
             </div>
           </div>
-          <div className="mt-3">
-            <Button
-              size="sm"
-              variant="outline"
-              className="w-full border-gray-700 bg-gray-900 text-gray-300 hover:bg-gray-800 hover:border-blue-500 hover:text-blue-400 transition-colors"
-              onClick={() => {
-                window.open(result.url, "_blank")
-              }}
-            >
-              <Eye className="h-4 w-4 mr-1" /> View PDF
-            </Button>
+          {result.description && (
+            <div className="mb-2 text-gray-400 text-xs line-clamp-2">
+              {highlight(result.description, searchQuery)}
+            </div>
+          )}
+          <div className="flex-1 flex flex-col justify-end">
+            <div className="mt-2 p-2 bg-gray-800 rounded-lg border border-gray-700 group-hover:bg-blue-950/60 transition-colors flex items-center justify-between">
+              <span className="text-xs text-blue-300 font-medium flex items-center gap-1">
+                <Eye className="h-4 w-4 mr-1 inline-block" />
+                Click to view PDF in new tab
+              </span>
+              <span className="ml-2 text-xs text-gray-400 group-hover:text-blue-400 transition-colors">{result.file_name}</span>
+            </div>
           </div>
         </CardContent>
+        {/* Animated border on hover */}
+        <span className="absolute inset-0 border-2 border-transparent group-hover:border-blue-500 rounded-xl pointer-events-none transition-all duration-300" />
       </Card>
     );
   }

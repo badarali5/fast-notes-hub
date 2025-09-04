@@ -6,7 +6,6 @@ import { supabase } from "@/lib/supabase"
 import { ArrowLeft, Eye, FileText, Presentation, BookOpen, File} from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 const subjectFullNames: Record<string, string> = {
