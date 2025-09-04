@@ -185,9 +185,9 @@ export default function Dashboard() {
     CS3001: "Computer Networks",
     SE4002: "Fundamentals of Software Project Management",
     CS3006: "Parallel and Distributed Computing",
-    "SS-2002": "Fundamentals of Economics",
-    "MG-1001": "Fundamentals of Management",
-    "AF-1001": "Fundamentals of Accounting",
+    SS2002: "Fundamentals of Economics",
+    MG1001: "Fundamentals of Management",
+    AF1001: "Fundamentals of Accounting",
   };
 
   // Helper: highlight search query in text
