@@ -226,7 +226,7 @@ export default function SubjectPage() {
             >
               <Presentation className="h-4 w-4 mr-1" /> Slides ({resources.slides.length})
             </TabsTrigger>
-          
+          </TabsList>
 
           {/* Notes Tab Content */}
           <TabsContent value="notes" className="space-y-4">
@@ -258,74 +258,77 @@ export default function SubjectPage() {
             )}
           </TabsContent>
           <TabsContent value="papers" className="space-y-4">
-            <Tabs value={papersSubTab} onValueChange={(val) => setPapersSubTab(val as "final" | "mid") }>
-              <TabsList className="mb-4 flex justify-center gap-2 bg-gray-800 border border-gray-700 rounded-lg">
-                <TabsTrigger value="final" className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-1 sm:px-3 sm:py-2 transition">
-                  Final
-                </TabsTrigger>
-                <TabsTrigger value="mid" className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-1 sm:px-3 sm:py-2 transition">
-                  Mid
-                </TabsTrigger>
-              </TabsList>
-              <TabsContent value="final">
-                {isLoading ? (
-                  <div className="text-center py-12">
-                    <div className="w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                    <p className="text-gray-400">Loading final papers...</p>
-                  </div>
-                ) : errorMsg ? (
-                  <div className="text-center py-12 text-red-400">{errorMsg}</div>
-                ) : resources.papers.filter(res => /final/i.test(res.title) || /final/i.test(res.file_name)).length > 0 ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {resources.papers.filter(res => /final/i.test(res.title) || /final/i.test(res.file_name)).map((res) => (
-                      <div
-                        key={res.id}
-                        className="w-full sm:w-[340px] lg:w-[370px] max-w-full flex-shrink-0"
-                      >
-                        <ResourceCard resource={res} />
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-center py-12">
-                    <FileText className="h-12 w-12 text-gray-500 mx-auto mb-4" />
-                    <h3 className="text-lg font-medium text-white mb-2">
-                      No final papers are yet available for {subjectFullName}
-                    </h3>
-                  </div>
-                )}
-              </TabsContent>
-              <TabsContent value="mid">
-                {isLoading ? (
-                  <div className="text-center py-12">
-                    <div className="w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                    <p className="text-gray-400">Loading mid papers...</p>
-                  </div>
-                ) : errorMsg ? (
-                  <div className="text-center py-12 text-red-400">{errorMsg}</div>
-                ) : resources.papers.filter(res => /mid/i.test(res.title) || /mid/i.test(res.file_name)).length > 0 ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {resources.papers.filter(res => /mid/i.test(res.title) || /mid/i.test(res.file_name)).map((res) => (
-                      <div
-                        key={res.id}
-                        className="w-full sm:w-[340px] lg:w-[370px] max-w-full flex-shrink-0"
-                      >
-                        <ResourceCard resource={res} />
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-center py-12">
-                    <FileText className="h-12 w-12 text-gray-500 mx-auto mb-4" />
-                    <h3 className="text-lg font-medium text-white mb-2">
-                      No mid papers are yet available for {subjectFullName}
-                    </h3>
-                  </div>
-                )}
-              </TabsContent>
-            </Tabs>
+            <div className="w-full mb-6 flex flex-wrap justify-center gap-2 rounded-xl">
+              <button
+                className={`data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-1 sm:px-3 sm:py-2 transition ${papersSubTab === 'final' ? 'bg-gray-800 text-blue-300' : ''}`}
+                onClick={() => setPapersSubTab('final')}
+              >
+                <BookOpen className="h-4 w-4 mr-1" /> Final
+              </button>
+              <button
+                className={`data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-1 sm:px-3 sm:py-2 transition ${papersSubTab === 'mid' ? 'bg-gray-800 text-blue-300' : ''}`}
+                onClick={() => setPapersSubTab('mid')}
+              >
+                <BookOpen className="h-4 w-4 mr-1" /> Mid
+              </button>
+            </div>
+            {papersSubTab === 'final' ? (
+              isLoading ? (
+                <div className="text-center py-12">
+                  <div className="w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                  <p className="text-gray-400">Loading final papers...</p>
+                </div>
+              ) : errorMsg ? (
+                <div className="text-center py-12 text-red-400">{errorMsg}</div>
+              ) : resources.papers.filter(res => /final/i.test(res.title) || /final/i.test(res.file_name)).length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {resources.papers.filter(res => /final/i.test(res.title) || /final/i.test(res.file_name)).map((res) => (
+                    <div
+                      key={res.id}
+                      className="w-full sm:w-[340px] lg:w-[370px] max-w-full flex-shrink-0"
+                    >
+                      <ResourceCard resource={res} />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-12">
+                  <FileText className="h-12 w-12 text-gray-500 mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-white mb-2">
+                    No final papers are yet available for {subjectFullName}
+                  </h3>
+                </div>
+              )
+            ) : papersSubTab === 'mid' ? (
+              isLoading ? (
+                <div className="text-center py-12">
+                  <div className="w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                  <p className="text-gray-400">Loading mid papers...</p>
+                </div>
+              ) : errorMsg ? (
+                <div className="text-center py-12 text-red-400">{errorMsg}</div>
+              ) : resources.papers.filter(res => /mid/i.test(res.title) || /mid/i.test(res.file_name)).length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {resources.papers.filter(res => /mid/i.test(res.title) || /mid/i.test(res.file_name)).map((res) => (
+                    <div
+                      key={res.id}
+                      className="w-full sm:w-[340px] lg:w-[370px] max-w-full flex-shrink-0"
+                    >
+                      <ResourceCard resource={res} />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-12">
+                  <FileText className="h-12 w-12 text-gray-500 mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-white mb-2">
+                    No mid papers are yet available for {subjectFullName}
+                  </h3>
+                </div>
+              )
+            ) : null}
           </TabsContent>
-          </TabsList>
+
           {/* Slides Tab Content */}
           <TabsContent value="slides" className="space-y-4">
             {isLoading ? (
