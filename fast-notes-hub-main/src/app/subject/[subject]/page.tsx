@@ -280,25 +280,34 @@ export default function SubjectPage() {
                 </div>
               ) : errorMsg ? (
                 <div className="text-center py-12 text-red-400">{errorMsg}</div>
-              ) : resources.papers.filter(res => /final/i.test(res.title) || /final/i.test(res.file_name)).length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {resources.papers.filter(res => /final/i.test(res.title) || /final/i.test(res.file_name)).map((res) => (
-                    <div
-                      key={res.id}
-                      className="w-full sm:w-[340px] lg:w-[370px] max-w-full flex-shrink-0"
-                    >
-                      <ResourceCard resource={res} />
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-12">
-                  <FileText className="h-12 w-12 text-gray-500 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-white mb-2">
-                    No final papers are yet available for {subjectFullName}
-                  </h3>
-                </div>
-              )
+              ) : (() => {
+                // Filter and sort by number descending
+                const filtered = resources.papers.filter(res => /final/i.test(res.title) || /final/i.test(res.file_name));
+                const extractNumber = (str: string) => {
+                  const match = str.match(/\d+/g);
+                  return match ? Math.max(...match.map(Number)) : -1;
+                };
+                const sorted = filtered.slice().sort((a, b) => extractNumber(b.title + ' ' + b.file_name) - extractNumber(a.title + ' ' + a.file_name));
+                return sorted.length > 0 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {sorted.map((res) => (
+                      <div
+                        key={res.id}
+                        className="w-full sm:w-[340px] lg:w-[370px] max-w-full flex-shrink-0"
+                      >
+                        <ResourceCard resource={res} />
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-12">
+                    <FileText className="h-12 w-12 text-gray-500 mx-auto mb-4" />
+                    <h3 className="text-lg font-medium text-white mb-2">
+                      No final papers are yet available for {subjectFullName}
+                    </h3>
+                  </div>
+                );
+              })()
             ) : papersSubTab === 'mid' ? (
               isLoading ? (
                 <div className="text-center py-12">
@@ -307,25 +316,34 @@ export default function SubjectPage() {
                 </div>
               ) : errorMsg ? (
                 <div className="text-center py-12 text-red-400">{errorMsg}</div>
-              ) : resources.papers.filter(res => /mid/i.test(res.title) || /mid/i.test(res.file_name)).length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {resources.papers.filter(res => /mid/i.test(res.title) || /mid/i.test(res.file_name)).map((res) => (
-                    <div
-                      key={res.id}
-                      className="w-full sm:w-[340px] lg:w-[370px] max-w-full flex-shrink-0"
-                    >
-                      <ResourceCard resource={res} />
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-12">
-                  <FileText className="h-12 w-12 text-gray-500 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-white mb-2">
-                    No mid papers are yet available for {subjectFullName}
-                  </h3>
-                </div>
-              )
+              ) : (() => {
+                // Filter and sort by number descending
+                const filtered = resources.papers.filter(res => /mid/i.test(res.title) || /mid/i.test(res.file_name));
+                const extractNumber = (str: string) => {
+                  const match = str.match(/\d+/g);
+                  return match ? Math.max(...match.map(Number)) : -1;
+                };
+                const sorted = filtered.slice().sort((a, b) => extractNumber(b.title + ' ' + b.file_name) - extractNumber(a.title + ' ' + a.file_name));
+                return sorted.length > 0 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {sorted.map((res) => (
+                      <div
+                        key={res.id}
+                        className="w-full sm:w-[340px] lg:w-[370px] max-w-full flex-shrink-0"
+                      >
+                        <ResourceCard resource={res} />
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-12">
+                    <FileText className="h-12 w-12 text-gray-500 mx-auto mb-4" />
+                    <h3 className="text-lg font-medium text-white mb-2">
+                      No mid papers are yet available for {subjectFullName}
+                    </h3>
+                  </div>
+                );
+              })()
             ) : null}
           </TabsContent>
 
