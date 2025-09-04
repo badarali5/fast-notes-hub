@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { useSearchParams, useParams } from "next/navigation"
 import { supabase } from "@/lib/supabase"
-import { ArrowLeft, Eye, FileText, Presentation, BookOpen, File, Search, Code } from "lucide-react"
+import { ArrowLeft, Eye, FileText, Presentation, BookOpen, File} from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -257,15 +257,13 @@ export default function SubjectPage() {
               </div>
             )}
           </TabsContent>
-
-          {/* Past Papers Tab Content with sub-tabs */}
           <TabsContent value="papers" className="space-y-4">
             <Tabs value={papersSubTab} onValueChange={(val) => setPapersSubTab(val as "final" | "mid") }>
               <TabsList className="mb-4 flex justify-center gap-2 bg-gray-800 border border-gray-700 rounded-lg">
-                <TabsTrigger value="final" className="data-[state=active]:bg-gray-700 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium rounded-lg px-3 py-2 transition">
+                <TabsTrigger value="final" className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-1 sm:px-3 sm:py-2 transition">
                   Final
                 </TabsTrigger>
-                <TabsTrigger value="mid" className="data-[state=active]:bg-gray-700 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium rounded-lg px-3 py-2 transition">
+                <TabsTrigger value="mid" className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-1 sm:px-3 sm:py-2 transition">
                   Mid
                 </TabsTrigger>
               </TabsList>
