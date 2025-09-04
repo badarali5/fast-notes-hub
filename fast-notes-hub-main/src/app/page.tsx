@@ -58,6 +58,9 @@ const semesters = [
       { value: "SE1001", fullName: "Introduction to Software Engineering", icon: Code },
       { value: "MT1004", fullName: "Linear Algebra", icon: Code },
       { value: "CS3005", fullName: "Theory Of Automata", icon: Code },
+      { value: "SS-2002", fullName: "Fundamentals of Economics", icon: Code },
+      { value: "MG-1001", fullName: "Fundamentals of Management", icon: Code },
+      { value: "AF-1001", fullName: "Fundamentals of Accounting", icon: Code },
     ],
   },
   {
@@ -164,16 +167,12 @@ export default function Dashboard() {
                 <File className="h-4 w-4 text-blue-400" />
                 <h4 className="font-medium text-white group-hover:text-blue-400 transition-colors">{result.title}</h4>
               </div>
-              <p className="text-sm text-gray-300 mb-1">{result.description}</p>
               <div className="flex items-center space-x-2 mb-2">
                 <Badge variant="outline" className="text-xs border-gray-700 bg-gray-800 text-gray-300">
                   {result.subject}
                 </Badge>
                 <Badge variant="secondary" className="text-xs bg-gray-800 text-gray-300">
                   {result.type.charAt(0).toUpperCase() + result.type.slice(1)}
-                </Badge>
-                <Badge variant="outline" className="text-xs border-gray-700 bg-gray-800 text-gray-300">
-                  Semester {result.semester}
                 </Badge>
               </div>
             </div>

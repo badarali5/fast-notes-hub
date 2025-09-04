@@ -41,6 +41,9 @@ const subjectFullNames: Record<string, string> = {
   CS3001: "Computer Networks",
   SE4002: "Fundamentals of Software Project Management",
   CS3006: "Parallel and Distributed Computing",
+  SS2002: "Fundamentals of Economics",
+  MG1001: "Fundamentals of Management",
+  AF1001: "Fundamentals of Accounting",
 }
 
 interface Resource {
@@ -251,30 +254,30 @@ export default function SubjectPage() {
             )}
           </TabsContent>
           <TabsContent value="papers" className="space-y-4">
-            <div className="w-full mb-6 flex flex-row flex-nowrap overflow-x-auto justify-center gap-2 rounded-xl">
+            <div className="w-full mb-6 flex flex-row flex-nowrap overflow-x-auto justify-center gap-1 rounded-xl">
               <button
-                className={`data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-3 py-2 transition cursor-pointer whitespace-nowrap ${papersSubTab === 'final' ? 'bg-gray-800 text-blue-300' : ''}`}
+                className={`data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-2 transition cursor-pointer whitespace-nowrap ${papersSubTab === 'final' ? 'bg-gray-800 text-blue-300' : ''}`}
                 onClick={() => setPapersSubTab('final')}
               >
-                Final Theory
+                <BookOpen className="h-4 w-4 mr-1" /> Final Theory
               </button>
               <button
-                className={`data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-3 py-2 transition cursor-pointer whitespace-nowrap ${papersSubTab === 'mid' ? 'bg-gray-800 text-blue-300' : ''}`}
+                className={`data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-2 transition cursor-pointer whitespace-nowrap ${papersSubTab === 'mid' ? 'bg-gray-800 text-blue-300' : ''}`}
                 onClick={() => setPapersSubTab('mid')}
               >
-                Mid Theory
+                <BookOpen className="h-4 w-4 mr-1" /> Mid Theory
               </button>
               <button
-                className={`data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-3 py-2 transition cursor-pointer whitespace-nowrap ${papersSubTab === 'finalLab' ? 'bg-gray-800 text-blue-300' : ''}`}
+                className={`data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-2 transition cursor-pointer whitespace-nowrap ${papersSubTab === 'finalLab' ? 'bg-gray-800 text-blue-300' : ''}`}
                 onClick={() => setPapersSubTab('finalLab')}
               >
-                Final Lab
+                <BookOpen className="h-4 w-4 mr-1" /> Final Lab
               </button>
               <button
-                className={`data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-3 py-2 transition cursor-pointer whitespace-nowrap ${papersSubTab === 'midLab' ? 'bg-gray-800 text-blue-300' : ''}`}
+                className={`data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-2 transition cursor-pointer whitespace-nowrap ${papersSubTab === 'midLab' ? 'bg-gray-800 text-blue-300' : ''}`}
                 onClick={() => setPapersSubTab('midLab')}
               >
-                Mid Lab
+                <BookOpen className="h-4 w-4 mr-1" /> Mid Lab
               </button>
             </div>
             {papersSubTab === 'final' ? (
