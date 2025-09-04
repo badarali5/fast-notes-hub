@@ -218,18 +218,18 @@ export default function SubjectPage() {
               className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-1 sm:px-3 sm:py-2 transition"
             >
               <BookOpen className="h-4 w-4 mr-1" /> Past Papers ({resources.papers.length})
-            </TabsTrigger>
-            <TabsTrigger
+              <TabsTrigger
               value="final"
               className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-1 sm:px-3 sm:py-2 transition"
             >
               <BookOpen className="h-4 w-4 mr-1" /> Final
-            </TabsTrigger>
+             </TabsTrigger>
             <TabsTrigger
               value="mid"
               className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-1 sm:px-3 sm:py-2 transition"
             >
               <BookOpen className="h-4 w-4 mr-1" /> Mid
+            </TabsTrigger>
             </TabsTrigger>
             <TabsTrigger
               value="slides"
