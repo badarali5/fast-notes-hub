@@ -253,7 +253,7 @@ export default function Dashboard() {
             <div className="mt-2 p-2 bg-gray-800 rounded-lg border border-gray-700 group-hover:bg-blue-950/60 transition-colors flex items-center justify-between">
               <span className="text-xs text-blue-300 font-medium flex items-center gap-1">
                 <Eye className="h-4 w-4 mr-1 inline-block" />
-                Click to view PDF in new tab
+                Click to view PDF
               </span>
               <span className="ml-2 text-xs text-gray-400 group-hover:text-blue-400 transition-colors">{result.file_name}</span>
             </div>

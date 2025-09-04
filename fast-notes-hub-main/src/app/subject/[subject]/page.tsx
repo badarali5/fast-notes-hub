@@ -78,50 +78,46 @@ function ResourceCard({ resource }: { resource: Resource }) {
 
   return (
     <Card
-      className="group border border-gray-800 bg-gray-900 hover:border-blue-500 hover:shadow-blue-900/40 shadow-lg hover:shadow-2xl transition-all duration-200 cursor-pointer relative overflow-hidden"
+      className="group border border-gray-800 bg-gray-900 hover:border-blue-500 hover:shadow-blue-900/30 shadow-md hover:shadow-lg transition-all duration-150 cursor-pointer relative overflow-hidden rounded-lg min-h-0"
       onClick={openPdf}
+      style={{ minHeight: 0, padding: 0 }}
     >
-      {/* Animated blue glow on hover */}
-      <span className="absolute inset-0 pointer-events-none group-hover:shadow-[0_0_40px_10px_rgba(59,130,246,0.15)] transition-all duration-300 rounded-xl" />
-      <CardContent className="p-5 flex flex-col h-full">
-        <div className="flex items-center gap-3 mb-2">
-          <span className="flex items-center justify-center rounded-full bg-gray-800 border border-blue-700 w-10 h-10 group-hover:bg-blue-950/60 transition-all">
-            <File className="h-5 w-5 text-blue-400" />
+      <CardContent className="p-2 flex flex-col h-full min-h-0">
+        <div className="flex items-center gap-2 mb-1">
+          <span className="flex items-center justify-center rounded bg-gray-800 border border-blue-700 w-7 h-7 group-hover:bg-blue-950/60 transition-all">
+            <File className="h-4 w-4 text-blue-400" />
           </span>
           <div className="flex-1 min-w-0">
-            <h4 className="font-bold text-white text-lg group-hover:text-blue-400 transition-colors line-clamp-2">
+            <h4 className="font-semibold text-white text-sm group-hover:text-blue-400 transition-colors truncate">
               {resource.title}
             </h4>
-            <div className="flex flex-wrap items-center gap-2 mt-1">
-              <span className="text-xs bg-gray-800 text-gray-300 border border-gray-700 rounded px-2 py-0.5">
+            <div className="flex flex-wrap items-center gap-1 mt-0.5">
+              <span className="text-[10px] bg-gray-800 text-gray-300 border border-gray-700 rounded px-1 py-0.5">
                 {resource.subject}
               </span>
-              <span className="text-xs bg-gray-800 text-blue-300 border border-blue-700 rounded px-2 py-0.5">
-                Semester {resource.semester}
+              <span className="text-[10px] bg-gray-800 text-blue-300 border border-blue-700 rounded px-1 py-0.5">
+                Sem {resource.semester}
               </span>
-              <span className="text-xs bg-gray-800 text-purple-300 border border-purple-700 rounded px-2 py-0.5">
+              <span className="text-[10px] bg-gray-800 text-purple-300 border border-purple-700 rounded px-1 py-0.5">
                 {resource.type.charAt(0).toUpperCase() + resource.type.slice(1)}
               </span>
             </div>
           </div>
         </div>
         {resource.description && (
-          <div className="mb-2 text-gray-400 text-xs line-clamp-2">
+          <div className="mb-1 text-gray-400 text-[10px] truncate">
             {resource.description}
           </div>
         )}
         <div className="flex-1 flex flex-col justify-end">
-          <div className="mt-2 p-2 bg-gray-800 rounded-lg border border-gray-700 group-hover:bg-blue-950/60 transition-colors flex items-center justify-between">
+          <div className="mt-1 p-1 bg-gray-800 rounded border border-gray-700 group-hover:bg-blue-950/60 transition-colors flex items-center justify-center">
             <span className="text-xs text-blue-300 font-medium flex items-center gap-1">
-              <Eye className="h-4 w-4 mr-1 inline-block" />
-              Click to view PDF in new tab
+              <Eye className="h-3 w-3 mr-1 inline-block" />
+              Open PDF
             </span>
-            <span className="ml-2 text-xs text-gray-400 group-hover:text-blue-400 transition-colors">{resource.file_name}</span>
           </div>
         </div>
       </CardContent>
-      {/* Animated border on hover */}
-      <span className="absolute inset-0 border-2 border-transparent group-hover:border-blue-500 rounded-xl pointer-events-none transition-all duration-300" />
     </Card>
   );
 }
@@ -223,25 +219,26 @@ export default function SubjectPage() {
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={(val) => setActiveTab(val as TabType)} className="w-full">
           <TabsList
-            className="w-full mb-6 bg-gray-900 border border-gray-800 flex flex-wrap justify-center gap-2 rounded-xl"
+            className="w-full mb-6 bg-gray-900 border border-gray-800 flex flex-row flex-nowrap overflow-x-auto justify-center gap-1 sm:gap-2 rounded-xl scrollbar-hide"
+            style={{ WebkitOverflowScrolling: 'touch' }}
           >
             <TabsTrigger
               value="notes"
-              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-1 sm:px-3 sm:py-2 transition cursor-pointer"
+              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-sm sm:text-base font-semibold flex items-center justify-center rounded-lg px-4 py-2 sm:px-5 sm:py-3 transition cursor-pointer whitespace-nowrap min-w-[110px]"
             >
-              <FileText className="h-4 w-4 mr-1" /> Notes ({resources.notes.length})
+              <FileText className="h-5 w-5 mr-1" /> Notes ({resources.notes.length})
             </TabsTrigger>
             <TabsTrigger
               value="papers"
-              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-1 sm:px-3 sm:py-2 transition cursor-pointer"
+              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-sm sm:text-base font-semibold flex items-center justify-center rounded-lg px-4 py-2 sm:px-5 sm:py-3 transition cursor-pointer whitespace-nowrap min-w-[110px]"
             >
-              <BookOpen className="h-4 w-4 mr-1" /> Past Papers ({resources.papers.length})
+              <BookOpen className="h-5 w-5 mr-1" /> Past Papers ({resources.papers.length})
             </TabsTrigger>
             <TabsTrigger
               value="slides"
-              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-1 sm:px-3 sm:py-2 transition cursor-pointer"
+              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-sm sm:text-base font-semibold flex items-center justify-center rounded-lg px-4 py-2 sm:px-5 sm:py-3 transition cursor-pointer whitespace-nowrap min-w-[110px]"
             >
-              <Presentation className="h-4 w-4 mr-1" /> Slides ({resources.slides.length})
+              <Presentation className="h-5 w-5 mr-1" /> Slides ({resources.slides.length})
             </TabsTrigger>
           </TabsList>
 
