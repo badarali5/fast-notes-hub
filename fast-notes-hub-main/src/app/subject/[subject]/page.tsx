@@ -125,7 +125,7 @@ export default function SubjectPage() {
     slides: [],
   });
   const [activeTab, setActiveTab] = useState<TabType>("papers");
-  const [papersSubTab, setPapersSubTab] = useState<"final" | "mid">("final");
+  const [papersSubTab, setPapersSubTab] = useState<"final" | "mid" | "finalLab" | "midLab">("final");
   const [isLoading, setIsLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
@@ -263,13 +263,25 @@ export default function SubjectPage() {
                 className={`data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-1 sm:px-3 sm:py-2 transition ${papersSubTab === 'final' ? 'bg-gray-800 text-blue-300' : ''}`}
                 onClick={() => setPapersSubTab('final')}
               >
-                <BookOpen className="h-4 w-4 mr-1" /> Final
+                <BookOpen className="h-4 w-4 mr-1" /> Final Theory
               </button>
               <button
                 className={`data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-1 sm:px-3 sm:py-2 transition ${papersSubTab === 'mid' ? 'bg-gray-800 text-blue-300' : ''}`}
                 onClick={() => setPapersSubTab('mid')}
               >
-                <BookOpen className="h-4 w-4 mr-1" /> Mid
+                <BookOpen className="h-4 w-4 mr-1" /> Mid Theory
+              </button>
+              <button
+                className={`data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-1 sm:px-3 sm:py-2 transition ${papersSubTab === 'finalLab' ? 'bg-gray-800 text-blue-300' : ''}`}
+                onClick={() => setPapersSubTab('finalLab')}
+              >
+                <BookOpen className="h-4 w-4 mr-1" /> Final Lab
+              </button>
+              <button
+                className={`data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-1 sm:px-3 sm:py-2 transition ${papersSubTab === 'midLab' ? 'bg-gray-800 text-blue-300' : ''}`}
+                onClick={() => setPapersSubTab('midLab')}
+              >
+                <BookOpen className="h-4 w-4 mr-1" /> Mid Lab
               </button>
             </div>
             {papersSubTab === 'final' ? (
@@ -282,7 +294,10 @@ export default function SubjectPage() {
                 <div className="text-center py-12 text-red-400">{errorMsg}</div>
               ) : (() => {
                 // Filter and sort by number descending
-                const filtered = resources.papers.filter(res => /final/i.test(res.title) || /final/i.test(res.file_name));
+                const filtered = resources.papers.filter(res =>
+                  (/final/i.test(res.title) || /final/i.test(res.file_name)) &&
+                  !/lab/i.test(res.title) && !/lab/i.test(res.file_name)
+                );
                 const extractNumber = (str: string) => {
                   const match = str.match(/\d+/g);
                   return match ? Math.max(...match.map(Number)) : -1;
@@ -318,7 +333,10 @@ export default function SubjectPage() {
                 <div className="text-center py-12 text-red-400">{errorMsg}</div>
               ) : (() => {
                 // Filter and sort by number descending
-                const filtered = resources.papers.filter(res => /mid/i.test(res.title) || /mid/i.test(res.file_name));
+                const filtered = resources.papers.filter(res =>
+                  (/mid/i.test(res.title) || /mid/i.test(res.file_name)) &&
+                  !/lab/i.test(res.title) && !/lab/i.test(res.file_name)
+                );
                 const extractNumber = (str: string) => {
                   const match = str.match(/\d+/g);
                   return match ? Math.max(...match.map(Number)) : -1;
@@ -340,6 +358,84 @@ export default function SubjectPage() {
                     <FileText className="h-12 w-12 text-gray-500 mx-auto mb-4" />
                     <h3 className="text-lg font-medium text-white mb-2">
                       No mid papers are yet available for {subjectFullName}
+                    </h3>
+                  </div>
+                );
+              })()
+            ) : papersSubTab === 'finalLab' ? (
+              isLoading ? (
+                <div className="text-center py-12">
+                  <div className="w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                  <p className="text-gray-400">Loading final lab papers...</p>
+                </div>
+              ) : errorMsg ? (
+                <div className="text-center py-12 text-red-400">{errorMsg}</div>
+              ) : (() => {
+                // Filter and sort by number descending
+                const filtered = resources.papers.filter(res =>
+                  (/final/i.test(res.title) || /final/i.test(res.file_name)) &&
+                  (/lab/i.test(res.title) || /lab/i.test(res.file_name))
+                );
+                const extractNumber = (str: string) => {
+                  const match = str.match(/\d+/g);
+                  return match ? Math.max(...match.map(Number)) : -1;
+                };
+                const sorted = filtered.slice().sort((a, b) => extractNumber(b.title + ' ' + b.file_name) - extractNumber(a.title + ' ' + a.file_name));
+                return sorted.length > 0 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {sorted.map((res) => (
+                      <div
+                        key={res.id}
+                        className="w-full sm:w-[340px] lg:w-[370px] max-w-full flex-shrink-0"
+                      >
+                        <ResourceCard resource={res} />
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-12">
+                    <FileText className="h-12 w-12 text-gray-500 mx-auto mb-4" />
+                    <h3 className="text-lg font-medium text-white mb-2">
+                      No final lab papers are yet available for {subjectFullName}
+                    </h3>
+                  </div>
+                );
+              })()
+            ) : papersSubTab === 'midLab' ? (
+              isLoading ? (
+                <div className="text-center py-12">
+                  <div className="w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                  <p className="text-gray-400">Loading mid lab papers...</p>
+                </div>
+              ) : errorMsg ? (
+                <div className="text-center py-12 text-red-400">{errorMsg}</div>
+              ) : (() => {
+                // Filter and sort by number descending
+                const filtered = resources.papers.filter(res =>
+                  (/mid/i.test(res.title) || /mid/i.test(res.file_name)) &&
+                  (/lab/i.test(res.title) || /lab/i.test(res.file_name))
+                );
+                const extractNumber = (str: string) => {
+                  const match = str.match(/\d+/g);
+                  return match ? Math.max(...match.map(Number)) : -1;
+                };
+                const sorted = filtered.slice().sort((a, b) => extractNumber(b.title + ' ' + b.file_name) - extractNumber(a.title + ' ' + a.file_name));
+                return sorted.length > 0 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {sorted.map((res) => (
+                      <div
+                        key={res.id}
+                        className="w-full sm:w-[340px] lg:w-[370px] max-w-full flex-shrink-0"
+                      >
+                        <ResourceCard resource={res} />
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-12">
+                    <FileText className="h-12 w-12 text-gray-500 mx-auto mb-4" />
+                    <h3 className="text-lg font-medium text-white mb-2">
+                      No mid lab papers are yet available for {subjectFullName}
                     </h3>
                   </div>
                 );
