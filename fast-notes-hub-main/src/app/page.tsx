@@ -290,7 +290,7 @@ export default function Dashboard() {
             {semesters.map((semester) => (
               <Card
                 key={semester.id}
-                className="group hover:shadow-2xl transition-all duration-300 border border-gray-800 bg-gray-900 hover:bg-gray-950 hover:scale-[1.03]"
+                className="group hover:shadow-2xl transition-all duration-300 border border-gray-800 bg-gray-900 hover:bg-gray-910 hover:scale-[1.03]"
               >
                 <CardHeader className="pb-3">
                   <CardTitle className="text-lg font-semibold text-blue-400">
