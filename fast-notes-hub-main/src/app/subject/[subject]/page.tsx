@@ -84,14 +84,7 @@ function ResourceCard({ resource }: { resource: Resource }) {
                 <File className="h-4 w-4 text-blue-400" />
                 <h4 className="font-medium text-white group-hover:text-blue-400 transition-colors">{resource.title}</h4>
               </div>
-              <p className="text-sm text-gray-300 mb-1">{resource.description}</p>
-              <Badge variant="outline" className="text-xs border-gray-700 bg-gray-800 text-gray-300">
-                {resource.file_name.split(".").pop()?.toUpperCase()} &bull; Uploaded for {resource.subject}
-              </Badge>
             </div>
-          </div>
-          <div className="mt-2 p-2 bg-gray-800 rounded-lg border border-gray-700 group-hover:bg-gray-700 transition-colors">
-            <p className="text-xs text-blue-300 text-center font-medium">📱 Click anywhere on this card to view PDF</p>
           </div>
         </div>
         <div className="mt-3">
@@ -258,30 +251,30 @@ export default function SubjectPage() {
             )}
           </TabsContent>
           <TabsContent value="papers" className="space-y-4">
-            <div className="w-full mb-6 flex flex-wrap justify-center gap-2 rounded-xl">
+            <div className="w-full mb-6 flex flex-row flex-nowrap overflow-x-auto justify-center gap-2 rounded-xl">
               <button
-                className={`data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-1 sm:px-3 sm:py-2 transition cursor-pointer ${papersSubTab === 'final' ? 'bg-gray-800 text-blue-300' : ''}`}
+                className={`data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-3 py-2 transition cursor-pointer whitespace-nowrap ${papersSubTab === 'final' ? 'bg-gray-800 text-blue-300' : ''}`}
                 onClick={() => setPapersSubTab('final')}
               >
-                <BookOpen className="h-4 w-4 mr-1" /> Final Theory
+                Final Theory
               </button>
               <button
-                className={`data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-1 sm:px-3 sm:py-2 transition cursor-pointer ${papersSubTab === 'mid' ? 'bg-gray-800 text-blue-300' : ''}`}
+                className={`data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-3 py-2 transition cursor-pointer whitespace-nowrap ${papersSubTab === 'mid' ? 'bg-gray-800 text-blue-300' : ''}`}
                 onClick={() => setPapersSubTab('mid')}
               >
-                <BookOpen className="h-4 w-4 mr-1" /> Mid Theory
+                Mid Theory
               </button>
               <button
-                className={`data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-1 sm:px-3 sm:py-2 transition cursor-pointer ${papersSubTab === 'finalLab' ? 'bg-gray-800 text-blue-300' : ''}`}
+                className={`data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-3 py-2 transition cursor-pointer whitespace-nowrap ${papersSubTab === 'finalLab' ? 'bg-gray-800 text-blue-300' : ''}`}
                 onClick={() => setPapersSubTab('finalLab')}
               >
-                <BookOpen className="h-4 w-4 mr-1" /> Final Lab
+                Final Lab
               </button>
               <button
-                className={`data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-1 sm:px-3 sm:py-2 transition cursor-pointer ${papersSubTab === 'midLab' ? 'bg-gray-800 text-blue-300' : ''}`}
+                className={`data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-3 py-2 transition cursor-pointer whitespace-nowrap ${papersSubTab === 'midLab' ? 'bg-gray-800 text-blue-300' : ''}`}
                 onClick={() => setPapersSubTab('midLab')}
               >
-                <BookOpen className="h-4 w-4 mr-1" /> Mid Lab
+                Mid Lab
               </button>
             </div>
             {papersSubTab === 'final' ? (
