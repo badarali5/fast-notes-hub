@@ -55,9 +55,10 @@ interface Resource {
   created_at: string
 }
 
-const tabTypes = ["notes", "papers", "slides"] as const
-type TabType = (typeof tabTypes)[number]
-type ResourcesMap = Record<TabType, Resource[]>
+
+const tabTypes = ["notes", "papers", "final", "mid", "slides"] as const;
+type TabType = (typeof tabTypes)[number];
+type ResourcesMap = Record<"notes" | "papers" | "slides", Resource[]>;
 
 function isMobile() {
   if (typeof window === "undefined") return false
@@ -122,10 +123,10 @@ export default function SubjectPage() {
     notes: [],
     papers: [],
     slides: [],
-  })
-  const [activeTab, setActiveTab] = useState<TabType>("papers")
-  const [isLoading, setIsLoading] = useState(true)
-  const [errorMsg, setErrorMsg] = useState<string | null>(null)
+  });
+  const [activeTab, setActiveTab] = useState<TabType>("papers");
+  const [isLoading, setIsLoading] = useState(true);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchResources() {
@@ -155,9 +156,11 @@ export default function SubjectPage() {
 
         const grouped: ResourcesMap = { notes: [], papers: [], slides: [] }
 
+
         for (const r of data || []) {
-          if (tabTypes.includes(r.type)) {
-            grouped[r.type as TabType].push(r as Resource)
+          // Only group into notes, papers, slides
+          if (["notes", "papers", "slides"].includes(r.type)) {
+            grouped[r.type as keyof ResourcesMap].push(r as Resource);
           }
         }
 
@@ -217,6 +220,18 @@ export default function SubjectPage() {
               <BookOpen className="h-4 w-4 mr-1" /> Past Papers ({resources.papers.length})
             </TabsTrigger>
             <TabsTrigger
+              value="final"
+              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-1 sm:px-3 sm:py-2 transition"
+            >
+              <BookOpen className="h-4 w-4 mr-1" /> Final
+            </TabsTrigger>
+            <TabsTrigger
+              value="mid"
+              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-1 sm:px-3 sm:py-2 transition"
+            >
+              <BookOpen className="h-4 w-4 mr-1" /> Mid
+            </TabsTrigger>
+            <TabsTrigger
               value="slides"
               className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-1 sm:px-3 sm:py-2 transition"
             >
@@ -224,36 +239,51 @@ export default function SubjectPage() {
             </TabsTrigger>
           </TabsList>
 
-          {tabTypes.map((tab) => (
-            <TabsContent key={tab} value={tab} className="space-y-4">
-              {isLoading ? (
-                <div className="text-center py-12">
-                  <div className="w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                  <p className="text-gray-400">Loading {tab}...</p>
-                </div>
-              ) : errorMsg ? (
-                <div className="text-center py-12 text-red-400">{errorMsg}</div>
-              ) : resources[tab].length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {resources[tab].map((res) => (
-                    <div
-                      key={res.id}
-                      className="w-full sm:w-[340px] lg:w-[370px] max-w-full flex-shrink-0"
-                    >
-                      <ResourceCard resource={res} />
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-12">
-                  <FileText className="h-12 w-12 text-gray-500 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-white mb-2">
-                    No {tab} are yet available for {subjectFullName}
-                  </h3>
-                </div>
-              )}
-            </TabsContent>
-          ))}
+          {tabTypes.map((tab) => {
+            let tabResources: Resource[] = [];
+            if (tab === "final") {
+              tabResources = resources.papers.filter(
+                (res) => /final/i.test(res.title) || /final/i.test(res.file_name)
+              );
+            } else if (tab === "mid") {
+              tabResources = resources.papers.filter(
+                (res) => /mid/i.test(res.title) || /mid/i.test(res.file_name)
+              );
+            } else if (tab === "papers" || tab === "notes" || tab === "slides") {
+              tabResources = resources[tab];
+            }
+
+            return (
+              <TabsContent key={tab} value={tab} className="space-y-4">
+                {isLoading ? (
+                  <div className="text-center py-12">
+                    <div className="w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                    <p className="text-gray-400">Loading {tab}...</p>
+                  </div>
+                ) : errorMsg ? (
+                  <div className="text-center py-12 text-red-400">{errorMsg}</div>
+                ) : tabResources.length > 0 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {tabResources.map((res) => (
+                      <div
+                        key={res.id}
+                        className="w-full sm:w-[340px] lg:w-[370px] max-w-full flex-shrink-0"
+                      >
+                        <ResourceCard resource={res} />
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-12">
+                    <FileText className="h-12 w-12 text-gray-500 mx-auto mb-4" />
+                    <h3 className="text-lg font-medium text-white mb-2">
+                      No {tab} are yet available for {subjectFullName}
+                    </h3>
+                  </div>
+                )}
+              </TabsContent>
+            );
+          })}
         </Tabs>
       </main>
     </div>
