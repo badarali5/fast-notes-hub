@@ -234,16 +234,26 @@ export default function SubjectPage() {
             ) : errorMsg ? (
               <div className="text-center py-12 text-red-400">{errorMsg}</div>
             ) : resources.notes.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {resources.notes.map((res) => (
-                  <div
-                    key={res.id}
-                    className="w-full sm:w-[340px] lg:w-[370px] max-w-full flex-shrink-0"
-                  >
-                    <ResourceCard resource={res} />
+              (() => {
+                // Sort notes by number ascending (smallest first)
+                const extractNumber = (str: string) => {
+                  const match = str.match(/\d+/g);
+                  return match ? Math.min(...match.map(Number)) : Number.MAX_SAFE_INTEGER;
+                };
+                const sorted = resources.notes.slice().sort((a, b) => extractNumber(a.title + ' ' + a.file_name) - extractNumber(b.title + ' ' + b.file_name));
+                return (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {sorted.map((res) => (
+                      <div
+                        key={res.id}
+                        className="w-full sm:w-[340px] lg:w-[370px] max-w-full flex-shrink-0"
+                      >
+                        <ResourceCard resource={res} />
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+                );
+              })()
             ) : (
               <div className="text-center py-12">
                 <FileText className="h-12 w-12 text-gray-500 mx-auto mb-4" />
@@ -453,16 +463,26 @@ export default function SubjectPage() {
             ) : errorMsg ? (
               <div className="text-center py-12 text-red-400">{errorMsg}</div>
             ) : resources.slides.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {resources.slides.map((res) => (
-                  <div
-                    key={res.id}
-                    className="w-full sm:w-[340px] lg:w-[370px] max-w-full flex-shrink-0"
-                  >
-                    <ResourceCard resource={res} />
+              (() => {
+                // Sort slides by number ascending (smallest first)
+                const extractNumber = (str: string) => {
+                  const match = str.match(/\d+/g);
+                  return match ? Math.min(...match.map(Number)) : Number.MAX_SAFE_INTEGER;
+                };
+                const sorted = resources.slides.slice().sort((a, b) => extractNumber(a.title + ' ' + a.file_name) - extractNumber(b.title + ' ' + b.file_name));
+                return (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {sorted.map((res) => (
+                      <div
+                        key={res.id}
+                        className="w-full sm:w-[340px] lg:w-[370px] max-w-full flex-shrink-0"
+                      >
+                        <ResourceCard resource={res} />
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+                );
+              })()
             ) : (
               <div className="text-center py-12">
                 <FileText className="h-12 w-12 text-gray-500 mx-auto mb-4" />
