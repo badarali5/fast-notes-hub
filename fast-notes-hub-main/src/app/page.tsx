@@ -131,7 +131,7 @@ export default function Dashboard() {
     semester: "Unknown",  // no category info here
     type: "notes",        // default fallback
     file_name: file.name,
-    url: file.download_url, // 👈 direct raw link to file
+    url: `https://raw.githubusercontent.com/badarali5/fast-notes-hub/main/files/${file.name}`,
     created_at: ""
   }))
 
