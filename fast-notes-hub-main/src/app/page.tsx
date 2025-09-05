@@ -102,46 +102,54 @@ export default function Dashboard() {
   const [isSearching, setIsSearching] = useState(false)
   const [showResults, setShowResults] = useState(false)
 
-  const handleSearch = async (query: string) => {
-    if (!query.trim()) {
-      setSearchResults([])
-      setShowResults(false)
-      return
-    }
+const handleSearch = async (query: string) => {
+  if (!query.trim()) {
+    setSearchResults([])
+    setShowResults(false)
+    return
+  }
 
-    setIsSearching(true)
-    setShowResults(true)
+  setIsSearching(true)
+  setShowResults(true)
 
-    try {
-  // Fetch file list from GitHub (Contents API)
-  const res = await fetch("https://api.github.com/repos/badarali5/fast-notes-hub/contents/files")
-  const files = await res.json()
+  try {
+    // Fetch repo tree (all files, recursive)
+    const res = await fetch(
+      "https://api.github.com/repos/badarali5/fast-notes-hub/git/trees/main?recursive=1"
+    )
+    const json = await res.json()
 
-  // Filter files by keyword (case-insensitive)
-  const filtered = files.filter((file: any) =>
-    file.name.toLowerCase().includes(query.toLowerCase())
-  )
+    // Only keep files (blobs)
+    const files = json.tree?.filter((item: any) => item.type === "blob") || []
 
-  // Map to SearchResult[] with proper GitHub raw links
-  const results: SearchResult[] = filtered.map((file: any, idx: number) => ({
-    id: file.sha || String(idx),
-    title: file.name,
-    description: "File from GitHub storage.",
-    subject: "Unknown",   // no category info here
-    semester: "Unknown",  // no category info here
-    type: "notes",        // default fallback
-    file_name: file.name,
-    url: `https://raw.githubusercontent.com/badarali5/fast-notes-hub/main/files/${file.name}`,
-    created_at: ""
-  }))
+    // Filter by search keyword
+    const filtered = files.filter((file: any) =>
+      file.path.toLowerCase().includes(query.toLowerCase())
+    )
 
-  setSearchResults(results)
-} catch (error) {
-  console.error("Search error:", error)
-  setSearchResults([])
-} finally {
-  setIsSearching(false)
+    // Map results to SearchResult[]
+    const results: SearchResult[] = filtered.map((file: any, idx: number) => ({
+      id: file.sha || String(idx),
+      title: file.path.split("/").pop() || file.path,
+      description: "File from GitHub storage.",
+      subject: "Unknown",
+      semester: "Unknown",
+      type: "notes",
+      file_name: file.path.split("/").pop() || file.path,
+      // ✅ Use raw.githubusercontent.com so it opens in browser instead of download
+      url: `https://raw.githubusercontent.com/badarali5/fast-notes-hub/main/${file.path}`,
+      created_at: ""
+    }))
+
+    setSearchResults(results)
+  } catch (error) {
+    console.error("Search error:", error)
+    setSearchResults([])
+  } finally {
+    setIsSearching(false)
+  }
 }
+
 
       // Remove duplicate setSearchResults(results); and try-catch block
 
@@ -462,4 +470,4 @@ export default function Dashboard() {
       </main>
     </div>
   )
-}}
+}
