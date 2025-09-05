@@ -1,6 +1,6 @@
 "use client"
 
-import type React from "react"
+import React from "react"
 
 import { useState } from "react"
 import { BookOpen, Upload, Search, Code, Database, Cpu, File, Eye, Presentation } from "lucide-react"
@@ -113,39 +113,49 @@ export default function Dashboard() {
     setShowResults(true)
 
     try {
-      // Search in title, description, subject, and type
-      const { data, error } = await supabase
-        .from("uploads")
-        .select("*")
-        .or(`title.ilike.%${query}%,description.ilike.%${query}%,subject.ilike.%${query}%,type.ilike.%${query}%`)
-        .order("created_at", { ascending: false })
-        .limit(10)
+  // Fetch file list from GitHub (Contents API)
+  const res = await fetch("https://api.github.com/repos/badarali5/fast-notes-hub/contents/files")
+  const files = await res.json()
 
-      if (error) {
-        console.error("Search error:", error)
-        setSearchResults([])
-      } else {
-        setSearchResults(data || [])
-      }
-    } catch (error) {
-      console.error("Search error:", error)
-      setSearchResults([])
-    } finally {
-      setIsSearching(false)
-    }
-  }
+  // Filter files by keyword (case-insensitive)
+  const filtered = files.filter((file: any) =>
+    file.name.toLowerCase().includes(query.toLowerCase())
+  )
+
+  // Map to SearchResult[] with proper GitHub raw links
+  const results: SearchResult[] = filtered.map((file: any, idx: number) => ({
+    id: file.sha || String(idx),
+    title: file.name,
+    description: "File from GitHub storage.",
+    subject: "Unknown",   // no category info here
+    semester: "Unknown",  // no category info here
+    type: "notes",        // default fallback
+    file_name: file.name,
+    url: file.download_url, // 👈 direct raw link to file
+    created_at: ""
+  }))
+
+  setSearchResults(results)
+} catch (error) {
+  console.error("Search error:", error)
+  setSearchResults([])
+} finally {
+  setIsSearching(false)
+}
+
+      // Remove duplicate setSearchResults(results); and try-catch block
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const query = e.target.value
-    setSearchQuery(query)
-
-    // Debounce search
-    const timeoutId = setTimeout(() => {
-      handleSearch(query)
-    }, 300)
-
-    return () => clearTimeout(timeoutId)
+    setSearchQuery(e.target.value)
   }
+
+  // Debounce search using useEffect
+  React.useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      handleSearch(searchQuery)
+    }, 300)
+    return () => clearTimeout(timeoutId)
+  }, [searchQuery])
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -452,4 +462,4 @@ export default function Dashboard() {
       </main>
     </div>
   )
-}
+}}
