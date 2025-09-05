@@ -89,15 +89,13 @@ function ResourceCard({ resource }: { resource: Resource }) {
             <File className="h-4 w-4 text-blue-400" />
           </span>
           <div className="flex-1 min-w-0">
-            <h4 className="font-semibold text-white text-sm group-hover:text-blue-400 transition-colors truncate justify-center text-center align-middle">
-              {resource.title}
+            <h4 className="font-bold text-white text-lg group-hover:text-blue-400 transition-colors line-clamp-2">
+                {resource.title}
             </h4>
-            <Badge variant="secondary" className="text-xs bg-gray-800 text-gray-300">
-                  {subjectFullNames[resource.subject.toUpperCase()] || resource.subject}
-                </Badge>
-                <Badge variant="secondary" className="text-xs bg-gray-800 text-blue-300 border border-blue-700">
+            
+            <Badge variant="secondary" className="text-xs bg-gray-800 text-blue-300 border border-blue-700">
                   Semester {resource.semester}
-                </Badge>
+            </Badge>
                 <Badge variant="secondary" className="text-xs bg-gray-800 text-purple-300 border border-purple-700">
                   {resource.type.charAt(0).toUpperCase() + resource.type.slice(1)}
                 </Badge>

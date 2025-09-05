@@ -230,9 +230,6 @@ export default function Dashboard() {
                 {highlight(result.title, searchQuery)}
               </h4>
               <div className="flex flex-wrap items-center gap-2 mt-1">
-                <Badge variant="outline" className="text-xs border-gray-700 bg-gray-800 text-gray-300">
-                  {subjectCode}
-                </Badge>
                 <Badge variant="secondary" className="text-xs bg-gray-800 text-gray-300">
                   {subjectName}
                 </Badge>
