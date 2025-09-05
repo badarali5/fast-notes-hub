@@ -85,9 +85,9 @@ function ResourceCard({ resource }: { resource: Resource }) {
     >
       <CardContent className="p-2 flex flex-col h-full min-h-0">
         <div className="flex items-center gap-2 mb-1">
-          <span className="flex items-center justify-center rounded bg-gray-800 border border-blue-700 w-7 h-7 group-hover:bg-blue-950/60 transition-all">
+          {/* <span className="flex items-center justify-center rounded bg-gray-800 border border-blue-700 w-7 h-7 group-hover:bg-blue-950/60 transition-all">
             <File className="h-4 w-4 text-blue-400" />
-          </span>
+          </span> */}
           <div className="flex-1 min-w-0 flex flex-col items-center justify-center">
             <h4 className="font-bold text-white text-lg group-hover:text-blue-400 transition-colors line-clamp-2 text-center mb-2">
               {resource.title}
