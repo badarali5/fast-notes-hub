@@ -88,17 +88,18 @@ function ResourceCard({ resource }: { resource: Resource }) {
           <span className="flex items-center justify-center rounded bg-gray-800 border border-blue-700 w-7 h-7 group-hover:bg-blue-950/60 transition-all">
             <File className="h-4 w-4 text-blue-400" />
           </span>
-          <div className="flex-1 min-w-0">
-            <h4 className="font-bold text-white text-lg group-hover:text-blue-400 transition-colors line-clamp-2 justify-center text-center align-middle">
-                {resource.title}
+          <div className="flex-1 min-w-0 flex flex-col items-center justify-center">
+            <h4 className="font-bold text-white text-lg group-hover:text-blue-400 transition-colors line-clamp-2 text-center mb-2">
+              {resource.title}
             </h4>
-            
-            <Badge variant="secondary" className="text-xs bg-gray-800 text-blue-300 border border-blue-700">
-                  Semester {resource.semester}
-            </Badge>
-                <Badge variant="secondary" className="text-xs bg-gray-800 text-purple-300 border border-purple-700">
-                  {resource.type.charAt(0).toUpperCase() + resource.type.slice(1)}
-                </Badge>
+            <div className="flex flex-row gap-2 mb-1 justify-center">
+              <Badge variant="secondary" className="text-xs bg-gray-800 text-blue-300 border border-blue-700 px-2 py-1">
+                Semester {resource.semester}
+              </Badge>
+              <Badge variant="secondary" className="text-xs bg-gray-800 text-purple-300 border border-purple-700 px-2 py-1">
+                {resource.type.charAt(0).toUpperCase() + resource.type.slice(1)}
+              </Badge>
+            </div>
           </div>
         </div>
         {resource.description && (
