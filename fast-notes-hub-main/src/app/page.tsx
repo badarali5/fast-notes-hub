@@ -137,7 +137,7 @@ const handleSearch = async (query: string) => {
       type: "notes",
       file_name: file.path.split("/").pop() || file.path,
       // Use GitHub blob URL for browser view
-      url: `https://github.com/badarali5/fast-notes-hub/blob/main/${file.path}`,
+  url: `https://raw.githubusercontent.com/badarali5/fast-notes-hub/main/${file.path}`,
       created_at: ""
     }))
 
