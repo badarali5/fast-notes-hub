@@ -89,7 +89,7 @@ function ResourceCard({ resource }: { resource: Resource }) {
             <File className="h-4 w-4 text-blue-400" />
           </span>
           <div className="flex-1 min-w-0">
-            <h4 className="font-bold text-white text-lg group-hover:text-blue-400 transition-colors line-clamp-2">
+            <h4 className="font-bold text-white text-lg group-hover:text-blue-400 transition-colors line-clamp-2 justify-center text-center align-middle">
                 {resource.title}
             </h4>
             
@@ -216,7 +216,7 @@ export default function SubjectPage() {
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={(val) => setActiveTab(val as TabType)} className="w-full">
           <TabsList
-            className="w-full mb-6 bg-gray-900 border border-gray-800 flex flex-col sm:flex-row flex-nowrap justify-center gap-2 rounded-xl p-2"
+            className="w-full mb-6 bg-gray-900 border border-gray-800 flex flex-col sm:flex-row flex-nowrap justify-center gap-2 rounded-xl"
           >
             <TabsTrigger
               value="notes"
