@@ -88,20 +88,9 @@ function ResourceCard({ resource }: { resource: Resource }) {
             <File className="h-4 w-4 text-blue-400" />
           </span>
           <div className="flex-1 min-w-0">
-            <h4 className="font-semibold text-white text-sm group-hover:text-blue-400 transition-colors truncate">
+            <h4 className="font-semibold text-white text-sm group-hover:text-blue-400 transition-colors truncate justify-center text-center align-middle">
               {resource.title}
             </h4>
-            <div className="flex flex-wrap items-center gap-1 mt-0.5">
-              <span className="text-[10px] bg-gray-800 text-gray-300 border border-gray-700 rounded px-1 py-0.5">
-                {resource.subject}
-              </span>
-              <span className="text-[10px] bg-gray-800 text-blue-300 border border-blue-700 rounded px-1 py-0.5">
-                Sem {resource.semester}
-              </span>
-              <span className="text-[10px] bg-gray-800 text-purple-300 border border-purple-700 rounded px-1 py-0.5">
-                {resource.type.charAt(0).toUpperCase() + resource.type.slice(1)}
-              </span>
-            </div>
           </div>
         </div>
         {resource.description && (

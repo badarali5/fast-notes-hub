@@ -172,6 +172,9 @@ export default function Dashboard() {
     SE1001: "Introduction to Software Engineering",
     MT1004: "Linear Algebra",
     CS3005: "Theory Of Automata",
+    SS2002: "Fundamentals of Economics",
+    MG1001: "Fundamentals of Management",
+    AF1001: "Fundamentals of Accounting",
     CS2005: "Database Systems",
     CS2006: "Operating Systems",
     MT2005: "Probability and Statistics",
@@ -185,9 +188,7 @@ export default function Dashboard() {
     CS3001: "Computer Networks",
     SE4002: "Fundamentals of Software Project Management",
     CS3006: "Parallel and Distributed Computing",
-    SS2002: "Fundamentals of Economics",
-    MG1001: "Fundamentals of Management",
-    AF1001: "Fundamentals of Accounting",
+    
   };
 
   // Helper: highlight search query in text
