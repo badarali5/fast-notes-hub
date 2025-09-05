@@ -208,26 +208,28 @@ export default function SubjectPage() {
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={(val) => setActiveTab(val as TabType)} className="w-full">
           <TabsList
-            className="w-full mb-6 bg-gray-900 border border-gray-800 flex flex-row flex-nowrap overflow-x-auto justify-start gap-3 sm:gap-6 rounded-xl scrollbar-hide px-2"
-            style={{ WebkitOverflowScrolling: 'touch' }}
+            className="w-full mb-6 bg-gray-900 border border-gray-800 flex flex-col sm:flex-row flex-nowrap justify-center gap-2 rounded-xl p-2"
           >
             <TabsTrigger
               value="notes"
-              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-sm sm:text-base font-semibold flex items-center justify-center rounded-lg px-6 py-3 transition cursor-pointer whitespace-nowrap min-w-[140px]"
+              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-sm font-semibold flex items-center justify-center rounded-lg px-4 py-2 transition cursor-pointer whitespace-nowrap min-w-[110px] mb-2 sm:mb-0"
             >
-              <FileText className="h-5 w-5 mr-1" /> Notes ({resources.notes.length})
+              <FileText className="h-5 w-5 mr-1" /> Notes
+              <span className="ml-2 text-xs text-blue-300">{resources.notes.length}</span>
             </TabsTrigger>
             <TabsTrigger
               value="papers"
-              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-sm sm:text-base font-semibold flex items-center justify-center rounded-lg px-6 py-3 transition cursor-pointer whitespace-nowrap min-w-[140px]"
+              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-sm font-semibold flex items-center justify-center rounded-lg px-4 py-2 transition cursor-pointer whitespace-nowrap min-w-[110px] mb-2 sm:mb-0"
             >
-              <BookOpen className="h-5 w-5 mr-1" /> Past Papers ({resources.papers.length})
+              <BookOpen className="h-5 w-5 mr-1" /> Past Papers
+              <span className="ml-2 text-xs text-blue-300">{resources.papers.length}</span>
             </TabsTrigger>
             <TabsTrigger
               value="slides"
-              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-sm sm:text-base font-semibold flex items-center justify-center rounded-lg px-6 py-3 transition cursor-pointer whitespace-nowrap min-w-[140px]"
+              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-sm font-semibold flex items-center justify-center rounded-lg px-4 py-2 transition cursor-pointer whitespace-nowrap min-w-[110px]"
             >
-              <Presentation className="h-5 w-5 mr-1" /> Slides ({resources.slides.length})
+              <Presentation className="h-5 w-5 mr-1" /> Slides
+              <span className="ml-2 text-xs text-blue-300">{resources.slides.length}</span>
             </TabsTrigger>
           </TabsList>
 
@@ -271,27 +273,27 @@ export default function SubjectPage() {
             )}
           </TabsContent>
           <TabsContent value="papers" className="space-y-4">
-            <div className="w-full mb-6 flex flex-row flex-nowrap overflow-x-auto justify-center gap-1 rounded-xl">
+            <div className="w-full mb-6 grid grid-cols-2 gap-2 sm:flex sm:flex-row sm:gap-2 rounded-xl">
               <button
-                className={`data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-2 transition cursor-pointer whitespace-nowrap ${papersSubTab === 'final' ? 'bg-gray-800 text-blue-300' : ''}`}
+                className={`data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs font-medium flex items-center justify-center rounded-lg px-2 py-2 transition cursor-pointer whitespace-nowrap ${papersSubTab === 'final' ? 'bg-gray-800 text-blue-300' : ''}`}
                 onClick={() => setPapersSubTab('final')}
               >
                 <BookOpen className="h-4 w-4 mr-1" /> Final Theory
               </button>
               <button
-                className={`data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-2 transition cursor-pointer whitespace-nowrap ${papersSubTab === 'mid' ? 'bg-gray-800 text-blue-300' : ''}`}
+                className={`data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs font-medium flex items-center justify-center rounded-lg px-2 py-2 transition cursor-pointer whitespace-nowrap ${papersSubTab === 'mid' ? 'bg-gray-800 text-blue-300' : ''}`}
                 onClick={() => setPapersSubTab('mid')}
               >
                 <BookOpen className="h-4 w-4 mr-1" /> Mid Theory
               </button>
               <button
-                className={`data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-2 transition cursor-pointer whitespace-nowrap ${papersSubTab === 'finalLab' ? 'bg-gray-800 text-blue-300' : ''}`}
+                className={`data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs font-medium flex items-center justify-center rounded-lg px-2 py-2 transition cursor-pointer whitespace-nowrap ${papersSubTab === 'finalLab' ? 'bg-gray-800 text-blue-300' : ''}`}
                 onClick={() => setPapersSubTab('finalLab')}
               >
                 <BookOpen className="h-4 w-4 mr-1" /> Final Lab
               </button>
               <button
-                className={`data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs sm:text-sm font-medium flex items-center justify-center rounded-lg px-2 py-2 transition cursor-pointer whitespace-nowrap ${papersSubTab === 'midLab' ? 'bg-gray-800 text-blue-300' : ''}`}
+                className={`data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-xs font-medium flex items-center justify-center rounded-lg px-2 py-2 transition cursor-pointer whitespace-nowrap ${papersSubTab === 'midLab' ? 'bg-gray-800 text-blue-300' : ''}`}
                 onClick={() => setPapersSubTab('midLab')}
               >
                 <BookOpen className="h-4 w-4 mr-1" /> Mid Lab
