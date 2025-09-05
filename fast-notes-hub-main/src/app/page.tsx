@@ -215,7 +215,7 @@ export default function Dashboard() {
     const subjectName = subjectFullNames[subjectCode] || result.subject;
     return (
       <Card
-        className="group border border-gray-800 bg-gradient-to-br from-gray-900 via-gray-950 to-gray-900 hover:border-blue-500 hover:shadow-blue-900/40 shadow-lg hover:shadow-2xl transition-all duration-200 cursor-pointer relative overflow-hidden"
+        className="bg-gray-900 group border border-gray-800 hover:border-blue-500 hover:shadow-blue-900/40 shadow-lg hover:shadow-2xl transition-all duration-200 cursor-pointer relative overflow-hidden"
         onClick={() => window.open(result.url, "_blank")}
       >
         {/* Animated blue glow on hover */}

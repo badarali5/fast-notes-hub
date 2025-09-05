@@ -7,6 +7,7 @@ import { ArrowLeft, Eye, FileText, Presentation, BookOpen, File} from "lucide-re
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Badge } from "@/components/ui/badge"
 
 const subjectFullNames: Record<string, string> = {
   NS1001: "Applied Physics",
@@ -91,6 +92,15 @@ function ResourceCard({ resource }: { resource: Resource }) {
             <h4 className="font-semibold text-white text-sm group-hover:text-blue-400 transition-colors truncate justify-center text-center align-middle">
               {resource.title}
             </h4>
+            <Badge variant="secondary" className="text-xs bg-gray-800 text-gray-300">
+                  {subjectFullNames[resource.subject.toUpperCase()] || resource.subject}
+                </Badge>
+                <Badge variant="secondary" className="text-xs bg-gray-800 text-blue-300 border border-blue-700">
+                  Semester {resource.semester}
+                </Badge>
+                <Badge variant="secondary" className="text-xs bg-gray-800 text-purple-300 border border-purple-700">
+                  {resource.type.charAt(0).toUpperCase() + resource.type.slice(1)}
+                </Badge>
           </div>
         </div>
         {resource.description && (
