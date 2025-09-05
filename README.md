@@ -7,7 +7,7 @@
 
 This project solves a **real pain point**:
 
-> At FAST, students often waste time hunting down notes and past papers across WhatsApp groups, random Google Drive links, and outdated Facebook posts.  
+> At FAST, students often waste time hunting down notes and past papers across WhatsApp groups and random Github repos.  
 > **FAST Notes Hub** centralizes all of that into **one clean, searchable, and categorized platform**.
 
 ---
