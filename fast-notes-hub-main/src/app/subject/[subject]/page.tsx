@@ -208,24 +208,24 @@ export default function SubjectPage() {
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={(val) => setActiveTab(val as TabType)} className="w-full">
           <TabsList
-            className="w-full mb-6 bg-gray-900 border border-gray-800 flex flex-row flex-nowrap overflow-x-auto justify-center gap-1 sm:gap-2 rounded-xl scrollbar-hide"
+            className="w-full mb-6 bg-gray-900 border border-gray-800 flex flex-row flex-nowrap overflow-x-auto justify-start gap-3 sm:gap-6 rounded-xl scrollbar-hide px-2"
             style={{ WebkitOverflowScrolling: 'touch' }}
           >
             <TabsTrigger
               value="notes"
-              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-sm sm:text-base font-semibold flex items-center justify-center rounded-lg px-4 py-2 sm:px-5 sm:py-3 transition cursor-pointer whitespace-nowrap min-w-[110px]"
+              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-sm sm:text-base font-semibold flex items-center justify-center rounded-lg px-6 py-3 transition cursor-pointer whitespace-nowrap min-w-[140px]"
             >
               <FileText className="h-5 w-5 mr-1" /> Notes ({resources.notes.length})
             </TabsTrigger>
             <TabsTrigger
               value="papers"
-              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-sm sm:text-base font-semibold flex items-center justify-center rounded-lg px-4 py-2 sm:px-5 sm:py-3 transition cursor-pointer whitespace-nowrap min-w-[110px]"
+              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-sm sm:text-base font-semibold flex items-center justify-center rounded-lg px-6 py-3 transition cursor-pointer whitespace-nowrap min-w-[140px]"
             >
               <BookOpen className="h-5 w-5 mr-1" /> Past Papers ({resources.papers.length})
             </TabsTrigger>
             <TabsTrigger
               value="slides"
-              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-sm sm:text-base font-semibold flex items-center justify-center rounded-lg px-4 py-2 sm:px-5 sm:py-3 transition cursor-pointer whitespace-nowrap min-w-[110px]"
+              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-sm sm:text-base font-semibold flex items-center justify-center rounded-lg px-6 py-3 transition cursor-pointer whitespace-nowrap min-w-[140px]"
             >
               <Presentation className="h-5 w-5 mr-1" /> Slides ({resources.slides.length})
             </TabsTrigger>
