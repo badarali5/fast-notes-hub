@@ -249,11 +249,11 @@ export default function SubjectPage() {
                 };
                 const sorted = resources.notes.slice().sort((a, b) => extractNumber(a.title + ' ' + a.file_name) - extractNumber(b.title + ' ' + b.file_name));
                 return (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {sorted.map((res) => (
                       <div
                         key={res.id}
-                        className="w-full sm:w-[340px] lg:w-[370px] max-w-full flex-shrink-0"
+                        className="w-full sm:w-[390px] lg:w-[440px] max-w-full flex-shrink-0"
                       >
                         <ResourceCard resource={res} />
                       </div>
@@ -318,11 +318,11 @@ export default function SubjectPage() {
                 };
                 const sorted = filtered.slice().sort((a, b) => extractNumber(b.title + ' ' + b.file_name) - extractNumber(a.title + ' ' + a.file_name));
                 return sorted.length > 0 ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {sorted.map((res) => (
                       <div
                         key={res.id}
-                        className="w-full sm:w-[340px] lg:w-[370px] max-w-full flex-shrink-0"
+                        className="w-full sm:w-[390px] lg:w-[440px] max-w-full flex-shrink-0"
                       >
                         <ResourceCard resource={res} />
                       </div>
@@ -358,11 +358,11 @@ export default function SubjectPage() {
                 };
                 const sorted = filtered.slice().sort((a, b) => extractNumber(b.title + ' ' + b.file_name) - extractNumber(a.title + ' ' + a.file_name));
                 return sorted.length > 0 ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {sorted.map((res) => (
                       <div
                         key={res.id}
-                        className="w-full sm:w-[340px] lg:w-[370px] max-w-full flex-shrink-0"
+                        className="w-full sm:w-[390px] lg:w-[440px] max-w-full flex-shrink-0"
                       >
                         <ResourceCard resource={res} />
                       </div>
@@ -398,11 +398,11 @@ export default function SubjectPage() {
                 };
                 const sorted = filtered.slice().sort((a, b) => extractNumber(b.title + ' ' + b.file_name) - extractNumber(a.title + ' ' + a.file_name));
                 return sorted.length > 0 ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {sorted.map((res) => (
                       <div
                         key={res.id}
-                        className="w-full sm:w-[340px] lg:w-[370px] max-w-full flex-shrink-0"
+                        className="w-full sm:w-[390px] lg:w-[440px] max-w-full flex-shrink-0"
                       >
                         <ResourceCard resource={res} />
                       </div>
