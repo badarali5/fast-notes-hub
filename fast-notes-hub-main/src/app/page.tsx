@@ -136,8 +136,8 @@ const handleSearch = async (query: string) => {
       semester: "Unknown",
       type: "notes",
       file_name: file.path.split("/").pop() || file.path,
-      // ✅ Use raw.githubusercontent.com so it opens in browser instead of download
-      url: `https://raw.githubusercontent.com/badarali5/fast-notes-hub/main/${file.path}`,
+      // Use GitHub blob URL for browser view
+      url: `https://github.com/badarali5/fast-notes-hub/blob/main/${file.path}`,
       created_at: ""
     }))
 
