@@ -102,54 +102,46 @@ export default function Dashboard() {
   const [isSearching, setIsSearching] = useState(false)
   const [showResults, setShowResults] = useState(false)
 
-const handleSearch = async (query: string) => {
-  if (!query.trim()) {
-    setSearchResults([])
-    setShowResults(false)
-    return
-  }
+  const handleSearch = async (query: string) => {
+    if (!query.trim()) {
+      setSearchResults([])
+      setShowResults(false)
+      return
+    }
 
-  setIsSearching(true)
-  setShowResults(true)
+    setIsSearching(true)
+    setShowResults(true)
 
-  try {
-    // Fetch repo tree (all files, recursive)
-    const res = await fetch(
-      "https://api.github.com/repos/badarali5/fast-notes-hub/git/trees/main?recursive=1"
-    )
-    const json = await res.json()
+    try {
+  // Fetch file list from GitHub (Contents API)
+  const res = await fetch("https://api.github.com/repos/badarali5/fast-notes-hub/contents/files")
+  const files = await res.json()
 
-    // Only keep files (blobs)
-    const files = json.tree?.filter((item: any) => item.type === "blob") || []
+  // Filter files by keyword (case-insensitive)
+  const filtered = files.filter((file: any) =>
+    file.name.toLowerCase().includes(query.toLowerCase())
+  )
 
-    // Filter by search keyword
-    const filtered = files.filter((file: any) =>
-      file.path.toLowerCase().includes(query.toLowerCase())
-    )
+  // Map to SearchResult[] with proper GitHub raw links
+  const results: SearchResult[] = filtered.map((file: any, idx: number) => ({
+    id: file.sha || String(idx),
+    title: file.name,
+    description: "File from GitHub storage.",
+    subject: "Unknown",   // no category info here
+    semester: "Unknown",  // no category info here
+    type: "notes",        // default fallback
+    file_name: file.name,
+    url: `https://raw.githubusercontent.com/badarali5/fast-notes-hub/main/files/${file.name}`,
+    created_at: ""
+  }))
 
-    // Map results to SearchResult[]
-    const results: SearchResult[] = filtered.map((file: any, idx: number) => ({
-      id: file.sha || String(idx),
-      title: file.path.split("/").pop() || file.path,
-      description: "File from GitHub storage.",
-      subject: "Unknown",
-      semester: "Unknown",
-      type: "notes",
-      file_name: file.path.split("/").pop() || file.path,
-      // Use GitHub blob URL for browser view
-  url: `https://raw.githubusercontent.com/badarali5/fast-notes-hub/main/${file.path}`,
-      created_at: ""
-    }))
-
-    setSearchResults(results)
-  } catch (error) {
-    console.error("Search error:", error)
-    setSearchResults([])
-  } finally {
-    setIsSearching(false)
-  }
+  setSearchResults(results)
+} catch (error) {
+  console.error("Search error:", error)
+  setSearchResults([])
+} finally {
+  setIsSearching(false)
 }
-
 
       // Remove duplicate setSearchResults(results); and try-catch block
 
@@ -231,38 +223,18 @@ const handleSearch = async (query: string) => {
   const SearchResultCard = ({ result }: { result: SearchResult }) => {
     const subjectCode = result.subject?.toUpperCase();
     const subjectName = subjectFullNames[subjectCode] || result.subject;
-    // Open PDF in Google Docs Viewer, images directly, others as raw
-    const handleCardClick = () => {
-    let url = result.url;
-
-    // 🔄 Convert GitHub "blob" links → raw links
-    if (url.includes("github.com") && url.includes("/blob/")) {
-      url = url
-        .replace("github.com", "raw.githubusercontent.com")
-        .replace("/blob/", "/");
-    }
-
-    if (url.endsWith(".pdf")) {
-      // ✅ Open PDFs in Google Docs Viewer
-      window.open(
-        `https://docs.google.com/viewer?embedded=true&url=${encodeURIComponent(url)}`,
-        "_blank"
-      );
-    } else if (url.match(/\.(jpg|jpeg|png|gif)$/i)) {
-      // ✅ Open images directly
-      window.open(url, "_blank");
-    } else if (url.endsWith(".txt") || url.endsWith(".md")) {
-      // ✅ Open text/markdown directly
-      window.open(url, "_blank");
-    } else {
-      // ✅ Fallback: open in browser tab
-      window.open(url, "_blank");
-    }
-  };
+    // Click handler: open PDF in Google Docs Viewer, others in new tab
+    const handleViewClick = () => {
+      const isPdf = result.file_name.toLowerCase().endsWith('.pdf');
+      const viewUrl = isPdf
+        ? `https://docs.google.com/viewer?url=${encodeURIComponent(result.url)}&embedded=true`
+        : result.url;
+      window.open(viewUrl, "_blank");
+    };
     return (
       <Card
         className="bg-gray-900 group border border-gray-800 hover:border-blue-500 hover:shadow-blue-900/40 shadow-lg hover:shadow-2xl transition-all duration-200 cursor-pointer relative overflow-hidden"
-        onClick={handleCardClick}
+        onClick={handleViewClick}
       >
         {/* Animated blue glow on hover */}
         <span className="absolute inset-0 pointer-events-none group-hover:shadow-[0_0_40px_10px_rgba(59,130,246,0.15)] transition-all duration-300 rounded-xl" />
@@ -297,7 +269,7 @@ const handleSearch = async (query: string) => {
             <div className="mt-2 p-2 bg-gray-800 rounded-lg border border-gray-700 group-hover:bg-blue-950/60 transition-colors flex items-center justify-between">
               <span className="text-xs text-blue-300 font-medium flex items-center gap-1">
                 <Eye className="h-4 w-4 mr-1 inline-block" />
-                Click to view PDF
+                Click to view file
               </span>
               <span className="ml-2 text-xs text-gray-400 group-hover:text-blue-400 transition-colors">{result.file_name}</span>
             </div>
@@ -498,4 +470,4 @@ const handleSearch = async (query: string) => {
       </main>
     </div>
   )
-}
+}}
