@@ -240,7 +240,7 @@ export default function SubjectPage() {
           </TabsList>
 
           {/* Notes Tab Content */}
-          <TabsContent value="notes" className="space-y-4">
+          <TabsContent value="notes" className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-sm font-semibold flex items-center justify-center rounded-full bg-gray-800 px-3 py-1 transition cursor-pointer whitespace-nowrap mb-2 sm:mb-0">
             {isLoading ? (
               <div className="text-center py-12">
                 <div className="w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
