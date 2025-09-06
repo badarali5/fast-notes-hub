@@ -86,20 +86,19 @@ const getFileType = (filename: string): "notes" | "papers" | "slides" => {
 
 // Helper function to check if file matches subject
 const matchesSubject = (filename: string, subject: string): boolean => {
-  const lower = filename.toLowerCase()
-  const subjectLower = subject.toLowerCase()
-  
-  // Direct match
-  if (lower.includes(subjectLower)) return true
-  
-  // Check against subject full name
-  const fullName = subjectFullNames[subject.toUpperCase()]
+  const lower = filename.toLowerCase();
+  const subjectLower = subject.toLowerCase();
+  // Only match subject code as a whole word (not substring)
+  const codeRegex = new RegExp(`\\b${subjectLower}\\b`, "i");
+  if (codeRegex.test(lower)) return true;
+  // Fallback: match full name only if code not found
+  const fullName = subjectFullNames[subject.toUpperCase()];
   if (fullName) {
-    const fullNameWords = fullName.toLowerCase().split(' ')
-    return fullNameWords.some(word => word.length > 3 && lower.includes(word))
+    // Only match full name as a whole word
+    const fullNameRegex = new RegExp(`\\b${fullName.toLowerCase().replace(/[^a-z0-9 ]/g, "").replace(/ +/g, "|\\b")}`, "i");
+    return fullNameRegex.test(lower);
   }
-  
-  return false
+  return false;
 }
 
 function ResourceCard({ resource }: { resource: Resource }) {
