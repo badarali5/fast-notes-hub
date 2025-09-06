@@ -226,9 +226,16 @@ export default function Dashboard() {
     // Click handler: open PDF in Google Docs Viewer, others in new tab
     const handleViewClick = () => {
       const isPdf = result.file_name.toLowerCase().endsWith('.pdf');
-      // For PDFs, use GitHub web URL (not raw) for Google Docs Viewer
-      const githubWebUrl = `https://github.com/badarali5/fast-notes-hub/blob/main/files/${encodeURIComponent(result.file_name)}`;
-      const fileUrl = isPdf ? githubWebUrl : result.url;
+      let fileUrl = result.url;
+      if (isPdf) {
+        // Start with GitHub web URL
+        fileUrl = `https://github.com/badarali5/fast-notes-hub/blob/main/files/${encodeURIComponent(result.file_name)}`;
+        // Replace with GitHub Pages URL
+        fileUrl = fileUrl.replace(
+          "github.com/badarali5/fast-notes-hub/blob/main/files",
+          "badarali5.github.io/fast-notes-hub/files"
+        );
+      }
       const viewUrl = isPdf
         ? `https://docs.google.com/viewer?url=${encodeURIComponent(fileUrl)}&embedded=true`
         : result.url;
@@ -263,11 +270,7 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
-          {result.description && (
-            <div className="mb-2 text-gray-400 text-xs line-clamp-2">
-              {highlight(result.description, searchQuery)}
-            </div>
-          )}
+          
           <div className="flex-1 flex flex-col justify-end">
             <div className="mt-2 p-2 bg-gray-800 rounded-lg border border-gray-700 group-hover:bg-blue-950/60 transition-colors flex items-center justify-between">
               <span className="text-xs text-blue-300 font-medium flex items-center gap-1">
