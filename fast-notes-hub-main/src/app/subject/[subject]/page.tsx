@@ -88,15 +88,29 @@ const getFileType = (filename: string): "notes" | "papers" | "slides" => {
 const matchesSubject = (filename: string, subject: string): boolean => {
   const lower = filename.toLowerCase();
   const subjectLower = subject.toLowerCase();
-  // Only match subject code as a whole word (not substring)
+  // Match subject code as a whole word
   const codeRegex = new RegExp(`\\b${subjectLower}\\b`, "i");
-  if (codeRegex.test(lower)) return true;
-  // Fallback: match full name only if code not found
+  // Match full subject name as a whole word
   const fullName = subjectFullNames[subject.toUpperCase()];
+  let fullNameMatch = false;
   if (fullName) {
-    // Only match full name as a whole word
     const fullNameRegex = new RegExp(`\\b${fullName.toLowerCase().replace(/[^a-z0-9 ]/g, "").replace(/ +/g, "|\\b")}`, "i");
-    return fullNameRegex.test(lower);
+    fullNameMatch = fullNameRegex.test(lower);
+  }
+  // Match semester (as a number or word)
+  let semesterMatch = false;
+  if (typeof window !== "undefined") {
+    const urlParams = new URLSearchParams(window.location.search);
+    const semester = urlParams.get("semester");
+    if (semester) {
+      // Match semester number or word (e.g., "semester 3", "sem3", "s3")
+      const semRegex = new RegExp(`\\b(semester|sem|s)[ _-]?${semester}\\b`, "i");
+      semesterMatch = semRegex.test(lower);
+    }
+  }
+  // File matches if subject code or full name AND semester (if present)
+  if ((codeRegex.test(lower) || fullNameMatch) && (semesterMatch || !semesterMatch)) {
+    return true;
   }
   return false;
 }
