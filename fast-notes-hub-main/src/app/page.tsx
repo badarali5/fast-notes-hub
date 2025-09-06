@@ -233,21 +233,32 @@ const handleSearch = async (query: string) => {
     const subjectName = subjectFullNames[subjectCode] || result.subject;
     // Open PDF in Google Docs Viewer, images directly, others as raw
     const handleCardClick = () => {
-      const url = result.url;
-      if (url.endsWith('.pdf')) {
-        // Use Google Docs Viewer for PDFs
-        window.open(`https://docs.google.com/viewer?url=${encodeURIComponent(url)}&embedded=true`, '_blank');
-      } else if (url.match(/\.(jpg|jpeg|png|gif)$/i)) {
-        // Open images directly
-        window.open(url, '_blank');
-      } else if (url.endsWith('.txt') || url.endsWith('.md')) {
-        // Open text/markdown files in a new tab
-        window.open(url, '_blank');
-      } else {
-        // For other files, try to open in a new tab (browser will decide)
-        window.open(url, '_blank');
-      }
-    };
+    let url = result.url;
+
+    // 🔄 Convert GitHub "blob" links → raw links
+    if (url.includes("github.com") && url.includes("/blob/")) {
+      url = url
+        .replace("github.com", "raw.githubusercontent.com")
+        .replace("/blob/", "/");
+    }
+
+    if (url.endsWith(".pdf")) {
+      // ✅ Open PDFs in Google Docs Viewer
+      window.open(
+        `https://docs.google.com/viewer?embedded=true&url=${encodeURIComponent(url)}`,
+        "_blank"
+      );
+    } else if (url.match(/\.(jpg|jpeg|png|gif)$/i)) {
+      // ✅ Open images directly
+      window.open(url, "_blank");
+    } else if (url.endsWith(".txt") || url.endsWith(".md")) {
+      // ✅ Open text/markdown directly
+      window.open(url, "_blank");
+    } else {
+      // ✅ Fallback: open in browser tab
+      window.open(url, "_blank");
+    }
+  };
     return (
       <Card
         className="bg-gray-900 group border border-gray-800 hover:border-blue-500 hover:shadow-blue-900/40 shadow-lg hover:shadow-2xl transition-all duration-200 cursor-pointer relative overflow-hidden"
