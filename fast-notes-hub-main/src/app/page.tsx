@@ -1,15 +1,11 @@
 "use client"
 
 import React from "react"
-
 import { useState } from "react"
-import { BookOpen, Upload, Search, Code, Database, Cpu, File, Eye, Presentation } from "lucide-react"
+import { BookOpen, Search, Code, Database, Cpu, File, Eye, Presentation } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { supabase } from "@/lib/supabase"
-import { toast } from "sonner"
 
 interface SearchResult {
   id: string
@@ -22,6 +18,11 @@ interface SearchResult {
   url: string
   created_at: string
 }
+
+// GitHub repository configuration
+const GITHUB_REPO = "badarali5/fast-notes-hub"
+const GITHUB_BRANCH = "main"
+const FILES_PATH = "files"
 
 const semesters = [
   {
@@ -101,49 +102,75 @@ export default function Dashboard() {
   const [searchResults, setSearchResults] = useState<SearchResult[]>([])
   const [isSearching, setIsSearching] = useState(false)
   const [showResults, setShowResults] = useState(false)
+  const [searchError, setSearchError] = useState("")
 
   const handleSearch = async (query: string) => {
     if (!query.trim()) {
       setSearchResults([])
       setShowResults(false)
+      setSearchError("")
       return
     }
 
     setIsSearching(true)
     setShowResults(true)
+    setSearchError("")
 
     try {
-  // Fetch file list from GitHub (Contents API)
-  const res = await fetch("https://api.github.com/repos/badarali5/fast-notes-hub/contents/files")
-  const files = await res.json()
+      // Fetch file list from GitHub (Contents API)
+      const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${FILES_PATH}`)
+      
+      if (!res.ok) {
+        if (res.status === 403) {
+          throw new Error("GitHub API rate limit exceeded. Please try again later.")
+        }
+        throw new Error(`GitHub API error: ${res.status}`)
+      }
 
-  // Filter files by keyword (case-insensitive)
-  const filtered = files.filter((file: any) =>
-    file.name.toLowerCase().includes(query.toLowerCase())
-  )
+      const files = await res.json()
 
-  // Map to SearchResult[] with proper GitHub raw links
-  const results: SearchResult[] = filtered.map((file: any, idx: number) => ({
-    id: file.sha || String(idx),
-    title: file.name,
-    description: "File from GitHub storage.",
-    subject: "Unknown",   // no category info here
-    semester: "Unknown",  // no category info here
-    type: "notes",        // default fallback
-    file_name: file.name,
-    url: `https://raw.githubusercontent.com/badarali5/fast-notes-hub/main/files/${file.name}`,
-    created_at: ""
-  }))
+      // Ensure files is an array (sometimes GitHub returns object for single files)
+      const fileArray = Array.isArray(files) ? files : [files]
 
-  setSearchResults(results)
-} catch (error) {
-  console.error("Search error:", error)
-  setSearchResults([])
-} finally {
-  setIsSearching(false)
-}
+      // Filter files by keyword (case-insensitive)
+      const filtered = fileArray.filter((file: any) =>
+        file.name && file.name.toLowerCase().includes(query.toLowerCase())
+      )
 
-      // Remove duplicate setSearchResults(results); and try-catch block
+      // Map to SearchResult[] with proper GitHub raw links
+      const results: SearchResult[] = filtered.map((file: any, idx: number) => ({
+        id: file.sha || String(idx),
+        title: file.name,
+        description: "File from GitHub storage.",
+        subject: "Unknown",   // no category info here
+        semester: "Unknown",  // no category info here
+        type: getFileType(file.name),
+        file_name: file.name,
+        url: `https://raw.githubusercontent.com/${GITHUB_REPO}/${GITHUB_BRANCH}/${FILES_PATH}/${file.name}`,
+        created_at: ""
+      }))
+
+      setSearchResults(results)
+    } catch (error) {
+      console.error("Search error:", error)
+      setSearchError(error instanceof Error ? error.message : "An error occurred while searching")
+      setSearchResults([])
+    } finally {
+      setIsSearching(false)
+    }
+  }
+
+  // Helper function to determine file type from filename
+  const getFileType = (filename: string): "notes" | "papers" | "slides" => {
+    const lower = filename.toLowerCase()
+    if (lower.includes("slide") || lower.includes("presentation") || lower.includes("ppt")) {
+      return "slides"
+    }
+    if (lower.includes("paper") || lower.includes("exam") || lower.includes("test")) {
+      return "papers"
+    }
+    return "notes"
+  }
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value)
@@ -198,49 +225,48 @@ export default function Dashboard() {
     CS3001: "Computer Networks",
     SE4002: "Fundamentals of Software Project Management",
     CS3006: "Parallel and Distributed Computing",
-    
-  };
+  }
 
   // Helper: highlight search query in text
   function highlight(text: string, query: string) {
-    if (!query) return text;
-    const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "gi");
+    if (!query) return text
+    const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "gi")
     return text.split(regex).map((part, i) =>
       regex.test(part) ? <mark key={i} className="bg-blue-900 text-blue-300 rounded px-1 py-0.5">{part}</mark> : part
-    );
+    )
   }
 
   // Helper: file type icon
   function getTypeIcon(type: string) {
     switch (type) {
-      case "notes": return <File className="h-4 w-4 text-green-400 mr-1" />;
-      case "papers": return <BookOpen className="h-4 w-4 text-blue-400 mr-1" />;
-      case "slides": return <Presentation className="h-4 w-4 text-purple-400 mr-1" />;
-      default: return <File className="h-4 w-4 text-gray-400 mr-1" />;
+      case "notes": return <File className="h-4 w-4 text-green-400 mr-1" />
+      case "papers": return <BookOpen className="h-4 w-4 text-blue-400 mr-1" />
+      case "slides": return <Presentation className="h-4 w-4 text-purple-400 mr-1" />
+      default: return <File className="h-4 w-4 text-gray-400 mr-1" />
     }
   }
 
   const SearchResultCard = ({ result }: { result: SearchResult }) => {
-    const subjectCode = result.subject?.toUpperCase();
-    const subjectName = subjectFullNames[subjectCode] || result.subject;
+    const subjectCode = result.subject?.toUpperCase()
+    const subjectName = subjectFullNames[subjectCode] || result.subject
+    
     // Click handler: open PDF in Google Docs Viewer, others in new tab
     const handleViewClick = () => {
-      const isPdf = result.file_name.toLowerCase().endsWith('.pdf');
-      let fileUrl = result.url;
+      const isPdf = result.file_name.toLowerCase().endsWith('.pdf')
+      let fileUrl = result.url
+      
       if (isPdf) {
-        // Start with GitHub web URL
-        fileUrl = `https://github.com/badarali5/fast-notes-hub/blob/main/files/${encodeURIComponent(result.file_name)}`;
-        // Replace with GitHub Pages URL
-        fileUrl = fileUrl.replace(
-          "github.com/badarali5/fast-notes-hub/blob/main/files",
-          "badarali5.github.io/fast-notes-hub/files"
-        );
+        // Use GitHub Pages URL for PDFs
+        fileUrl = `https://${GITHUB_REPO.split('/')[0]}.github.io/${GITHUB_REPO.split('/')[1]}/${FILES_PATH}/${encodeURIComponent(result.file_name)}`
       }
+      
       const viewUrl = isPdf
         ? `https://docs.google.com/viewer?url=${encodeURIComponent(fileUrl)}&embedded=true`
-        : result.url;
-      window.open(viewUrl, "_blank");
-    };
+        : result.url
+      
+      window.open(viewUrl, "_blank")
+    }
+
     return (
       <Card
         className="bg-gray-900 group border border-gray-800 hover:border-blue-500 hover:shadow-blue-900/40 shadow-lg hover:shadow-2xl transition-all duration-200 cursor-pointer relative overflow-hidden"
@@ -284,7 +310,7 @@ export default function Dashboard() {
         {/* Animated border on hover */}
         <span className="absolute inset-0 border-2 border-transparent group-hover:border-blue-500 rounded-xl pointer-events-none transition-all duration-300" />
       </Card>
-    );
+    )
   }
 
   return (
@@ -297,7 +323,6 @@ export default function Dashboard() {
               <h1 className="text-2xl font-extrabold text-white tracking-tight">FAST Notes Hub</h1>
             </div>
             <div className="flex items-center space-x-6">
-              {/* Upload button/tooltip here if needed */}
               <a
                 href="https://www.linkedin.com/in/badar-ali-07bb36282/"
                 target="_blank"
@@ -307,7 +332,6 @@ export default function Dashboard() {
               >
                 About Developer
               </a>
-              
             </div>
           </div>
         </div>
@@ -352,6 +376,14 @@ export default function Dashboard() {
                 </span>
               )}
             </div>
+
+            {/* Error Message */}
+            {searchError && (
+              <div className="bg-red-900/20 border border-red-500 rounded-lg p-4 mb-6">
+                <p className="text-red-400 text-sm">{searchError}</p>
+              </div>
+            )}
+
             {isSearching ? (
               <div className="text-center py-12">
                 <div className="w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
@@ -363,7 +395,7 @@ export default function Dashboard() {
                   <SearchResultCard key={result.id} result={result} />
                 ))}
               </div>
-            ) : searchQuery.trim() ? (
+            ) : searchQuery.trim() && !searchError ? (
               <div className="text-center py-12">
                 <Search className="h-12 w-12 text-gray-500 mx-auto mb-4" />
                 <h3 className="text-lg font-medium text-white mb-2">No results found</h3>
@@ -429,8 +461,8 @@ export default function Dashboard() {
               href="#"
               className="text-blue-400 underline font-medium"
               onClick={e => {
-                e.preventDefault();
-                window.open('https://mail.google.com/mail/?view=cm&fs=1&to=fastnoteshub@gmail.com', '_blank');
+                e.preventDefault()
+                window.open('https://mail.google.com/mail/?view=cm&fs=1&to=fastnoteshub@gmail.com', '_blank')
               }}
             >
               fastnoteshub@gmail.com
@@ -476,4 +508,4 @@ export default function Dashboard() {
       </main>
     </div>
   )
-}}
+}
