@@ -8,6 +8,13 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 
+// Import and initialize Supabase client
+import { createClient } from "@supabase/supabase-js"
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "<YOUR_SUPABASE_URL>"
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "<YOUR_SUPABASE_ANON_KEY>"
+const supabase = createClient(supabaseUrl, supabaseAnonKey)
+
 // GitHub repository configuration
 const GITHUB_REPO = "badarali5/fast-notes-hub"
 const GITHUB_BRANCH = "main"
@@ -189,54 +196,64 @@ export default function SubjectPage() {
 
   useEffect(() => {
     async function fetchResources() {
-      setIsLoading(true)
-      setErrorMsg(null)
+      setIsLoading(true);
+      setErrorMsg(null);
 
       if (!subject || !semester) {
-        setErrorMsg("Missing subject or semester in URL.")
-        setIsLoading(false)
-        return
+        setErrorMsg("Missing subject or semester in URL.");
+        setIsLoading(false);
+        return;
       }
 
       try {
-        // Fetch file list from GitHub (Contents API)
-        const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${FILES_PATH}`)
-        
-        if (!res.ok) {
-          if (res.status === 403) {
-            throw new Error("GitHub API rate limit exceeded. Please try again later.")
-          }
-          throw new Error(`GitHub API error: ${res.status}`)
+        // 1. First get the categorization data from Supabase
+        const { data: supabaseData, error: supabaseError } = await supabase
+          .from('uploads')
+          .select('*')
+          .eq('subject', subject.toUpperCase())
+          .eq('semester', semester);
+
+        if (supabaseError) {
+          throw new Error(`Database error: ${supabaseError.message}`);
         }
 
-        const files = await res.json()
-
-        // Ensure files is an array
-        const fileArray = Array.isArray(files) ? files : [files]
-
-        // Filter files by subject
-        const subjectFiles = fileArray.filter((file: any) => 
-          file.name && matchesSubject(file.name, subject)
-        )
-
-        // Convert to Resource objects and group by type
-        const grouped: ResourcesMap = { notes: [], papers: [], slides: [] }
-
-        for (const file of subjectFiles) {
-          const fileType = getFileType(file.name)
-          const resource: Resource = {
-            id: file.sha || Math.random().toString(),
-            title: file.name.replace(/\.[^/.]+$/, ""), // Remove file extension
-            description: "File from GitHub storage.",
-            subject: subject.toUpperCase(),
-            semester: semester,
-            type: fileType,
-            file_name: file.name,
-            url: `https://raw.githubusercontent.com/${GITHUB_REPO}/${GITHUB_BRANCH}/${FILES_PATH}/${file.name}`,
-            created_at: ""
+        // 2. Then fetch the file list from GitHub
+        const githubRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${FILES_PATH}`);
+        if (!githubRes.ok) {
+          if (githubRes.status === 403) {
+            throw new Error("GitHub API rate limit exceeded. Please try again later.");
           }
-          
-          grouped[fileType].push(resource)
+          throw new Error(`GitHub API error: ${githubRes.status}`);
+        }
+
+        const githubFiles = await githubRes.json();
+        const fileArray = Array.isArray(githubFiles) ? githubFiles : [githubFiles];
+
+        // Create a map of filenames for quick lookup
+        const githubFileMap = new Map(
+          fileArray.map(file => [file.name, file])
+        );
+
+        // 3. Process and group the resources using Supabase categorization
+        const grouped: ResourcesMap = { notes: [], papers: [], slides: [] };
+
+        for (const dbEntry of supabaseData) {
+          // Only include files that exist in both Supabase and GitHub
+          const githubFile = githubFileMap.get(dbEntry.file_name);
+          if (githubFile) {
+            const resource: Resource = {
+              id: githubFile.sha || dbEntry.id,
+              title: dbEntry.title || githubFile.name.replace(/\.[^/.]+$/, ""),
+              description: dbEntry.description || "File from GitHub storage.",
+              subject: dbEntry.subject,
+              semester: dbEntry.semester,
+              type: dbEntry.type,
+              file_name: dbEntry.file_name,
+              url: `https://raw.githubusercontent.com/${GITHUB_REPO}/${GITHUB_BRANCH}/${FILES_PATH}/${dbEntry.file_name}`,
+              created_at: dbEntry.created_at || ""
+            };
+            grouped[dbEntry.type as keyof ResourcesMap].push(resource);
+          }
         }
 
         setResources(grouped)
