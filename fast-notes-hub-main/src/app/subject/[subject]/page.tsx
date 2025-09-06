@@ -217,23 +217,23 @@ export default function SubjectPage() {
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={(val) => setActiveTab(val as TabType)} className="w-full">
           <TabsList
-            className="w-full mb-6 bg-gray-900 border border-gray-800 flex flex-col sm:flex-row flex-nowrap justify-center gap-2 rounded-xl"
+            className="w-full mb-6 bg-gray-900 border border-gray-800 flex flex-wrap justify-center gap-2 rounded-xl px-2 py-2"
           >
             <TabsTrigger
               value="notes"
-              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-sm font-semibold flex items-center justify-center rounded-lg px-4 py-2 transition cursor-pointer whitespace-nowrap min-w-[110px] mb-2 sm:mb-0"
+              className="data-[state=active]:bg-blue-950 data-[state=active]:text-blue-300 text-gray-400 text-sm font-semibold flex items-center justify-center rounded-full bg-muted px-3 py-1 transition cursor-pointer whitespace-nowrap mb-2 sm:mb-0"
             >
                             <FileText className="h-5 w-5 mr-1" /> Notes ({resources.notes.length})
             </TabsTrigger>
             <TabsTrigger
               value="papers"
-              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-sm font-semibold flex items-center justify-center rounded-lg px-4 py-2 transition cursor-pointer whitespace-nowrap min-w-[110px] mb-2 sm:mb-0"
+              className="data-[state=active]:bg-blue-950 data-[state=active]:text-blue-300 text-gray-400 text-sm font-semibold flex items-center justify-center rounded-full bg-muted px-3 py-1 transition cursor-pointer whitespace-nowrap mb-2 sm:mb-0"
             >
               <BookOpen className="h-5 w-5 mr-1" /> Past Papers ({resources.papers.length})
             </TabsTrigger>
             <TabsTrigger
               value="slides"
-              className="data-[state=active]:bg-gray-800 data-[state=active]:text-blue-300 text-gray-400 text-sm font-semibold flex items-center justify-center rounded-lg px-4 py-2 transition cursor-pointer whitespace-nowrap min-w-[110px]"
+              className="data-[state=active]:bg-blue-950 data-[state=active]:text-blue-300 text-gray-400 text-sm font-semibold flex items-center justify-center rounded-full bg-muted px-3 py-1 transition cursor-pointer whitespace-nowrap"
             >
               <Presentation className="h-5 w-5 mr-1" /> Slides ({resources.slides.length})
             </TabsTrigger>
