@@ -231,10 +231,21 @@ const handleSearch = async (query: string) => {
   const SearchResultCard = ({ result }: { result: SearchResult }) => {
     const subjectCode = result.subject?.toUpperCase();
     const subjectName = subjectFullNames[subjectCode] || result.subject;
+    // Open PDF in Google Docs Viewer, images directly, others as raw
+    const handleCardClick = () => {
+      const url = result.url;
+      if (url.endsWith('.pdf')) {
+        window.open(`https://docs.google.com/viewer?url=${encodeURIComponent(url)}`, '_blank');
+      } else if (url.match(/\.(jpg|jpeg|png|gif)$/i)) {
+        window.open(url, '_blank');
+      } else {
+        window.open(url, '_blank');
+      }
+    };
     return (
       <Card
         className="bg-gray-900 group border border-gray-800 hover:border-blue-500 hover:shadow-blue-900/40 shadow-lg hover:shadow-2xl transition-all duration-200 cursor-pointer relative overflow-hidden"
-        onClick={() => window.open(result.url, "_blank")}
+        onClick={handleCardClick}
       >
         {/* Animated blue glow on hover */}
         <span className="absolute inset-0 pointer-events-none group-hover:shadow-[0_0_40px_10px_rgba(59,130,246,0.15)] transition-all duration-300 rounded-xl" />
