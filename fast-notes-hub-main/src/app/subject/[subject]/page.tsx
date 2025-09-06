@@ -2,12 +2,16 @@
 
 import { useState, useEffect } from "react"
 import { useSearchParams, useParams } from "next/navigation"
-import { supabase } from "@/lib/supabase"
 import { ArrowLeft, Eye, FileText, Presentation, BookOpen, File} from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
+
+// GitHub repository configuration
+const GITHUB_REPO = "badarali5/fast-notes-hub"
+const GITHUB_BRANCH = "main"
+const FILES_PATH = "files"
 
 const subjectFullNames: Record<string, string> = {
   NS1001: "Applied Physics",
@@ -58,7 +62,6 @@ interface Resource {
   created_at: string
 }
 
-
 const tabTypes = ["notes", "papers", "slides"] as const;
 type TabType = (typeof tabTypes)[number];
 type ResourcesMap = Record<"notes" | "papers" | "slides", Resource[]>;
@@ -66,6 +69,37 @@ type ResourcesMap = Record<"notes" | "papers" | "slides", Resource[]>;
 function isMobile() {
   if (typeof window === "undefined") return false
   return /iPhone|iPad|iPod|Android/i.test(window.navigator.userAgent)
+}
+
+// Helper function to determine file type from filename
+const getFileType = (filename: string): "notes" | "papers" | "slides" => {
+  const lower = filename.toLowerCase()
+  if (lower.includes("slide") || lower.includes("presentation") || lower.includes("ppt")) {
+    return "slides"
+  }
+  if (lower.includes("paper") || lower.includes("exam") || lower.includes("test") || 
+      lower.includes("final") || lower.includes("mid") || lower.includes("quiz")) {
+    return "papers"
+  }
+  return "notes"
+}
+
+// Helper function to check if file matches subject
+const matchesSubject = (filename: string, subject: string): boolean => {
+  const lower = filename.toLowerCase()
+  const subjectLower = subject.toLowerCase()
+  
+  // Direct match
+  if (lower.includes(subjectLower)) return true
+  
+  // Check against subject full name
+  const fullName = subjectFullNames[subject.toUpperCase()]
+  if (fullName) {
+    const fullNameWords = fullName.toLowerCase().split(' ')
+    return fullNameWords.some(word => word.length > 3 && lower.includes(word))
+  }
+  
+  return false
 }
 
 function ResourceCard({ resource }: { resource: Resource }) {
@@ -85,9 +119,6 @@ function ResourceCard({ resource }: { resource: Resource }) {
     >
       <CardContent className="p-2 flex flex-col h-full min-h-0">
         <div className="flex items-center gap-2 mb-1">
-          {/* <span className="flex items-center justify-center rounded bg-gray-800 border border-blue-700 w-7 h-7 group-hover:bg-blue-950/60 transition-all">
-            <File className="h-4 w-4 text-blue-400" />
-          </span> */}
           <div className="flex-1 min-w-0 flex flex-col items-center justify-center">
             <h4 className="font-bold text-white text-lg group-hover:text-blue-400 transition-colors line-clamp-2 text-center mb-2">
               {resource.title}
@@ -152,35 +183,51 @@ export default function SubjectPage() {
       }
 
       try {
-        // Use case-insensitive matching with proper Supabase syntax
-        const { data, error } = await supabase
-          .from("uploads")
-          .select("*")
-          .ilike("subject", subject) // case-insensitive like
-          .eq("semester", semester)
-
-        if (error) {
-          console.error("Error fetching resources:", error)
-          setErrorMsg("Unable to load resources. Please try again later.")
-          setIsLoading(false)
-          return
+        // Fetch file list from GitHub (Contents API)
+        const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${FILES_PATH}`)
+        
+        if (!res.ok) {
+          if (res.status === 403) {
+            throw new Error("GitHub API rate limit exceeded. Please try again later.")
+          }
+          throw new Error(`GitHub API error: ${res.status}`)
         }
 
+        const files = await res.json()
+
+        // Ensure files is an array
+        const fileArray = Array.isArray(files) ? files : [files]
+
+        // Filter files by subject
+        const subjectFiles = fileArray.filter((file: any) => 
+          file.name && matchesSubject(file.name, subject)
+        )
+
+        // Convert to Resource objects and group by type
         const grouped: ResourcesMap = { notes: [], papers: [], slides: [] }
 
-
-        for (const r of data || []) {
-          // Only group into notes, papers, slides
-          if (["notes", "papers", "slides"].includes(r.type)) {
-            grouped[r.type as keyof ResourcesMap].push(r as Resource);
+        for (const file of subjectFiles) {
+          const fileType = getFileType(file.name)
+          const resource: Resource = {
+            id: file.sha || Math.random().toString(),
+            title: file.name.replace(/\.[^/.]+$/, ""), // Remove file extension
+            description: "File from GitHub storage.",
+            subject: subject.toUpperCase(),
+            semester: semester,
+            type: fileType,
+            file_name: file.name,
+            url: `https://raw.githubusercontent.com/${GITHUB_REPO}/${GITHUB_BRANCH}/${FILES_PATH}/${file.name}`,
+            created_at: ""
           }
+          
+          grouped[fileType].push(resource)
         }
 
         setResources(grouped)
         setIsLoading(false)
       } catch (error) {
         console.error("Fetch error:", error)
-        setErrorMsg("An error occurred while loading resources.")
+        setErrorMsg(error instanceof Error ? error.message : "An error occurred while loading resources.")
         setIsLoading(false)
       }
     }
@@ -191,29 +238,35 @@ export default function SubjectPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-800">
       <header className="bg-gray-900 shadow-lg border-b border-gray-800 w-full">
-  <div className="max-w-4xl mx-auto px-4 py-6">
-    <div className="flex items-center w-full mb-6">
-      <button
-        onClick={() => window.history.back()}
+        <div className="max-w-4xl mx-auto px-4 py-6">
+          <div className="flex items-center w-full mb-6">
+            <button
+              onClick={() => window.history.back()}
               className="flex items-center space-x-2 text-blue-400 hover:text-blue-300 font-medium cursor-pointer"
-      >
-        <ArrowLeft className="h-5 w-5" />
-        <span>Back to Home Page</span>
-      </button>
-    </div>
-    <div className="text-center">
-      <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mb-3">
-        🧠 {subjectFullName} – Semester {semester}
-      </h1>
-      <p className="text-gray-400 text-base sm:text-lg">
-        Access all your study materials for {subjectFullName}
-      </p>
-    </div>
-  </div>
-</header>
-
+            >
+              <ArrowLeft className="h-5 w-5" />
+              <span>Back to Home Page</span>
+            </button>
+          </div>
+          <div className="text-center">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mb-3">
+              🧠 {subjectFullName} – Semester {semester}
+            </h1>
+            <p className="text-gray-400 text-base sm:text-lg">
+              Access all your study materials for {subjectFullName}
+            </p>
+          </div>
+        </div>
+      </header>
 
       <main className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-6">
+        {/* Error Display */}
+        {errorMsg && (
+          <div className="bg-red-900/20 border border-red-500 rounded-lg p-4 mb-6">
+            <p className="text-red-400 text-sm">{errorMsg}</p>
+          </div>
+        )}
+
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={(val) => setActiveTab(val as TabType)} className="w-full">
           <TabsList
@@ -223,7 +276,7 @@ export default function SubjectPage() {
               value="notes"
               className="data-[state=active]:bg-gray-800 data-[state=active]:text-gray-300 text-gray-400 text-sm font-semibold flex items-center justify-center rounded-full bg-muted px-3 py-1 transition cursor-pointer whitespace-nowrap mb-2 sm:mb-0"
             >
-                            <FileText className="h-5 w-5 mr-1" /> Notes ({resources.notes.length})
+              <FileText className="h-5 w-5 mr-1" /> Notes ({resources.notes.length})
             </TabsTrigger>
             <TabsTrigger
               value="papers"
@@ -246,8 +299,6 @@ export default function SubjectPage() {
                 <div className="w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
                 <p className="text-gray-400">Loading notes...</p>
               </div>
-            ) : errorMsg ? (
-              <div className="text-center py-12 text-red-400">{errorMsg}</div>
             ) : resources.notes.length > 0 ? (
               (() => {
                 // Sort notes by number ascending (smallest first)
@@ -278,6 +329,7 @@ export default function SubjectPage() {
               </div>
             )}
           </TabsContent>
+
           <TabsContent value="papers" className="space-y-4">
             <div className="w-full mb-6 grid grid-cols-2 gap-2 sm:flex sm:flex-row sm:gap-2 rounded-xl align-center justify-center">
               <button
@@ -305,14 +357,14 @@ export default function SubjectPage() {
                 <BookOpen className="h-4 w-4 mr-1" /> Mid Lab
               </button>
             </div>
+
+            {/* Papers Sub-tabs Content */}
             {papersSubTab === 'final' ? (
               isLoading ? (
                 <div className="text-center py-12">
                   <div className="w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
                   <p className="text-gray-400">Loading final papers...</p>
                 </div>
-              ) : errorMsg ? (
-                <div className="text-center py-12 text-red-400">{errorMsg}</div>
               ) : (() => {
                 // Filter and sort by number descending
                 const filtered = resources.papers.filter(res => {
@@ -351,8 +403,6 @@ export default function SubjectPage() {
                   <div className="w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
                   <p className="text-gray-400">Loading mid papers...</p>
                 </div>
-              ) : errorMsg ? (
-                <div className="text-center py-12 text-red-400">{errorMsg}</div>
               ) : (() => {
                 // Filter and sort by number descending
                 const filtered = resources.papers.filter(res => {
@@ -391,8 +441,6 @@ export default function SubjectPage() {
                   <div className="w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
                   <p className="text-gray-400">Loading final lab papers...</p>
                 </div>
-              ) : errorMsg ? (
-                <div className="text-center py-12 text-red-400">{errorMsg}</div>
               ) : (() => {
                 // Filter and sort by number descending
                 const filtered = resources.papers.filter(res => {
@@ -431,8 +479,6 @@ export default function SubjectPage() {
                   <div className="w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
                   <p className="text-gray-400">Loading mid lab papers...</p>
                 </div>
-              ) : errorMsg ? (
-                <div className="text-center py-12 text-red-400">{errorMsg}</div>
               ) : (() => {
                 // Filter and sort by number descending
                 const filtered = resources.papers.filter(res => {
@@ -475,8 +521,6 @@ export default function SubjectPage() {
                 <div className="w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
                 <p className="text-gray-400">Loading slides...</p>
               </div>
-            ) : errorMsg ? (
-              <div className="text-center py-12 text-red-400">{errorMsg}</div>
             ) : resources.slides.length > 0 ? (
               (() => {
                 // Sort slides by number ascending (smallest first)
