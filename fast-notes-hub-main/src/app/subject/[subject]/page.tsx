@@ -103,10 +103,17 @@ const matchesSubject = (filename: string, subject: string): boolean => {
 }
 
 function ResourceCard({ resource }: { resource: Resource }) {
-  const openPdf = () => {
+  const openView = () => {
     let url = resource.url;
-    if (isMobile() && url.endsWith(".pdf")) {
-      url = `https://docs.google.com/viewer?url=${encodeURIComponent(url)}`;
+    const isPdf = resource.file_name.toLowerCase().endsWith('.pdf');
+    if (isPdf) {
+      // Use GitHub Pages URL for Google Docs Viewer
+      url = `https://github.com/badarali5/fast-notes-hub/blob/main/files/${encodeURIComponent(resource.file_name)}`;
+      url = url.replace(
+        "github.com/badarali5/fast-notes-hub/blob/main/files",
+        "badarali5.github.io/fast-notes-hub/files"
+      );
+      url = `https://docs.google.com/viewer?url=${encodeURIComponent(url)}&embedded=true`;
     }
     window.open(url, "_blank");
   };
@@ -114,7 +121,7 @@ function ResourceCard({ resource }: { resource: Resource }) {
   return (
     <Card
       className="group border border-gray-800 bg-gray-900 hover:border-blue-500 hover:shadow-blue-900/30 shadow-md hover:shadow-lg transition-all duration-150 cursor-pointer relative overflow-hidden rounded-lg min-h-0"
-      onClick={openPdf}
+      onClick={openView}
       style={{ minHeight: 0, padding: 0 }}
     >
       <CardContent className="p-2 flex flex-col h-full min-h-0">
@@ -142,7 +149,7 @@ function ResourceCard({ resource }: { resource: Resource }) {
           <div className="mt-1 p-1 bg-gray-800 rounded border border-gray-700 group-hover:bg-blue-950/60 transition-colors flex items-center justify-center">
             <span className="text-xs text-blue-300 font-medium flex items-center gap-1">
               <Eye className="h-3 w-3 mr-1 inline-block" />
-              Open PDF
+              Click to view file
             </span>
           </div>
         </div>
