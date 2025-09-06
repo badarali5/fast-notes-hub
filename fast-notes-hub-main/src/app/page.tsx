@@ -235,10 +235,16 @@ const handleSearch = async (query: string) => {
     const handleCardClick = () => {
       const url = result.url;
       if (url.endsWith('.pdf')) {
-        window.open(`https://docs.google.com/viewer?url=${encodeURIComponent(url)}`, '_blank');
+        // Use Google Docs Viewer for PDFs
+        window.open(`https://docs.google.com/viewer?url=${encodeURIComponent(url)}&embedded=true`, '_blank');
       } else if (url.match(/\.(jpg|jpeg|png|gif)$/i)) {
+        // Open images directly
+        window.open(url, '_blank');
+      } else if (url.endsWith('.txt') || url.endsWith('.md')) {
+        // Open text/markdown files in a new tab
         window.open(url, '_blank');
       } else {
+        // For other files, try to open in a new tab (browser will decide)
         window.open(url, '_blank');
       }
     };
