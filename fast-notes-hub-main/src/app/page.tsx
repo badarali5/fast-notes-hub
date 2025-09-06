@@ -226,8 +226,11 @@ export default function Dashboard() {
     // Click handler: open PDF in Google Docs Viewer, others in new tab
     const handleViewClick = () => {
       const isPdf = result.file_name.toLowerCase().endsWith('.pdf');
+      // For PDFs, use GitHub web URL (not raw) for Google Docs Viewer
+      const githubWebUrl = `https://github.com/badarali5/fast-notes-hub/blob/main/files/${encodeURIComponent(result.file_name)}`;
+      const fileUrl = isPdf ? githubWebUrl : result.url;
       const viewUrl = isPdf
-        ? `https://docs.google.com/viewer?url=${encodeURIComponent(result.url)}&embedded=true`
+        ? `https://docs.google.com/viewer?url=${encodeURIComponent(fileUrl)}&embedded=true`
         : result.url;
       window.open(viewUrl, "_blank");
     };
