@@ -83,6 +83,12 @@ export default function UploadPage() {
     setCurrentFileIndex(0)
 
     try {
+      // Constants for GitHub
+      const GITHUB_TOKEN = process.env.NEXT_PUBLIC_GITHUB_TOKEN;
+      const GITHUB_REPO = process.env.NEXT_PUBLIC_GITHUB_REPO || "badarali5/fast-notes-hub-main";
+      const GITHUB_BRANCH = process.env.NEXT_PUBLIC_GITHUB_BRANCH || "main";
+      const FILES_PATH = "files"; // The folder in the repo where files will be stored
+
       // 0. Check if uploads table exists and has correct structure
       console.log("🔍 Checking database table structure...")
       const { data: tableCheck, error: tableError } = await supabase
@@ -90,17 +96,12 @@ export default function UploadPage() {
         .select("id, title, description, subject, semester, type, file_name, url, created_at")
         .limit(1)
 
-      console.log("🔍 Table structure check result:", tableCheck)
-
       if (tableError) {
         console.error("❌ Table structure check failed:", tableError)
-        console.error("This might indicate the uploads table doesn't exist or has wrong structure")
         alert("Database table issue: " + tableError.message)
         setIsUploading(false)
         setUploadProgress(0)
         return
-      } else {
-        console.log("✅ Table structure check passed")
       }
 
       const totalFiles = files.length
@@ -116,28 +117,51 @@ export default function UploadPage() {
         console.log(`📤 Uploading file ${i + 1}/${totalFiles}: ${file.name}`)
 
         try {
-          // 1. Upload to Supabase Storage
-          const progressPerFile = 90 / totalFiles // Reserve 10% for completion
+          // 1. Read file content as base64
+          const fileContent = await new Promise((resolve) => {
+            const reader = new FileReader()
+            reader.onloadend = () => resolve(reader.result)
+            reader.readAsDataURL(file)
+          })
+
+          // Extract base64 content (remove data URL prefix)
+          const base64Content = (fileContent as string).split(',')[1]
+
+          // 2. Upload to GitHub via API
+          const progressPerFile = 90 / totalFiles
           const startProgress = i * progressPerFile
           setUploadProgress(startProgress)
 
-          const { data: uploadData, error: uploadError } = await supabase.storage
-            .from("materials")
-            .upload(`uploads/${file.name}`, file)
+          const githubResponse = await fetch(
+            `https://api.github.com/repos/${GITHUB_REPO}/contents/${FILES_PATH}/${file.name}`,
+            {
+              method: 'PUT',
+              headers: {
+                Authorization: `Bearer ${GITHUB_TOKEN}`,
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                message: `Upload ${file.name}`,
+                content: base64Content,
+                branch: GITHUB_BRANCH,
+              }),
+            }
+          )
 
-          if (uploadError) {
-            console.error(`Storage upload error for ${file.name}:`, uploadError)
+          if (!githubResponse.ok) {
+            const error = await githubResponse.json()
+            console.error(`GitHub upload error for ${file.name}:`, error)
             failedUploads++
-            failedFiles.push(`${file.name} (Storage error: ${uploadError.message})`)
+            failedFiles.push(`${file.name} (GitHub error: ${error.message})`)
             continue
           }
 
-          // 2. Get Public URL from Supabase
-          const { data: publicUrlData } = supabase.storage.from("materials").getPublicUrl(`uploads/${file.name}`)
+          const githubData = await githubResponse.json()
+          
+          // Generate the raw content URL for the file
+          const fileUrl = `https://raw.githubusercontent.com/${GITHUB_REPO}/${GITHUB_BRANCH}/${FILES_PATH}/${file.name}`
 
-          const publicUrl = publicUrlData.publicUrl
-
-          // 3. Insert into Supabase Table
+          // 3. Insert categorization metadata into Supabase
           const fileData = {
             title: file.name,
             description,
@@ -145,19 +169,20 @@ export default function UploadPage() {
             semester,
             type,
             file_name: file.name,
-            url: publicUrl,
+            url: fileUrl,
+            github_sha: githubData.content.sha // Store GitHub's file identifier
           }
 
-          console.log(`Inserting file with categorization:`, fileData)
+          console.log(`Inserting file categorization:`, fileData)
 
-          const { data: insertData, error: insertError } = await supabase.from("uploads").insert([fileData])
+          const { error: insertError } = await supabase.from("uploads").insert([fileData])
 
           if (insertError) {
-            console.error(`❌ Database insert failed for ${file.name}:`, insertError)
+            console.error(`❌ Database categorization failed for ${file.name}:`, insertError)
             failedUploads++
             failedFiles.push(`${file.name} (Database error: ${insertError.message})`)
           } else {
-            console.log(`✅ Successfully uploaded ${file.name}`)
+            console.log(`✅ Successfully uploaded and categorized ${file.name}`)
             successfulUploads++
           }
 
