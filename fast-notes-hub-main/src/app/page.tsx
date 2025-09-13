@@ -470,6 +470,67 @@ export default function Dashboard() {
           </p>
         </section>
 
+        {/* Feedback Form */}
+        <section className="bg-gray-900 rounded-xl p-6 shadow-lg mb-8">
+          <h4 className="text-lg font-semibold text-blue-400 mb-4">Quick Feedback</h4>
+          <form 
+            action="https://formspree.io/f/xleqgvry" 
+            method="POST"
+            className="space-y-4"
+          >
+            <div>
+              <input
+                type="email"
+                name="email"
+                placeholder="Your email (optional)"
+                className="w-full px-4 py-2 rounded-lg border border-gray-800 bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 transition duration-200"
+              />
+            </div>
+            <div>
+              <select
+                name="type"
+                className="w-full px-4 py-2 rounded-lg border border-gray-800 bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 transition duration-200"
+                required
+              >
+                <option value="">Select feedback type</option>
+                <option value="suggestion">Suggestion</option>
+                <option value="bug">Bug Report</option>
+                <option value="content">Content Request</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div>
+              <textarea
+                name="message"
+                placeholder="Your feedback message"
+                required
+                rows={4}
+                className="w-full px-4 py-2 rounded-lg border border-gray-800 bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 transition duration-200 resize-none"
+              ></textarea>
+            </div>
+            <button
+              type="submit"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200 flex items-center justify-center gap-2"
+            >
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                ></path>
+              </svg>
+              Send Feedback
+            </button>
+          </form>
+        </section>
+
         <a
           href="/apk/fast-notes-hub.apk"
           className="fixed bottom-6 right-6 z-50 bg-gray-900 hover:bg-gray-800 text-white border border-gray-800 rounded-full shadow-lg w-16 h-16 flex items-center justify-center transition-all duration-200 group ring-0 hover:ring-2 hover:ring-blue-500"
