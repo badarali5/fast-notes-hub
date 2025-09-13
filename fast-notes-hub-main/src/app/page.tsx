@@ -474,7 +474,7 @@ export default function Dashboard() {
         <section className="bg-gray-900 rounded-xl p-6 shadow-lg mb-8">
           <h4 className="text-lg font-semibold text-blue-400 mb-4">Quick Feedback</h4>
           <form 
-            action="https://formspree.io/f/xleqgvry" 
+            action="https://formspree.io/f/mvgbynpz" 
             method="POST"
             className="space-y-4"
           >
@@ -510,7 +510,7 @@ export default function Dashboard() {
             </div>
             <button
               type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200 flex items-center justify-center gap-2"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200 flex items-center justify-center gap-2 cursor-pointer"
             >
               <svg
                 className="w-5 h-5"
