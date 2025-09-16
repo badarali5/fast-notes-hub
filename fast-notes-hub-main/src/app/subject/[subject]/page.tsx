@@ -140,21 +140,21 @@ function ResourceCard({ resource }: { resource: Resource }) {
 
   return (
     <Card
-      className="group border border-gray-800 bg-gray-900 hover:border-blue-500 hover:shadow-blue-900/30 shadow-md hover:shadow-lg transition-all duration-150 cursor-pointer relative overflow-hidden rounded-lg min-h-0"
+      className="group border border-gray-800/50 bg-gradient-to-br from-gray-900 to-gray-800 hover:border-blue-500/50 hover:shadow-blue-900/20 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer relative overflow-hidden rounded-lg min-h-0"
       onClick={openView}
       style={{ minHeight: 0, padding: 0 }}
     >
       <CardContent className="p-2 flex flex-col h-full min-h-0">
         <div className="flex items-center gap-2 mb-1">
           <div className="flex-1 min-w-0 flex flex-col items-center justify-center">
-            <h4 className="font-bold text-white text-lg group-hover:text-blue-400 transition-colors line-clamp-2 text-center mb-2">
+            <h4 className="font-bold text-white text-lg group-hover:text-blue-300 transition-colors line-clamp-2 text-center mb-2">
               {resource.title}
             </h4>
             <div className="flex flex-row gap-2 mb-1 justify-center">
-              <Badge variant="secondary" className="text-xs bg-gray-800 text-blue-300 border border-blue-700 px-2 py-1">
+              <Badge variant="secondary" className="text-xs bg-gray-800/80 text-blue-200 border border-blue-900/50 px-2 py-1 shadow-sm">
                 Semester {resource.semester}
               </Badge>
-              <Badge variant="secondary" className="text-xs bg-gray-800 text-purple-300 border border-purple-700 px-2 py-1">
+              <Badge variant="secondary" className="text-xs bg-gray-800/80 text-blue-200 border border-blue-900/50 px-2 py-1 shadow-sm">
                 {resource.type.charAt(0).toUpperCase() + resource.type.slice(1)}
               </Badge>
             </div>
@@ -162,7 +162,7 @@ function ResourceCard({ resource }: { resource: Resource }) {
         </div>
       
         <div className="flex-1 flex flex-col justify-end">
-          <div className="mt-1 p-1 bg-gray-800 rounded border border-gray-700 group-hover:bg-blue-950/60 transition-colors flex items-center justify-center">
+          <div className="mt-1 p-1 bg-gray-800/50 rounded border border-gray-700/50 group-hover:bg-blue-900/20 group-hover:border-blue-500/30 transition-all duration-300 flex items-center justify-center">
             <span className="text-xs text-blue-300 font-medium flex items-center gap-1">
               <Eye className="h-3 w-3 mr-1 inline-block" />
               Click to view file
@@ -303,23 +303,23 @@ export default function SubjectPage() {
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={(val) => setActiveTab(val as TabType)} className="w-full">
           <TabsList
-            className="w-full mb-6 bg-gray-900 border border-gray-800 flex flex-wrap justify-center gap-2 rounded-xl px-2 py-2 [&>*]:mb-2 sm:[&>*]:mb-0"
+            className="w-full mb-6 bg-gradient-to-br from-gray-900 to-gray-800 border border-gray-700/50 flex flex-wrap justify-center gap-2 rounded-xl px-2 py-2 [&>*]:mb-2 sm:[&>*]:mb-0 shadow-lg"
           >
             <TabsTrigger
               value="notes"
-              className="data-[state=active]:bg-blue-950 data-[state=active]:text-blue-300 text-gray-400 text-sm font-semibold flex items-center justify-center rounded-full bg-muted px-3 py-1 transition cursor-pointer whitespace-nowrap mb-2 sm:mb-0"
+              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-900 data-[state=active]:to-blue-800 data-[state=active]:text-blue-100 data-[state=active]:shadow-lg text-gray-400 text-sm font-semibold flex items-center justify-center rounded-full bg-gray-800/50 px-3 py-1 transition-all duration-200 cursor-pointer whitespace-nowrap mb-2 sm:mb-0 hover:bg-gray-800"
             >
               <FileText className="h-5 w-5 mr-1" /> Notes ({resources.notes.length})
             </TabsTrigger>
             <TabsTrigger
               value="papers"
-              className="data-[state=active]:bg-blue-950 data-[state=active]:text-blue-300 text-gray-400 text-sm font-semibold flex items-center justify-center rounded-full bg-muted px-3 py-1 transition cursor-pointer whitespace-nowrap mb-2 sm:mb-0"
+              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-900 data-[state=active]:to-blue-800 data-[state=active]:text-blue-100 data-[state=active]:shadow-lg text-gray-400 text-sm font-semibold flex items-center justify-center rounded-full bg-gray-800/50 px-3 py-1 transition-all duration-200 cursor-pointer whitespace-nowrap mb-2 sm:mb-0 hover:bg-gray-800"
             >
               <BookOpen className="h-5 w-5 mr-1" /> Past Papers ({resources.papers.length})
             </TabsTrigger>
             <TabsTrigger
               value="slides"
-              className="data-[state=active]:bg-blue-950 data-[state=active]:text-blue-300 text-gray-400 text-sm font-semibold flex items-center justify-center rounded-full bg-muted px-3 py-1 transition cursor-pointer whitespace-nowrap mb-2 sm:mb-0"
+              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-900 data-[state=active]:to-blue-800 data-[state=active]:text-blue-100 data-[state=active]:shadow-lg text-gray-400 text-sm font-semibold flex items-center justify-center rounded-full bg-gray-800/50 px-3 py-1 transition-all duration-200 cursor-pointer whitespace-nowrap mb-2 sm:mb-0 hover:bg-gray-800"
             >
               <Presentation className="h-5 w-5 mr-1" /> Slides ({resources.slides.length})
             </TabsTrigger>
