@@ -6,6 +6,7 @@ import { BookOpen, Search, Code, Database, Cpu, File, Eye, Presentation } from "
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Analytics } from "@vercel/analytics/react"
 
 interface SearchResult {
   id: string
@@ -566,7 +567,9 @@ export default function Dashboard() {
             Download Android APK
           </span>
         </a>
+        <Analytics />
       </main>
     </div>
+    
   )
 }

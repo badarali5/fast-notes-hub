@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { useSearchParams, useParams } from "next/navigation"
 import { ArrowLeft, Eye, FileText, Presentation, BookOpen, File} from "lucide-react"
+import { Analytics } from "@vercel/analytics/react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -585,6 +586,8 @@ export default function SubjectPage() {
             )}
           </TabsContent>
         </Tabs>
+
+        <Analytics />
       </main>
     </div>
   )
