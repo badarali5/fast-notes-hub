@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useSearchParams, useParams } from "next/navigation"
+import { useSearchParams, useParams, useRouter } from "next/navigation"
 import { ArrowLeft, Eye, FileText, Presentation, BookOpen, File} from "lucide-react"
 import { Analytics } from "@vercel/analytics/react"
 import { Button } from "@/components/ui/button"
@@ -178,6 +178,7 @@ function ResourceCard({ resource }: { resource: Resource }) {
 export default function SubjectPage() {
   const params = useParams()
   const searchParams = useSearchParams()
+  const router = useRouter() // Add router
 
   const subject = (params?.subject as string)?.trim() || ""
   const semester = searchParams?.get("semester")?.trim() || ""
@@ -275,7 +276,7 @@ export default function SubjectPage() {
         <div className="max-w-4xl mx-auto px-4 py-6">
           <div className="flex items-center w-full mb-6">
             <button
-              onClick={() => window.history.back()}
+              onClick={() => router.back()} // Changed from window.history.back()
               className="flex items-center space-x-2 text-blue-400 hover:text-blue-300 font-medium cursor-pointer"
             >
               <ArrowLeft className="h-5 w-5" />
