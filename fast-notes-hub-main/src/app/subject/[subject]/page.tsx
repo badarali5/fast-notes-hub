@@ -132,10 +132,17 @@ function ResourceCard({ resource }: { resource: Resource }) {
     const isPdf = resource.file_name.toLowerCase().endsWith('.pdf');
     
     if (isPdf) {
+      // Convert to GitHub Pages URL
       url = url.replace(
         "raw.githubusercontent.com/badarali5/fast-notes-hub/main/files",
-        "https://badarali5.github.io/fast-notes-hub/files"
+        "badarali5.github.io/fast-notes-hub/files"
       );
+      
+      // For mobile devices, use direct PDF URL instead of Google Docs Viewer
+      if (isMobile()) {
+        return url;
+      }
+      // For desktop, use Google Docs Viewer
       return `https://docs.google.com/viewer?url=${encodeURIComponent(url)}&embedded=true`;
     }
     return url;
@@ -145,7 +152,8 @@ function ResourceCard({ resource }: { resource: Resource }) {
     if (isMobile()) {
       if (isHovered) {
         setIsOpening(true);
-        window.open(viewUrl, "_blank");
+        // For mobile, open in current tab to maintain navigation history
+        window.location.href = viewUrl;
         setTimeout(() => setIsOpening(false), 2000);
       } else {
         setIsHovered(true);
