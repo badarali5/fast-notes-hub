@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { useSearchParams, useParams, useRouter } from "next/navigation"
 import { ArrowLeft, Eye, FileText, Presentation, BookOpen, File} from "lucide-react"
 import { Analytics } from "@vercel/analytics/react"
@@ -124,19 +124,25 @@ const matchesSubject = (filename: string, subject: string): boolean => {
 }
 
 function ResourceCard({ resource }: { resource: Resource }) {
-  const openView = () => {
+  // Pre-process the URL when the component renders
+  const viewUrl = useMemo(() => {
     let url = resource.url;
     const isPdf = resource.file_name.toLowerCase().endsWith('.pdf');
+    
     if (isPdf) {
-      // Use GitHub Pages URL for Google Docs Viewer
-      url = `https://github.com/badarali5/fast-notes-hub/blob/main/files/${encodeURIComponent(resource.file_name)}`;
+      // Convert GitHub raw URL to GitHub Pages URL
       url = url.replace(
-        "github.com/badarali5/fast-notes-hub/blob/main/files",
+        "raw.githubusercontent.com/badarali5/fast-notes-hub/main/files",
         "badarali5.github.io/fast-notes-hub/files"
       );
-      url = `https://docs.google.com/viewer?url=${encodeURIComponent(url)}&embedded=true`;
+      // Wrap with Google Docs Viewer
+      return `https://docs.google.com/viewer?url=${encodeURIComponent(url)}&embedded=true`;
     }
-    window.open(url, "_blank");
+    return url;
+  }, [resource.url, resource.file_name]);
+
+  const openView = () => {
+    window.open(viewUrl, "_blank");
   };
 
   return (
