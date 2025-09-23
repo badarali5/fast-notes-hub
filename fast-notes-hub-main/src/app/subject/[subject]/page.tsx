@@ -124,31 +124,57 @@ const matchesSubject = (filename: string, subject: string): boolean => {
 }
 
 function ResourceCard({ resource }: { resource: Resource }) {
-  // Pre-process the URL when the component renders
+  const [isHovered, setIsHovered] = useState(false);
+  const [isOpening, setIsOpening] = useState(false);
+  
   const viewUrl = useMemo(() => {
     let url = resource.url;
     const isPdf = resource.file_name.toLowerCase().endsWith('.pdf');
     
     if (isPdf) {
-      // Convert GitHub raw URL to GitHub Pages URL
       url = url.replace(
         "raw.githubusercontent.com/badarali5/fast-notes-hub/main/files",
-        "badarali5.github.io/fast-notes-hub/files"
+        "https://badarali5.github.io/fast-notes-hub/files"
       );
-      // Wrap with Google Docs Viewer
       return `https://docs.google.com/viewer?url=${encodeURIComponent(url)}&embedded=true`;
     }
     return url;
   }, [resource.url, resource.file_name]);
 
-  const openView = () => {
-    window.open(viewUrl, "_blank");
+  const handleClick = () => {
+    if (isMobile()) {
+      if (isHovered) {
+        setIsOpening(true);
+        window.open(viewUrl, "_blank");
+        setTimeout(() => setIsOpening(false), 2000);
+      } else {
+        setIsHovered(true);
+      }
+    } else {
+      setIsOpening(true);
+      window.open(viewUrl, "_blank");
+      setTimeout(() => setIsOpening(false), 2000);
+    }
   };
+
+  // Reset hover state when touching outside
+  useEffect(() => {
+    const handleTouchStart = (e: TouchEvent) => {
+      const target = e.target as Element | null;
+      if (target && !target.closest('.resource-card')) {
+        setIsHovered(false);
+      }
+    };
+    document.addEventListener('touchstart', handleTouchStart);
+    return () => document.removeEventListener('touchstart', handleTouchStart);
+  }, []);
 
   return (
     <Card
-      className="group border border-gray-800/50 bg-gradient-to-br from-gray-900 to-gray-800 hover:border-blue-500/50 hover:shadow-blue-900/20 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer relative overflow-hidden rounded-lg min-h-0"
-      onClick={openView}
+      className={`resource-card group border border-gray-800/50 bg-gradient-to-br from-gray-900 to-gray-800 
+        ${isHovered ? 'border-blue-500/50 shadow-blue-900/20 shadow-xl scale-105' : ''}
+        transition-all duration-300 cursor-pointer relative overflow-hidden rounded-lg min-h-0`}
+      onClick={handleClick}
       style={{ minHeight: 0, padding: 0 }}
     >
       <CardContent className="p-2 flex flex-col h-full min-h-0">
@@ -169,10 +195,11 @@ function ResourceCard({ resource }: { resource: Resource }) {
         </div>
       
         <div className="flex-1 flex flex-col justify-end">
-          <div className="mt-1 p-1 bg-gray-800/50 rounded border border-gray-700/50 group-hover:bg-blue-900/20 group-hover:border-blue-500/30 transition-all duration-300 flex items-center justify-center">
+          <div className={`mt-1 p-1 rounded border transition-all duration-300 flex items-center justify-center
+            ${isHovered ? 'bg-blue-900/20 border-blue-500/30' : 'bg-gray-800/50 border-gray-700/50'}`}>
             <span className="text-xs text-blue-300 font-medium flex items-center gap-1">
               <Eye className="h-3 w-3 mr-1 inline-block" />
-              Click to view file
+              {isOpening ? 'Opening PDF...' : 'Click to open'}
             </span>
           </div>
         </div>
