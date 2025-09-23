@@ -132,17 +132,12 @@ function ResourceCard({ resource }: { resource: Resource }) {
     const isPdf = resource.file_name.toLowerCase().endsWith('.pdf');
     
     if (isPdf) {
-      // Convert to GitHub Pages URL
-      url = url.replace(
-        "raw.githubusercontent.com/badarali5/fast-notes-hub/main/files",
-        "badarali5.github.io/fast-notes-hub/files"
-      );
+      // Convert to GitHub Pages URL for all devices
+      url = url
+        .replace("raw.githubusercontent.com/badarali5/fast-notes-hub/main/files", 
+                "badarali5.github.io/fast-notes-hub/files");
       
-      // For mobile devices, use direct PDF URL instead of Google Docs Viewer
-      if (isMobile()) {
-        return url;
-      }
-      // For desktop, use Google Docs Viewer
+      // Use Google Docs Viewer for all devices
       return `https://docs.google.com/viewer?url=${encodeURIComponent(url)}&embedded=true`;
     }
     return url;
@@ -152,16 +147,21 @@ function ResourceCard({ resource }: { resource: Resource }) {
     if (isMobile()) {
       if (isHovered) {
         setIsOpening(true);
-        // For mobile, open in current tab to maintain navigation history
-        window.location.href = viewUrl;
-        setTimeout(() => setIsOpening(false), 2000);
+        // Open in new tab for both mobile and desktop
+        window.open(viewUrl, "_blank");
+        setTimeout(() => {
+          setIsOpening(false);
+          setIsHovered(false);
+        }, 2000);
       } else {
         setIsHovered(true);
       }
     } else {
       setIsOpening(true);
       window.open(viewUrl, "_blank");
-      setTimeout(() => setIsOpening(false), 2000);
+      setTimeout(() => {
+        setIsOpening(false);
+      }, 2000);
     }
   };
 
