@@ -73,22 +73,27 @@ function ResourceCard({ resource }: { resource: Resource }) {
   const [isOpening, setIsOpening] = useState(false);
   const hasPrefetched = useRef(false);
 
-  const viewUrl = useMemo(() => {
+  // Compute a direct PDF URL (GitHub Pages) and an internal viewer URL (iframe)
+  const { viewUrl, pdfUrl } = useMemo(() => {
+    const isPdf = resource.file_name?.toLowerCase().endsWith(".pdf");
     let url = resource.url;
-    const isPdf = resource.file_name.toLowerCase().endsWith('.pdf');
+
     if (isPdf) {
-      url = url.replace(
+      const ghPagesUrl = url.replace(
         "raw.githubusercontent.com/badarali5/fast-notes-hub/main/files",
         "badarali5.github.io/fast-notes-hub/files"
       );
-      return `https://docs.google.com/viewer?url=${encodeURIComponent(url)}&embedded=true`;
+      return {
+        viewUrl: `/viewer?file=${encodeURIComponent(ghPagesUrl)}&name=${encodeURIComponent(resource.file_name)}`,
+        pdfUrl: ghPagesUrl,
+      };
     }
-    return url;
+    return { viewUrl: url, pdfUrl: "" };
   }, [resource.url, resource.file_name]);
 
   const ensurePrefetch = () => {
     if (!hasPrefetched.current) {
-      prefetchUrlOnce(viewUrl);
+      prefetchUrlOnce(pdfUrl || viewUrl); // prefetch the actual PDF if available
       hasPrefetched.current = true;
     }
   };
@@ -98,21 +103,18 @@ function ResourceCard({ resource }: { resource: Resource }) {
     if (isMobile()) {
       if (isHovered) {
         setIsOpening(true);
-        // Open in new tab for both mobile and desktop
         window.open(viewUrl, "_blank");
         setTimeout(() => {
           setIsOpening(false);
           setIsHovered(false);
-        }, 2000);
+        }, 1200);
       } else {
         setIsHovered(true);
       }
     } else {
       setIsOpening(true);
       window.open(viewUrl, "_blank");
-      setTimeout(() => {
-        setIsOpening(false);
-      }, 2000);
+      setTimeout(() => setIsOpening(false), 1200);
     }
   };
 
