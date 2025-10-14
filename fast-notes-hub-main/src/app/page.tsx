@@ -498,7 +498,10 @@ export default function Dashboard() {
 
         {/* Feedback Form */}
         <section className="bg-gray-900 rounded-xl p-6 shadow-lg mb-8">
-          <h4 className="text-lg font-semibold text-blue-400 mb-4">Quick Feedback</h4>
+          <h4 className="text-lg font-semibold text-blue-400 mb-2">Feedback</h4>
+          <p className="text-gray-300 mb-4">
+            Have a minute? Share how you like the site and any improvements you’d love to see—features to add, confusing parts, or bugs you noticed.
+          </p>
           <form 
             action="https://formspree.io/f/mvgbynpz" 
             method="POST"
@@ -528,7 +531,7 @@ export default function Dashboard() {
             <div>
               <textarea
                 name="message"
-                placeholder="Your feedback message"
+                placeholder="What did you like? What can be improved? Any feature request?"
                 required
                 rows={4}
                 className="w-full px-4 py-2 rounded-lg border border-gray-800 bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 transition duration-200 resize-none"
