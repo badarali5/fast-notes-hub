@@ -75,20 +75,21 @@ function ResourceCard({ resource }: { resource: Resource }) {
 
   // Compute a direct PDF URL (GitHub Pages) and an internal viewer URL (iframe)
   const { viewUrl, pdfUrl } = useMemo(() => {
-    const isPdf = resource.file_name?.toLowerCase().endsWith(".pdf");
-    let url = resource.url;
-
+    const isPdf = resource.file_name?.toLowerCase().endsWith(".pdf")
+    let url = resource.url
     if (isPdf) {
       const ghPagesUrl = url.replace(
         "raw.githubusercontent.com/badarali5/fast-notes-hub/main/files",
         "badarali5.github.io/fast-notes-hub/files"
-      );
+      )
+      // Proxy URL (served from our own domain)
+      const proxied = `/api/pdf-proxy?url=${encodeURIComponent(ghPagesUrl)}`
       return {
-        viewUrl: `/viewer?file=${encodeURIComponent(ghPagesUrl)}&name=${encodeURIComponent(resource.file_name)}`,
-        pdfUrl: ghPagesUrl,
-      };
+        viewUrl: `/viewer?file=${encodeURIComponent(proxied)}&name=${encodeURIComponent(resource.file_name)}`,
+        pdfUrl: proxied
+      }
     }
-    return { viewUrl: url, pdfUrl: "" };
+    return { viewUrl: url, pdfUrl: "" }
   }, [resource.url, resource.file_name]);
 
   const ensurePrefetch = () => {
