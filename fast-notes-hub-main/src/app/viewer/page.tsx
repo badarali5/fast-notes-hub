@@ -1,56 +1,33 @@
-// Server component (no "use client" needed unless you use hooks)
+// Server component
 
-interface ViewerSearchParams {
-  file?: string
-  name?: string
+type SearchParams = {
+  file?: string | string[]
+  name?: string | string[]
 }
 
-export default function ViewerPage({ searchParams }: { searchParams: ViewerSearchParams }) {
-  const rawFileParam = searchParams?.file || ""
-  const decodedFileUrl = rawFileParam ? decodeURIComponent(rawFileParam) : ""
-  const displayName = searchParams?.name ? decodeURIComponent(searchParams.name) : "Document"
+const first = (v?: string | string[]) => (Array.isArray(v) ? v[0] : v) || ""
 
-  if (!decodedFileUrl) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-950 text-gray-300">
-        <p>Missing file URL.</p>
-      </div>
-    )
+export default function ViewerPage({ searchParams }: { searchParams?: SearchParams }) {
+  const encodedFile = first(searchParams?.file)
+  const encodedName = first(searchParams?.name)
+
+  const fileUrl = encodedFile ? decodeURIComponent(encodedFile) : ""
+  const fileName = encodedName ? decodeURIComponent(encodedName) : "Document"
+
+  if (!fileUrl) {
+    return <p>No file selected.</p>
   }
 
-  // If the param is a relative API path (/api/pdf-proxy?url=...), keep it as-is.
-  // If it is an absolute URL, pass directly to iframe.
-  const iframeSrc =
-    decodedFileUrl.startsWith("/") || decodedFileUrl.startsWith("http")
-      ? decodedFileUrl
-      : decodedFileUrl // (kept simple; you can normalize further if needed)
+  // fileUrl can be a proxied path (/api/pdf-proxy?url=...) or an absolute URL
+  const iframeSrc = fileUrl
 
   return (
-    <div className="min-h-screen bg-gray-950">
-      <header className="w-full bg-gray-900 border-b border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-          <h1 className="text-sm sm:text-base text-gray-200 truncate" title={displayName}>
-            {displayName}
-          </h1>
-          <a
-            href={iframeSrc}
-            target="_blank"
-            rel="noreferrer"
-            className="text-xs sm:text-sm text-blue-300 hover:text-blue-200"
-          >
-            Open original
-          </a>
-        </div>
-      </header>
-      <main className="w-full h-[calc(100vh-56px)]">
-        <iframe
-          title={displayName}
-          // Allow pdf rendering; sandbox removed for GitHub raw / proxy
-          src={iframeSrc}
-          className="w-full h-full"
-          loading="eager"
-        />
-      </main>
-    </div>
+    <iframe
+      src={iframeSrc}
+      title={fileName}
+      width="100%"
+      height="800"
+      style={{ border: "none" }}
+    />
   )
 }
