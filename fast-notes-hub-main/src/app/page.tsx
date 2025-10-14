@@ -266,47 +266,38 @@ export default function Dashboard() {
   const SearchResultCard = ({ result }: { result: SearchResult }) => {
     const hasPrefetched = useRef(false)
 
-    // Click handler: open PDF in Google Docs Viewer, others in new tab
-    const handleViewClick = () => {
-      const isPdf = result.file_name.toLowerCase().endsWith('.pdf')
-      let fileUrl = result.url
-      
-      if (isPdf) {
-        // Use GitHub Pages URL for PDFs
-        fileUrl = `https://${GITHUB_REPO.split('/')[0]}.github.io/${GITHUB_REPO.split('/')[1]}/${FILES_PATH}/${encodeURIComponent(result.file_name)}`
-      }
-      
-      const viewUrl = isPdf
-        ? `https://docs.google.com/viewer?url=${encodeURIComponent(fileUrl)}&embedded=true`
-        : result.url
+    const buildViewUrl = () => {
+      const isPdf = result.file_name?.toLowerCase().endsWith(".pdf")
+      if (!isPdf) return result.url
 
-      // Before opening, ensure prefetch is added
-      prefetchUrlOnce(viewUrl)
-      hasPrefetched.current = true
-      window.open(viewUrl, "_blank")
+      // Normalize to GitHub Pages URL, then proxy through our domain
+      const ghPagesUrl = result.url
+        .replace("raw.githubusercontent.com/badarali5/fast-notes-hub/main/files", "badarali5.github.io/fast-notes-hub/files")
+        .replace("github.com/badarali5/fast-notes-hub/blob/main/files", "badarali5.github.io/fast-notes-hub/files")
+
+      const proxied = `/api/pdf-proxy?url=${encodeURIComponent(ghPagesUrl)}`
+      return `/viewer?file=${encodeURIComponent(proxied)}&name=${encodeURIComponent(result.file_name)}`
     }
 
-    const handlePrefetchOnHover = () => {
+    const handlePrefetch = () => {
       if (!hasPrefetched.current) {
-        // compute the same viewUrl here too
-        const isPdf = result.file_name.toLowerCase().endsWith('.pdf')
-        let fileUrl = result.url
-        if (isPdf) {
-          fileUrl = `https://${GITHUB_REPO.split('/')[0]}.github.io/${GITHUB_REPO.split('/')[1]}/${FILES_PATH}/${encodeURIComponent(result.file_name)}`
-        }
-        const viewUrl = isPdf
-          ? `https://docs.google.com/viewer?url=${encodeURIComponent(fileUrl)}&embedded=true`
-          : result.url
+        const viewUrl = buildViewUrl()
         prefetchUrlOnce(viewUrl)
         hasPrefetched.current = true
       }
     }
 
+    const handleViewClick = () => {
+      const viewUrl = buildViewUrl()
+      prefetchUrlOnce(viewUrl)
+      window.open(viewUrl, "_blank")
+    }
+
     return (
       <Card
         className="bg-gray-900 group border border-gray-800 hover:border-blue-500 hover:shadow-blue-900/40 shadow-lg hover:shadow-2xl transition-all duration-200 cursor-pointer relative overflow-hidden"
-        onMouseEnter={handlePrefetchOnHover}
-        onTouchStart={handlePrefetchOnHover}
+        onMouseEnter={handlePrefetch}
+        onTouchStart={handlePrefetch}
         onClick={handleViewClick}
       >
         {/* Animated blue glow on hover */}
