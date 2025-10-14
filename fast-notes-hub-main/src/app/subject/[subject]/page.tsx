@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState, useCallback } from "react"
 import { useSearchParams, useParams, useRouter } from "next/navigation"
 import { ArrowLeft, Eye, FileText, Presentation, BookOpen, File} from "lucide-react"
 import { Analytics } from "@vercel/analytics/react"
@@ -10,67 +10,33 @@ import { Badge } from "@/components/ui/badge"
 
 // Import and initialize Supabase client
 import { createClient } from "@supabase/supabase-js"
+import { subjectFullNames, TABLES, GITHUB } from "@/lib/constants"
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "<YOUR_SUPABASE_URL>"
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "<YOUR_SUPABASE_ANON_KEY>"
 const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 // GitHub repository configuration
-const GITHUB_REPO = "badarali5/fast-notes-hub"
-const GITHUB_BRANCH = "main"
-const FILES_PATH = "files"
-
-const subjectFullNames: Record<string, string> = {
-  NS1001: "Applied Physics",
-  MT1003: "Calculus and Analytical Geometry",
-  SS1012: "Functional English",
-  SS1013: "Ideology and Constitution of Pakistan",
-  CL1000: "Introduction to Information and Communication Technology",
-  CS1002: "Programming Fundamentals",
-  CS1004: "Object Oriented Programming",
-  MT1008: "Multivariable Calculus",
-  EE1005: "Digital Logic Design",
-  SS1014: "Expository Writing",
-  SS1007: "Islamic Studies/Ethics",
-  SS2043: "Civics and Community Engagement",
-  EE2003: "Computer Organization and Assembly Language",
-  CS2001: "Data Structures and Algorithms",
-  CS1005: "Discrete Structures",
-  SE1001: "Introduction to Software Engineering",
-  MT1004: "Linear Algebra",
-  CS3005: "Theory Of Automata",
-  SS2002: "Fundamentals of Economics",
-  MG1001: "Fundamentals of Management",
-  AF1001: "Fundamentals of Accounting",
-  CS2005: "Database Systems",
-  CS2006: "Operating Systems",
-  MT2005: "Probability and Statistics",
-  SE2004: "Software Design and Architecture",
-  SE2001: "Software Requirements Engineering",
-  AI2002: "Artificial Intelligence",
-  CS2009: "Design and Analysis of Algorithms",
-  SE3004: "Software Construction and Development",
-  SE3002: "Software Quality Engineering",
-  SS2007: "Technical and Business Writing",
-  CS3001: "Computer Networks",
-  SE4002: "Fundamentals of Software Project Management",
-  CS3006: "Parallel and Distributed Computing",
-}
-
-interface Resource {
-  id: string
-  title: string
-  description: string
-  subject: string
-  semester: string
-  type: "notes" | "papers" | "slides"
-  file_name: string
-  url: string
-  created_at: string
-}
+const GITHUB_REPO = GITHUB.REPO
+const GITHUB_BRANCH = GITHUB.BRANCH
+const FILES_PATH = GITHUB.FILES_PATH
 
 const tabTypes = ["notes", "papers", "slides"] as const;
 type TabType = (typeof tabTypes)[number];
+
+// Define the Resource type
+type Resource = {
+  id: string;
+  title: string;
+  description: string;
+  subject: string;
+  semester: string;
+  type: "notes" | "papers" | "slides";
+  file_name: string;
+  url: string;
+  created_at: string;
+};
+
 type ResourcesMap = Record<"notes" | "papers" | "slides", Resource[]>;
 
 function isMobile() {
@@ -81,45 +47,9 @@ function isMobile() {
 // Helper function to determine file type from filename
 const getFileType = (filename: string): "notes" | "papers" | "slides" => {
   const lower = filename.toLowerCase()
-  if (lower.includes("slide") || lower.includes("presentation") || lower.includes("ppt")) {
-    return "slides"
-  }
-  if (lower.includes("paper") || lower.includes("exam") || lower.includes("test") || 
-      lower.includes("final") || lower.includes("mid") || lower.includes("quiz")) {
-    return "papers"
-  }
+  if (lower.includes("slide") || lower.includes("presentation") || lower.includes("ppt")) return "slides"
+  if (lower.includes("paper") || lower.includes("exam") || lower.includes("test") || lower.includes("final") || lower.includes("mid") || lower.includes("quiz")) return "papers"
   return "notes"
-}
-
-// Helper function to check if file matches subject
-const matchesSubject = (filename: string, subject: string): boolean => {
-  const lower = filename.toLowerCase();
-  const subjectLower = subject.toLowerCase();
-  // Match subject code as a whole word
-  const codeRegex = new RegExp(`\\b${subjectLower}\\b`, "i");
-  // Match full subject name as a whole word
-  const fullName = subjectFullNames[subject.toUpperCase()];
-  let fullNameMatch = false;
-  if (fullName) {
-    const fullNameRegex = new RegExp(`\\b${fullName.toLowerCase().replace(/[^a-z0-9 ]/g, "").replace(/ +/g, "|\\b")}`, "i");
-    fullNameMatch = fullNameRegex.test(lower);
-  }
-  // Match semester (as a number or word)
-  let semesterMatch = false;
-  if (typeof window !== "undefined") {
-    const urlParams = new URLSearchParams(window.location.search);
-    const semester = urlParams.get("semester");
-    if (semester) {
-      // Match semester number or word (e.g., "semester 3", "sem3", "s3")
-      const semRegex = new RegExp(`\\b(semester|sem|s)[ _-]?${semester}\\b`, "i");
-      semesterMatch = semRegex.test(lower);
-    }
-  }
-  // File matches if subject code or full name AND semester (if present)
-  if ((codeRegex.test(lower) || fullNameMatch) && (semesterMatch || !semesterMatch)) {
-    return true;
-  }
-  return false;
 }
 
 // Add a tiny helper to prefetch a URL once
@@ -132,7 +62,6 @@ function prefetchUrlOnce(url: string) {
     link.id = id
     link.rel = "prefetch"
     link.href = url
-    // Best-effort hint
     link.as = url.endsWith(".pdf") || url.includes("docs.google.com/viewer") ? "document" : "fetch"
     link.crossOrigin = "anonymous"
     document.head.appendChild(link)
@@ -205,6 +134,7 @@ function ResourceCard({ resource }: { resource: Resource }) {
         ${isHovered ? 'border-blue-500/50 shadow-blue-900/20 shadow-xl scale-105' : ''}
         transition-all duration-300 cursor-pointer relative overflow-hidden rounded-lg min-h-0`}
       onMouseEnter={() => { setIsHovered(true); ensurePrefetch(); }}
+      onMouseLeave={() => { setIsHovered(false); }} // added: stop hover when cursor leaves
       onTouchStart={() => { setIsHovered(true); ensurePrefetch(); }}
       onClick={handleClick}
       style={{ minHeight: 0, padding: 0 }}
@@ -251,89 +181,111 @@ export default function SubjectPage() {
   // Get the full name from the mapping, fallback to code if not found
   const subjectFullName = subjectFullNames[subject.toUpperCase()] || subject
 
-  const [resources, setResources] = useState<ResourcesMap>({
-    notes: [],
-    papers: [],
-    slides: [],
-  });
-  const [activeTab, setActiveTab] = useState<TabType>("papers");
-  const [papersSubTab, setPapersSubTab] = useState<"final" | "mid" | "finalLab" | "midLab">("final");
-  const [isLoading, setIsLoading] = useState(true);
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [resources, setResources] = useState<ResourcesMap>({ notes: [], papers: [], slides: [] })
+  const [activeTab, setActiveTab] = useState<TabType>("papers")
+  const [papersSubTab, setPapersSubTab] = useState<"final" | "mid" | "finalLab" | "midLab">("final")
+  const [isLoading, setIsLoading] = useState(true)
+  const [errorMsg, setErrorMsg] = useState<string | null>(null)
 
-  useEffect(() => {
-    async function fetchResources() {
-      setIsLoading(true);
-      setErrorMsg(null);
+  // Cache keys for GitHub contents
+  const CACHE_KEY = `gh-files:${GITHUB_REPO}/${FILES_PATH}`
+  const CACHE_TIME_KEY = `${CACHE_KEY}:time`
+  const CACHE_TTL_MS = 10 * 60 * 1000 // 10 minutes
 
-      if (!subject || !semester) {
-        setErrorMsg("Missing subject or semester in URL.");
-        setIsLoading(false);
-        return;
-      }
+  // Abortable fetcher
+  const fetchResources = useCallback(async (signal?: AbortSignal) => {
+    setIsLoading(true)
+    setErrorMsg(null)
 
-      try {
-        // 1. First get the categorization data from Supabase
-        const { data: supabaseData, error: supabaseError } = await supabase
-          .from('uploads')
-          .select('*')
-          .eq('subject', subject.toUpperCase())
-          .eq('semester', semester);
-
-        if (supabaseError) {
-          throw new Error(`Database error: ${supabaseError.message}`);
-        }
-
-        // 2. Then fetch the file list from GitHub
-        const githubRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${FILES_PATH}`);
-        if (!githubRes.ok) {
-          if (githubRes.status === 403) {
-            throw new Error("GitHub API rate limit exceeded. Please try again later.");
-          }
-          throw new Error(`GitHub API error: ${githubRes.status}`);
-        }
-
-        const githubFiles = await githubRes.json();
-        const fileArray = Array.isArray(githubFiles) ? githubFiles : [githubFiles];
-
-        // Create a map of filenames for quick lookup
-        const githubFileMap = new Map(
-          fileArray.map(file => [file.name, file])
-        );
-
-        // 3. Process and group the resources using Supabase categorization
-        const grouped: ResourcesMap = { notes: [], papers: [], slides: [] };
-
-        for (const dbEntry of supabaseData) {
-          // Only include files that exist in both Supabase and GitHub
-          const githubFile = githubFileMap.get(dbEntry.file_name);
-          if (githubFile) {
-            const resource: Resource = {
-              id: githubFile.sha || dbEntry.id,
-              title: dbEntry.title || githubFile.name.replace(/\.[^/.]+$/, ""),
-              description: dbEntry.description || "File from GitHub storage.",
-              subject: dbEntry.subject,
-              semester: dbEntry.semester,
-              type: dbEntry.type,
-              file_name: dbEntry.file_name,
-              url: `https://raw.githubusercontent.com/${GITHUB_REPO}/${GITHUB_BRANCH}/${FILES_PATH}/${dbEntry.file_name}`,
-              created_at: dbEntry.created_at || ""
-            };
-            grouped[dbEntry.type as keyof ResourcesMap].push(resource);
-          }
-        }
-
-        setResources(grouped)
-        setIsLoading(false)
-      } catch (error) {
-        console.error("Fetch error:", error)
-        setErrorMsg(error instanceof Error ? error.message : "An error occurred while loading resources.")
-        setIsLoading(false)
-      }
+    if (!subject || !semester) {
+      setErrorMsg("Missing subject or semester in URL.")
+      setIsLoading(false)
+      return
     }
 
-    fetchResources()
+    try {
+      // 1) Supabase categorization (case-insensitive subject)
+      const { data: supabaseData, error: supabaseError } = await supabase
+        .from(TABLES.UPLOADS)
+        .select("*")
+        .ilike("subject", subject) // case-insensitive
+        .eq("semester", semester)
+
+      if (supabaseError) throw new Error(`Database error: ${supabaseError.message}`)
+      const safeSupabaseData = Array.isArray(supabaseData) ? supabaseData : []
+
+      // 2) GitHub files with localStorage cache
+      let fileArray: any[] | null = null
+      if (typeof window !== "undefined") {
+        try {
+          const cached = localStorage.getItem(CACHE_KEY)
+          const time = localStorage.getItem(CACHE_TIME_KEY)
+          if (cached && time && Date.now() - Number(time) < CACHE_TTL_MS) {
+            fileArray = JSON.parse(cached)
+          }
+        } catch {}
+      }
+
+      if (!fileArray) {
+        const githubRes = await fetch(
+          `https://api.github.com/repos/${GITHUB_REPO}/contents/${FILES_PATH}`,
+          { signal }
+        )
+        if (!githubRes.ok) {
+          if (githubRes.status === 403) throw new Error("GitHub API rate limit exceeded. Please try again later.")
+          throw new Error(`GitHub API error: ${githubRes.status}`)
+        }
+        if (signal?.aborted) return
+        const githubFiles = await githubRes.json()
+        fileArray = Array.isArray(githubFiles) ? githubFiles : [githubFiles]
+
+        // Save fresh cache
+        if (typeof window !== "undefined") {
+          try {
+            localStorage.setItem(CACHE_KEY, JSON.stringify(fileArray))
+            localStorage.setItem(CACHE_TIME_KEY, String(Date.now()))
+          } catch {}
+        }
+      }
+
+      // 3) Build map and group resources based on Supabase categorization only
+      const githubFileMap = new Map(fileArray.map((file: any) => [file.name, file]))
+      const grouped: ResourcesMap = { notes: [], papers: [], slides: [] }
+
+      for (const dbEntry of safeSupabaseData) {
+        const githubFile = githubFileMap.get(dbEntry.file_name)
+        if (!githubFile) continue
+
+        const resource: Resource = {
+          id: githubFile.sha || dbEntry.id,
+          title: dbEntry.title || githubFile.name.replace(/\.[^/.]+$/, ""),
+          description: dbEntry.description || "File from GitHub storage.",
+          subject: dbEntry.subject,
+          semester: dbEntry.semester,
+          type: dbEntry.type,
+          file_name: dbEntry.file_name,
+          url: `https://raw.githubusercontent.com/${GITHUB_REPO}/${GITHUB_BRANCH}/${FILES_PATH}/${dbEntry.file_name}`,
+          created_at: dbEntry.created_at || "",
+        }
+        grouped[dbEntry.type as keyof ResourcesMap].push(resource)
+      }
+
+      setResources(grouped)
+      setIsLoading(false)
+    } catch (err) {
+      if ((err as any)?.name === "AbortError") return
+      console.error("Fetch error:", err)
+      setErrorMsg(err instanceof Error ? err.message : "An error occurred while loading resources.")
+      setIsLoading(false)
+    }
   }, [subject, semester])
+
+  // Run with AbortController and cancel on tab/param change
+  useEffect(() => {
+    const controller = new AbortController()
+    fetchResources(controller.signal)
+    return () => controller.abort()
+  }, [fetchResources])
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-800">
@@ -362,8 +314,14 @@ export default function SubjectPage() {
       <main className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-6">
         {/* Error Display */}
         {errorMsg && (
-          <div className="bg-red-900/20 border border-red-500 rounded-lg p-4 mb-6">
-            <p className="text-red-400 text-sm">{errorMsg}</p>
+          <div className="bg-red-900/20 border border-red-500/60 rounded-lg p-4 mb-6">
+            <p className="text-red-300 text-sm mb-3">{errorMsg}</p>
+            <button
+              onClick={() => fetchResources()}
+              className="text-sm px-3 py-1 rounded bg-red-700/30 hover:bg-red-700/40 text-red-100 border border-red-600/40 transition"
+            >
+              Retry
+            </button>
           </div>
         )}
 
