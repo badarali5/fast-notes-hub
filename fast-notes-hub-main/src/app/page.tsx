@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react"
-import { useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { BookOpen, Search, Code, Database, Cpu, File, Eye, Presentation } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -247,10 +247,25 @@ export default function Dashboard() {
     }
   }
 
+  // Reuse the same prefetch helper
+  function prefetchUrlOnce(url: string) {
+    try {
+      if (!url || typeof document === "undefined") return
+      const id = "pf-" + btoa(unescape(encodeURIComponent(url))).slice(0, 16)
+      if (document.getElementById(id)) return
+      const link = document.createElement("link")
+      link.id = id
+      link.rel = "prefetch"
+      link.href = url
+      link.as = url.endsWith(".pdf") || url.includes("docs.google.com/viewer") ? "document" : "fetch"
+      link.crossOrigin = "anonymous"
+      document.head.appendChild(link)
+    } catch {}
+  }
+
   const SearchResultCard = ({ result }: { result: SearchResult }) => {
-    const subjectCode = result.subject?.toUpperCase()
-    const subjectName = subjectFullNames[subjectCode] || result.subject
-    
+    const hasPrefetched = useRef(false)
+
     // Click handler: open PDF in Google Docs Viewer, others in new tab
     const handleViewClick = () => {
       const isPdf = result.file_name.toLowerCase().endsWith('.pdf')
@@ -264,13 +279,34 @@ export default function Dashboard() {
       const viewUrl = isPdf
         ? `https://docs.google.com/viewer?url=${encodeURIComponent(fileUrl)}&embedded=true`
         : result.url
-      
+
+      // Before opening, ensure prefetch is added
+      prefetchUrlOnce(viewUrl)
+      hasPrefetched.current = true
       window.open(viewUrl, "_blank")
+    }
+
+    const handlePrefetchOnHover = () => {
+      if (!hasPrefetched.current) {
+        // compute the same viewUrl here too
+        const isPdf = result.file_name.toLowerCase().endsWith('.pdf')
+        let fileUrl = result.url
+        if (isPdf) {
+          fileUrl = `https://${GITHUB_REPO.split('/')[0]}.github.io/${GITHUB_REPO.split('/')[1]}/${FILES_PATH}/${encodeURIComponent(result.file_name)}`
+        }
+        const viewUrl = isPdf
+          ? `https://docs.google.com/viewer?url=${encodeURIComponent(fileUrl)}&embedded=true`
+          : result.url
+        prefetchUrlOnce(viewUrl)
+        hasPrefetched.current = true
+      }
     }
 
     return (
       <Card
         className="bg-gray-900 group border border-gray-800 hover:border-blue-500 hover:shadow-blue-900/40 shadow-lg hover:shadow-2xl transition-all duration-200 cursor-pointer relative overflow-hidden"
+        onMouseEnter={handlePrefetchOnHover}
+        onTouchStart={handlePrefetchOnHover}
         onClick={handleViewClick}
       >
         {/* Animated blue glow on hover */}
@@ -286,7 +322,7 @@ export default function Dashboard() {
               </h4>
               <div className="flex flex-wrap items-center gap-2 mt-1">
                 <Badge variant="secondary" className="text-xs bg-gray-800 text-gray-300">
-                  {subjectName}
+                  {subjectFullNames[result.subject] || result.subject}
                 </Badge>
                 <Badge variant="secondary" className="text-xs bg-gray-800 text-blue-300 border border-blue-700">
                   Semester {result.semester}

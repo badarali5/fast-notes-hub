@@ -1,10 +1,9 @@
 "use client"
 
-import { useState, useEffect, useMemo } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { useSearchParams, useParams, useRouter } from "next/navigation"
 import { ArrowLeft, Eye, FileText, Presentation, BookOpen, File} from "lucide-react"
 import { Analytics } from "@vercel/analytics/react"
-import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
@@ -123,27 +122,50 @@ const matchesSubject = (filename: string, subject: string): boolean => {
   return false;
 }
 
+// Add a tiny helper to prefetch a URL once
+function prefetchUrlOnce(url: string) {
+  try {
+    if (!url || typeof document === "undefined") return
+    const id = "pf-" + btoa(unescape(encodeURIComponent(url))).slice(0, 16)
+    if (document.getElementById(id)) return
+    const link = document.createElement("link")
+    link.id = id
+    link.rel = "prefetch"
+    link.href = url
+    // Best-effort hint
+    link.as = url.endsWith(".pdf") || url.includes("docs.google.com/viewer") ? "document" : "fetch"
+    link.crossOrigin = "anonymous"
+    document.head.appendChild(link)
+  } catch {}
+}
+
 function ResourceCard({ resource }: { resource: Resource }) {
   const [isHovered, setIsHovered] = useState(false);
   const [isOpening, setIsOpening] = useState(false);
-  
+  const hasPrefetched = useRef(false);
+
   const viewUrl = useMemo(() => {
     let url = resource.url;
     const isPdf = resource.file_name.toLowerCase().endsWith('.pdf');
-    
     if (isPdf) {
-      // Convert to GitHub Pages URL for all devices
-      url = url
-        .replace("raw.githubusercontent.com/badarali5/fast-notes-hub/main/files", 
-                "badarali5.github.io/fast-notes-hub/files");
-      
-      // Use Google Docs Viewer for all devices
+      url = url.replace(
+        "raw.githubusercontent.com/badarali5/fast-notes-hub/main/files",
+        "badarali5.github.io/fast-notes-hub/files"
+      );
       return `https://docs.google.com/viewer?url=${encodeURIComponent(url)}&embedded=true`;
     }
     return url;
   }, [resource.url, resource.file_name]);
 
+  const ensurePrefetch = () => {
+    if (!hasPrefetched.current) {
+      prefetchUrlOnce(viewUrl);
+      hasPrefetched.current = true;
+    }
+  };
+
   const handleClick = () => {
+    ensurePrefetch();
     if (isMobile()) {
       if (isHovered) {
         setIsOpening(true);
@@ -182,6 +204,8 @@ function ResourceCard({ resource }: { resource: Resource }) {
       className={`resource-card group border border-gray-800/50 bg-gradient-to-br from-gray-900 to-gray-800 
         ${isHovered ? 'border-blue-500/50 shadow-blue-900/20 shadow-xl scale-105' : ''}
         transition-all duration-300 cursor-pointer relative overflow-hidden rounded-lg min-h-0`}
+      onMouseEnter={() => { setIsHovered(true); ensurePrefetch(); }}
+      onTouchStart={() => { setIsHovered(true); ensurePrefetch(); }}
       onClick={handleClick}
       style={{ minHeight: 0, padding: 0 }}
     >
