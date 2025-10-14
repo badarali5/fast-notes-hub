@@ -75,29 +75,24 @@ function ResourceCard({ resource }: { resource: Resource }) {
 
   // Compute a direct PDF URL (GitHub Pages) and an internal viewer URL (iframe)
   const { viewUrl, pdfUrl } = useMemo(() => {
-    const isPdf = resource.file_name?.toLowerCase().endsWith(".pdf")
     let url = resource.url
+    const isPdf = resource.file_name?.toLowerCase().endsWith(".pdf")
     if (isPdf) {
-      const ghPagesUrl = url.replace(
-        "raw.githubusercontent.com/badarali5/fast-notes-hub/main/files",
-        "badarali5.github.io/fast-notes-hub/files"
-      )
-      // Proxy URL (served from our own domain)
-      const proxied = `/api/pdf-proxy?url=${encodeURIComponent(ghPagesUrl)}`
-      return {
-        viewUrl: `/viewer?file=${encodeURIComponent(proxied)}&name=${encodeURIComponent(resource.file_name)}`,
-        pdfUrl: proxied
-      }
+      // Open directly via GitHub Pages so the browser's PDF viewer handles it
+      const ghPagesUrl = url
+        .replace("raw.githubusercontent.com/badarali5/fast-notes-hub/main/files", "badarali5.github.io/fast-notes-hub/files")
+        .replace("github.com/badarali5/fast-notes-hub/blob/main/files", "badarali5.github.io/fast-notes-hub/files")
+      return { viewUrl: ghPagesUrl, pdfUrl: ghPagesUrl }
     }
     return { viewUrl: url, pdfUrl: "" }
-  }, [resource.url, resource.file_name]);
+  }, [resource.url, resource.file_name])
 
   const ensurePrefetch = () => {
     if (!hasPrefetched.current) {
-      prefetchUrlOnce(pdfUrl || viewUrl); // prefetch the actual PDF if available
-      hasPrefetched.current = true;
+      prefetchUrlOnce(pdfUrl || viewUrl) // prefetch direct PDF (or file) URL
+      hasPrefetched.current = true
     }
-  };
+  }
 
   const handleClick = () => {
     ensurePrefetch();

@@ -270,13 +270,11 @@ export default function Dashboard() {
       const isPdf = result.file_name?.toLowerCase().endsWith(".pdf")
       if (!isPdf) return result.url
 
-      // Normalize to GitHub Pages URL, then proxy through our domain
+      // Direct GitHub Pages URL so the browser handles PDF viewing natively
       const ghPagesUrl = result.url
         .replace("raw.githubusercontent.com/badarali5/fast-notes-hub/main/files", "badarali5.github.io/fast-notes-hub/files")
         .replace("github.com/badarali5/fast-notes-hub/blob/main/files", "badarali5.github.io/fast-notes-hub/files")
-
-      const proxied = `/api/pdf-proxy?url=${encodeURIComponent(ghPagesUrl)}`
-      return `/viewer?file=${encodeURIComponent(proxied)}&name=${encodeURIComponent(result.file_name)}`
+      return ghPagesUrl
     }
 
     const handlePrefetch = () => {
