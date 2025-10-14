@@ -613,8 +613,9 @@ export default function SubjectPage() {
           </TabsContent>
         </Tabs>
 
-        <Analytics />
+        
       </main>
+      <Analytics />
     </div>
   )
 }
