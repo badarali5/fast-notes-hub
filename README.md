@@ -1,4 +1,4 @@
-# 📚 FAST Notes Hub
+# 📚 FAST Notes Hub (1800+ users)
 
 **Your one-stop platform for all FAST-NU student academic resources — notes, past papers,**
 
