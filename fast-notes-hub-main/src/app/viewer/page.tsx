@@ -5,9 +5,15 @@ type SearchParams = {
   name?: string | string[]
 }
 
+// If you want to use a shared PageProps type, define it here:
+type PageProps = {
+  searchParams?: SearchParams
+}
+
 const first = (v?: string | string[]) => (Array.isArray(v) ? v[0] : v) || ""
 
-export default function ViewerPage({ searchParams }: { searchParams?: SearchParams }) {
+// Change the function definition to use PageProps type instead of inline type
+export default function ViewerPage({ searchParams }: PageProps) {
   const encodedFile = first(searchParams?.file)
   const encodedName = first(searchParams?.name)
 
