@@ -5,17 +5,13 @@ type SearchParams = {
   name?: string | string[]
 }
 
-// If you want to use a shared PageProps type, define it here:
-type PageProps = {
-  searchParams?: SearchParams
-}
-
 const first = (v?: string | string[]) => (Array.isArray(v) ? v[0] : v) || ""
 
-// Change the function definition to use PageProps type instead of inline type
-export default function ViewerPage({ searchParams }: PageProps) {
-  const encodedFile = first(searchParams?.file)
-  const encodedName = first(searchParams?.name)
+// In Next.js 15, searchParams is async and must be awaited
+export default async function ViewerPage({ searchParams }: { searchParams?: Promise<SearchParams> }) {
+  const params = await searchParams
+  const encodedFile = first(params?.file)
+  const encodedName = first(params?.name)
 
   const fileUrl = encodedFile ? decodeURIComponent(encodedFile) : ""
   const fileName = encodedName ? decodeURIComponent(encodedName) : "Document"
