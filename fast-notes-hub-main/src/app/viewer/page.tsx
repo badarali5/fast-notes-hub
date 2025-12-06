@@ -1,32 +1,21 @@
 // Server component
-
 type SearchParams = {
   file?: string | string[]
   name?: string | string[]
 }
-
-// If you want to use a shared PageProps type, define it here:
-type PageProps = {
-  searchParams?: SearchParams
-}
-
 const first = (v?: string | string[]) => (Array.isArray(v) ? v[0] : v) || ""
-
-// Change the function definition to use PageProps type instead of inline type
-export default function ViewerPage({ searchParams }: PageProps) {
-  const encodedFile = first(searchParams?.file)
-  const encodedName = first(searchParams?.name)
+export default async function ViewerPage({ searchParams }: { searchParams?: Promise<SearchParams> }) {
+  const params = searchParams ? await searchParams : undefined
+  const encodedFile = first(params?.file)
+  const encodedName = first(params?.name)
 
   const fileUrl = encodedFile ? decodeURIComponent(encodedFile) : ""
   const fileName = encodedName ? decodeURIComponent(encodedName) : "Document"
-
   if (!fileUrl) {
     return <p>No file selected.</p>
   }
-
   // fileUrl can be a proxied path (/api/pdf-proxy?url=...) or an absolute URL
   const iframeSrc = fileUrl
-
   return (
     <iframe
       src={iframeSrc}
