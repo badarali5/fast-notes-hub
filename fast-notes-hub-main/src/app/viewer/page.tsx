@@ -9,7 +9,7 @@ const first = (v?: string | string[]) => (Array.isArray(v) ? v[0] : v) || ""
 
 // In Next.js 15, searchParams is async and must be awaited
 export default async function ViewerPage({ searchParams }: { searchParams?: Promise<SearchParams> }) {
-  const params = await searchParams
+  const params = searchParams ? await searchParams : undefined
   const encodedFile = first(params?.file)
   const encodedName = first(params?.name)
 
