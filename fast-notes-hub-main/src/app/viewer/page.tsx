@@ -1,4 +1,3 @@
-// Server component
 type SearchParams = {
   file?: string | string[]
   name?: string | string[]
@@ -6,7 +5,7 @@ type SearchParams = {
 
 const first = (v?: string | string[]) => (Array.isArray(v) ? v[0] : v) || ""
 
-export default function ViewerPage({ searchParams }: { searchParams?: SearchParams }) {
+export default function ViewerPage({ searchParams }: any) {
   const encodedFile = first(searchParams?.file)
   const encodedName = first(searchParams?.name)
 
