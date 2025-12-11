@@ -367,7 +367,7 @@ export default function Dashboard() {
         {/* Global Search */}
         <section className="text-center mb-14">
           <h2 className="text-3xl font-bold text-white mb-4">
-            Fast Access for FAST Students 🚀
+            Fast Access for FAST University Students 🚀
           </h2>
           <p className="text-gray-400 mb-6 text-lg">
             Past papers, notes, slides &ndash; all in one place. Search by keyword or browse by semester.
