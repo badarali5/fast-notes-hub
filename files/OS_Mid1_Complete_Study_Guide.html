@@ -1,0 +1,1661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OS Mid-1 Complete Study Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Playfair+Display:wght@700;900&family=Source+Serif+4:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0e14;
+    --surface: #13151f;
+    --surface2: #1a1d2e;
+    --border: #252840;
+    --accent: #6c8eff;
+    --accent2: #ff6b9d;
+    --accent3: #52e0c4;
+    --accent4: #ffd166;
+    --text: #e8eaf2;
+    --text-muted: #7a7f9a;
+    --text-dim: #4a4f6a;
+    --code-bg: #0a0b10;
+    --success: #52e0a0;
+    --warning: #ffd166;
+    --danger: #ff6b6b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: 'Source Serif 4', Georgia, serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.75;
+    font-size: 16px;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0d0e14 0%, #111328 50%, #0d1520 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 60px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(ellipse at 30% 40%, rgba(108,142,255,0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 60%, rgba(82,224,196,0.05) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(108,142,255,0.12);
+    border: 1px solid rgba(108,142,255,0.3);
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 2px;
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 5vw, 58px);
+    font-weight: 900;
+    line-height: 1.1;
+    background: linear-gradient(135deg, #fff 0%, var(--accent) 60%, var(--accent3) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 16px;
+  }
+  .hero p {
+    color: var(--text-muted);
+    font-size: 16px;
+    max-width: 600px;
+    margin: 0 auto 30px;
+  }
+  .chapter-pills {
+    display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+  }
+  .pill {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .pill:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* NAV SIDEBAR */
+  .layout { display: flex; }
+  .sidebar {
+    width: 260px; min-width: 260px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    position: sticky; top: 0;
+    height: 100vh; overflow-y: auto;
+    padding: 24px 0;
+  }
+  .sidebar-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    padding: 0 20px 12px;
+  }
+  .sidebar a {
+    display: block;
+    padding: 8px 20px;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 13px;
+    transition: all 0.15s;
+    border-left: 2px solid transparent;
+  }
+  .sidebar a:hover { color: var(--text); border-left-color: var(--accent); background: rgba(108,142,255,0.05); }
+  .sidebar a.chapter-link {
+    font-weight: 600; color: var(--text); font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 1px; text-transform: uppercase;
+    margin-top: 16px; padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+  .sidebar a.sub { padding-left: 32px; font-size: 12px; }
+
+  /* MAIN CONTENT */
+  .content {
+    flex: 1; min-width: 0;
+    padding: 48px 56px;
+    max-width: 900px;
+  }
+
+  /* SECTION HEADERS */
+  .chapter-header {
+    display: flex; align-items: center; gap: 16px;
+    margin-bottom: 32px; padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .chapter-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 2px;
+    color: var(--accent); text-transform: uppercase;
+    background: rgba(108,142,255,0.1);
+    border: 1px solid rgba(108,142,255,0.2);
+    padding: 4px 10px; border-radius: 2px;
+    white-space: nowrap;
+  }
+  h2.chapter-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px; font-weight: 700;
+    color: #fff;
+  }
+  h3.section-title {
+    font-family: 'Source Serif 4', serif;
+    font-size: 20px; font-weight: 600;
+    color: var(--accent3);
+    margin: 36px 0 14px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(82,224,196,0.15);
+  }
+  h4.sub-title {
+    font-size: 16px; font-weight: 600;
+    color: var(--accent4);
+    margin: 24px 0 10px;
+  }
+
+  /* TEXT ELEMENTS */
+  p { margin-bottom: 14px; color: #c8cad8; }
+  strong { color: var(--text); font-weight: 600; }
+  em { color: var(--accent4); font-style: italic; }
+
+  /* DEFINITION BOX */
+  .def-box {
+    background: var(--surface2);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 16px 20px;
+    margin: 20px 0;
+  }
+  .def-box .def-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .def-box p { margin: 0; }
+
+  /* TIP / NOTE / WARNING BOXES */
+  .box {
+    border-radius: 8px; padding: 16px 20px;
+    margin: 20px 0; border: 1px solid;
+  }
+  .box-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 2px;
+    text-transform: uppercase; font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .box-tip { background: rgba(82,224,196,0.06); border-color: rgba(82,224,196,0.25); }
+  .box-tip .box-label { color: var(--accent3); }
+  .box-warn { background: rgba(255,209,102,0.06); border-color: rgba(255,209,102,0.25); }
+  .box-warn .box-label { color: var(--accent4); }
+  .box-exam { background: rgba(255,107,157,0.06); border-color: rgba(255,107,157,0.25); }
+  .box-exam .box-label { color: var(--accent2); }
+  .box p { margin: 0; color: var(--text-muted); font-size: 14px; }
+
+  /* CODE BLOCKS */
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    overflow-x: auto;
+    margin: 20px 0;
+    position: relative;
+  }
+  pre::before {
+    content: attr(data-lang);
+    position: absolute; top: 8px; right: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; color: var(--text-dim);
+    letter-spacing: 1px; text-transform: uppercase;
+  }
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #abb2bf;
+  }
+  /* Inline code */
+  p code, li code {
+    background: rgba(108,142,255,0.1);
+    color: var(--accent);
+    padding: 2px 6px; border-radius: 3px;
+    font-size: 13px;
+  }
+  /* Syntax highlighting approximation */
+  .kw { color: #c678dd; }
+  .fn { color: #61afef; }
+  .str { color: #98c379; }
+  .num { color: #d19a66; }
+  .cm { color: #5c6370; font-style: italic; }
+  .type { color: #e5c07b; }
+  .punc { color: #abb2bf; }
+
+  /* TABLES */
+  table {
+    width: 100%; border-collapse: collapse;
+    margin: 20px 0; font-size: 14px;
+  }
+  th {
+    background: var(--surface2); color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 1px;
+    text-transform: uppercase; padding: 12px 16px;
+    border: 1px solid var(--border); text-align: left;
+  }
+  td {
+    padding: 10px 16px; border: 1px solid var(--border);
+    color: var(--text-muted); vertical-align: top;
+  }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+
+  /* LISTS */
+  ul, ol { margin: 12px 0 12px 24px; }
+  li { margin-bottom: 8px; color: #c8cad8; }
+  li::marker { color: var(--accent); }
+
+  /* GANTT CHART */
+  .gantt {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    margin: 20px 0;
+    overflow-x: auto;
+  }
+  .gantt-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; color: var(--text-muted);
+    margin-bottom: 16px;
+  }
+  .gantt-row { display: flex; align-items: center; margin-bottom: 8px; gap: 8px; }
+  .gantt-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; color: var(--text-muted);
+    width: 30px; text-align: right;
+  }
+  .gantt-bar {
+    height: 32px; border-radius: 4px;
+    display: flex; align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; font-weight: 700;
+    color: rgba(255,255,255,0.9);
+  }
+  .g-p1 { background: rgba(108,142,255,0.7); }
+  .g-p2 { background: rgba(82,224,196,0.7); }
+  .g-p3 { background: rgba(255,107,157,0.7); }
+  .g-p4 { background: rgba(255,209,102,0.7); }
+  .gantt-times {
+    display: flex; margin-top: 8px; margin-left: 38px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; color: var(--text-dim);
+  }
+  .gantt-time { text-align: center; }
+
+  /* PROCESS STATE DIAGRAM */
+  .diagram {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    margin: 20px 0;
+    text-align: center;
+  }
+  .diagram svg { max-width: 100%; }
+
+  /* FORMULA */
+  .formula {
+    background: var(--surface2);
+    border: 1px solid rgba(108,142,255,0.2);
+    border-radius: 8px;
+    padding: 16px 24px;
+    margin: 16px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: var(--accent3);
+    text-align: center;
+  }
+
+  /* DIVIDER */
+  .divider {
+    border: none; border-top: 1px solid var(--border);
+    margin: 48px 0;
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .sidebar { display: none; }
+    .content { padding: 24px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-badge">Mid-1 Complete Study Guide</div>
+  <h1>Operating Systems<br>From Zero to Exam Ready</h1>
+  <p>Complete coverage of Chapters 1, 2, 3 &amp; 5 — explained from the ground up with examples, code, and exam tips</p>
+  <div class="chapter-pills">
+    <a href="#ch1" class="pill">CH1 · Introduction</a>
+    <a href="#ch2" class="pill">CH2 · OS Structures</a>
+    <a href="#ch3" class="pill">CH3 · Processes</a>
+    <a href="#ch5" class="pill">CH5 · CPU Scheduling</a>
+    <a href="#exam" class="pill">⚡ Exam Tips</a>
+  </div>
+</div>
+
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-title">Contents</div>
+    <a href="#ch1" class="chapter-link">Chapter 1</a>
+    <a href="#what-is-os" class="sub">What is an OS?</a>
+    <a href="#cs-org" class="sub">CS Organization</a>
+    <a href="#interrupts" class="sub">Interrupts</a>
+    <a href="#storage" class="sub">Storage Hierarchy</a>
+    <a href="#cs-arch" class="sub">CS Architecture</a>
+    <a href="#os-ops" class="sub">OS Operations</a>
+    <a href="#resource-mgmt" class="sub">Resource Management</a>
+
+    <a href="#ch2" class="chapter-link">Chapter 2</a>
+    <a href="#os-services" class="sub">OS Services</a>
+    <a href="#user-interface" class="sub">User Interface</a>
+    <a href="#system-calls" class="sub">System Calls</a>
+    <a href="#os-structure" class="sub">OS Structure</a>
+    <a href="#booting" class="sub">Booting</a>
+    <a href="#debugging" class="sub">Debugging</a>
+
+    <a href="#ch3" class="chapter-link">Chapter 3</a>
+    <a href="#process-concept" class="sub">Process Concept</a>
+    <a href="#process-state" class="sub">Process State</a>
+    <a href="#pcb" class="sub">PCB</a>
+    <a href="#scheduling" class="sub">Scheduling</a>
+    <a href="#context-switch" class="sub">Context Switch</a>
+    <a href="#creation" class="sub">Process Creation</a>
+    <a href="#termination" class="sub">Termination</a>
+    <a href="#ipc" class="sub">IPC</a>
+    <a href="#pipes" class="sub">Pipes</a>
+
+    <a href="#ch5" class="chapter-link">Chapter 5</a>
+    <a href="#sched-basics" class="sub">Basic Concepts</a>
+    <a href="#criteria" class="sub">Criteria</a>
+    <a href="#fcfs" class="sub">FCFS / FIFO</a>
+    <a href="#sjf" class="sub">SJF</a>
+    <a href="#srtf" class="sub">SRTF</a>
+
+    <a href="#exam" class="chapter-link">Exam Tips</a>
+  </nav>
+
+  <main class="content">
+
+    <!-- ========== CHAPTER 1 ========== -->
+    <section id="ch1">
+      <div class="chapter-header">
+        <span class="chapter-num">Chapter 1</span>
+        <h2 class="chapter-title">Introduction to Operating Systems</h2>
+      </div>
+
+      <h3 class="section-title" id="what-is-os">1.1 — What is an Operating System?</h3>
+
+      <p>Imagine you bought a powerful gaming PC. The hardware — CPU, RAM, GPU — is just metal and silicon. Without software to manage it all, you'd have a very expensive paperweight. That's exactly where the <strong>Operating System (OS)</strong> comes in.</p>
+
+      <div class="def-box">
+        <div class="def-label">Definition</div>
+        <p>An <strong>Operating System</strong> is a program that acts as an <em>intermediary</em> (middleman) between a user and the computer hardware. It manages hardware resources and provides services for application programs.</p>
+      </div>
+
+      <p>Think of it like a restaurant:</p>
+      <ul>
+        <li><strong>You (User)</strong> = customer who wants food (services)</li>
+        <li><strong>Waiter (OS)</strong> = takes your order, coordinates with kitchen</li>
+        <li><strong>Kitchen + Ingredients (Hardware)</strong> = actual processing happens here</li>
+        <li><strong>Menu Items (Applications)</strong> = Word, Chrome, games, etc.</li>
+      </ul>
+
+      <p><strong>OS Goals:</strong></p>
+      <ul>
+        <li>Execute user programs and make solving problems easier</li>
+        <li>Make the computer system convenient to use</li>
+        <li>Use hardware in an <em>efficient</em> manner</li>
+      </ul>
+
+      <p><strong>Computer System Structure (4 components):</strong></p>
+      <ul>
+        <li><strong>Hardware</strong> — CPU, memory, I/O devices (the physical stuff)</li>
+        <li><strong>Operating System</strong> — controls and coordinates hardware</li>
+        <li><strong>Application Programs</strong> — Word processor, browsers, games</li>
+        <li><strong>Users</strong> — people, machines, other computers</li>
+      </ul>
+
+      <div class="def-box">
+        <div class="def-label">Key Term</div>
+        <p>The <strong>Kernel</strong> is "the one program running at all times on the computer." It is the core of the OS. Everything else is either a <em>system program</em> or an <em>application program</em>.</p>
+      </div>
+
+      <div class="box box-exam">
+        <div class="box-label">⚡ Exam Point</div>
+        <p>The OS acts as a <strong>resource allocator</strong> (decides who gets CPU time, memory, etc.) AND a <strong>control program</strong> (manages execution to prevent errors and misuse). Remember both roles!</p>
+      </div>
+
+      <!-- 1.2 -->
+      <h3 class="section-title" id="cs-org">1.2 — Computer-System Organization</h3>
+
+      <p>Modern computers have one or more CPUs and multiple device controllers (for disk, keyboard, display, etc.) all connected via a common <strong>bus</strong> that shares memory.</p>
+
+      <h4 class="sub-title">How I/O Works — The Basic Flow</h4>
+      <ol>
+        <li>The CPU tells a <strong>device controller</strong> to perform an I/O operation (e.g., read from disk)</li>
+        <li>The device controller uses its <strong>local buffer</strong> to temporarily hold data</li>
+        <li>CPU moves data from main memory to/from those local buffers</li>
+        <li>When the controller is done, it <strong>interrupts</strong> the CPU to say "I'm finished!"</li>
+      </ol>
+
+      <div class="def-box">
+        <div class="def-label">Definition</div>
+        <p>A <strong>Device Driver</strong> is a software module for each device controller. It provides a uniform interface between the controller and the kernel — think of it as a translator.</p>
+      </div>
+
+      <!-- Interrupts -->
+      <h3 class="section-title" id="interrupts">Interrupts — The OS's Notification System</h3>
+
+      <p>An <strong>interrupt</strong> is a signal that tells the CPU "stop what you're doing, something needs your attention!" It's like a phone ringing while you're working — you pause, answer the call, then return to work.</p>
+
+      <table>
+        <tr><th>Type</th><th>What Is It?</th><th>Example</th></tr>
+        <tr><td><strong>Hardware Interrupt</strong></td><td>Triggered by a hardware device</td><td>Keyboard press, disk done reading</td></tr>
+        <tr><td><strong>Software Interrupt (Trap/Exception)</strong></td><td>Triggered by software event</td><td>Division by zero, system call</td></tr>
+      </table>
+
+      <p><strong>How Interrupts Work (Step by Step):</strong></p>
+      <ol>
+        <li>Interrupt occurs (hardware or software)</li>
+        <li>CPU <strong>saves its current state</strong> (registers + program counter)</li>
+        <li>CPU looks up the <strong>Interrupt Vector</strong> (a table of addresses for each interrupt handler)</li>
+        <li>CPU jumps to the appropriate <strong>Interrupt Service Routine (ISR)</strong></li>
+        <li>ISR handles the interrupt</li>
+        <li>CPU <strong>restores saved state</strong> and continues previous work</li>
+      </ol>
+
+      <div class="box box-tip">
+        <div class="box-label">💡 Simple Analogy</div>
+        <p>A <strong>Trap</strong> = you accidentally call 911 (software-generated, caused by error or request). A <strong>Hardware Interrupt</strong> = someone physically calls 911 (external event). Both reach the dispatch center (ISR) but via different channels.</p>
+      </div>
+
+      <!-- Storage -->
+      <h3 class="section-title" id="storage">1.2 (cont.) — Storage Structure &amp; Hierarchy</h3>
+
+      <p>Not all storage is equal. There's a hierarchy from fast-but-expensive to slow-but-cheap:</p>
+
+      <table>
+        <tr><th>Level</th><th>Storage Type</th><th>Speed</th><th>Size</th><th>Volatile?</th></tr>
+        <tr><td>1</td><td>Registers</td><td>Fastest</td><td>Bytes</td><td>Yes</td></tr>
+        <tr><td>2</td><td>Cache (L1, L2, L3)</td><td>Very Fast</td><td>KB–MB</td><td>Yes</td></tr>
+        <tr><td>3</td><td>Main Memory (RAM)</td><td>Fast</td><td>GB</td><td>Yes</td></tr>
+        <tr><td>4</td><td>SSD / NVM</td><td>Medium</td><td>GB–TB</td><td>No</td></tr>
+        <tr><td>5</td><td>Hard Disk (HDD)</td><td>Slow</td><td>TB</td><td>No</td></tr>
+        <tr><td>6</td><td>Optical / Tape</td><td>Slowest</td><td>TB+</td><td>No</td></tr>
+      </table>
+
+      <div class="def-box">
+        <div class="def-label">Key Concepts</div>
+        <p><strong>Volatile</strong> = data is lost when power is off (RAM, registers, cache). <strong>Non-volatile</strong> = data persists without power (HDD, SSD).<br><br>
+        <strong>Caching</strong> = copying data from a slower storage to a faster one temporarily. Main memory acts as a cache for the hard disk.</p>
+      </div>
+
+      <p><strong>DMA (Direct Memory Access):</strong> For fast I/O devices, instead of the CPU handling every byte individually, DMA transfers entire <em>blocks</em> of data directly between the device and main memory, generating only <em>one</em> interrupt per block (not per byte). This frees the CPU for other work.</p>
+
+      <!-- CS Architecture -->
+      <h3 class="section-title" id="cs-arch">1.3 — Computer-System Architecture</h3>
+
+      <h4 class="sub-title">Types of Systems</h4>
+      <ul>
+        <li><strong>Single-Processor Systems</strong> — One general-purpose CPU. Most common historically.</li>
+        <li><strong>Multiprocessor Systems (Parallel Systems)</strong> — Multiple CPUs working together. 3 main advantages:
+          <ul>
+            <li>Increased <em>throughput</em> (more work done)</li>
+            <li><em>Economy of scale</em> (share resources)</li>
+            <li>Increased <em>reliability</em> (if one fails, others keep running)</li>
+          </ul>
+        </li>
+      </ul>
+
+      <table>
+        <tr><th>Type</th><th>How it Works</th><th>Example</th></tr>
+        <tr><td><strong>Asymmetric Multiprocessing (AMP)</strong></td><td>Each processor assigned a specific task. One "boss" processor controls others.</td><td>Old embedded systems</td></tr>
+        <tr><td><strong>Symmetric Multiprocessing (SMP)</strong></td><td>All processors are equal — each can run any task. Peer-to-peer relationship.</td><td>Modern PCs, servers</td></tr>
+      </table>
+
+      <div class="box box-exam">
+        <div class="box-label">⚡ Exam Point</div>
+        <p><strong>Multicore</strong> = multiple CPU cores on ONE chip. <strong>Multiprocessor</strong> = multiple physical chips. Both enable parallel processing but multicore cores share on-chip cache, making communication faster.</p>
+      </div>
+
+      <h4 class="sub-title">Clustered Systems</h4>
+      <p>Multiple complete computer systems (nodes) working together, usually sharing storage via a <strong>Storage Area Network (SAN)</strong>. Provides <em>high availability</em> — if one machine fails, others take over.</p>
+
+      <!-- OS Operations -->
+      <h3 class="section-title" id="os-ops">1.4 — Operating-System Operations</h3>
+
+      <h4 class="sub-title">Bootstrap Program</h4>
+      <p>When you turn on your computer, the very first program that runs is the <strong>bootstrap program</strong> (also called firmware/BIOS/UEFI). It:</p>
+      <ol>
+        <li>Initializes all hardware components</li>
+        <li>Locates the OS kernel on disk</li>
+        <li>Loads the kernel into memory</li>
+        <li>Starts execution of the kernel</li>
+      </ol>
+
+      <h4 class="sub-title">Multiprogramming vs. Multitasking</h4>
+
+      <table>
+        <tr><th>Concept</th><th>What It Means</th><th>Analogy</th></tr>
+        <tr><td><strong>Multiprogramming</strong></td><td>Multiple programs kept in memory simultaneously. When one waits for I/O, CPU switches to another. <em>Maximizes CPU utilization.</em></td><td>A chef juggling multiple dishes — when one is in the oven, work on another.</td></tr>
+        <tr><td><strong>Multitasking (Timesharing)</strong></td><td>CPU switches between programs so fast that each user perceives their own dedicated machine. Response time &lt; 1 second.</td><td>A very fast chef who appears to be at every table simultaneously.</td></tr>
+      </table>
+
+      <h4 class="sub-title">Dual-Mode Operation — THE MOST IMPORTANT CONCEPT</h4>
+      <p>How does the OS protect itself from badly-written programs? Through <strong>dual-mode operation</strong>:</p>
+
+      <div class="def-box">
+        <div class="def-label">Dual Mode</div>
+        <p><strong>User Mode</strong>: Applications run here. Limited privileges. Cannot directly access hardware.<br>
+        <strong>Kernel Mode</strong> (also called supervisor/system/privileged mode): OS runs here. Full access to all hardware and instructions.</p>
+      </div>
+
+      <p>A hardware <strong>mode bit</strong> (0 = kernel, 1 = user) indicates the current mode.</p>
+
+      <p><strong>How switching happens:</strong></p>
+      <ol>
+        <li>Application makes a <strong>system call</strong></li>
+        <li>Hardware switches mode bit to <strong>kernel mode</strong></li>
+        <li>OS executes the privileged operation</li>
+        <li>OS returns result and switches back to <strong>user mode</strong></li>
+      </ol>
+
+      <div class="box box-exam">
+        <div class="box-label">⚡ Exam Point</div>
+        <p><strong>Privileged instructions</strong> can ONLY execute in kernel mode (e.g., accessing I/O directly, modifying memory protection). If a user program tries to execute a privileged instruction, it causes a <strong>trap</strong> → the OS handles it (usually by killing the program).</p>
+      </div>
+
+      <h4 class="sub-title">Timer</h4>
+      <p>To prevent one program from hogging the CPU forever (infinite loops!), the OS sets a <strong>timer</strong> that generates an interrupt after a certain time period. The counter decrements with each clock tick; when it hits zero → interrupt → OS regains control.</p>
+
+      <!-- Resource Management -->
+      <h3 class="section-title" id="resource-mgmt">1.5 — Resource Management</h3>
+
+      <p>The OS manages all resources. Here's a quick overview of each:</p>
+
+      <table>
+        <tr><th>Resource</th><th>What OS Does</th></tr>
+        <tr><td><strong>Process Management</strong></td><td>Create/delete processes, scheduling, synchronization, communication, deadlock handling</td></tr>
+        <tr><td><strong>Memory Management</strong></td><td>Track which memory is used by whom, allocate/deallocate, decide what stays in memory</td></tr>
+        <tr><td><strong>File-System Management</strong></td><td>Create/delete files &amp; directories, map files to storage, backup, access control</td></tr>
+        <tr><td><strong>Mass-Storage Management</strong></td><td>Disk scheduling, free-space management, mounting/unmounting, partitioning</td></tr>
+        <tr><td><strong>Cache Management</strong></td><td>Decide what data to cache, how long, replacement policies</td></tr>
+        <tr><td><strong>I/O Subsystem</strong></td><td>Buffering, caching, spooling, device drivers</td></tr>
+      </table>
+
+      <div class="def-box">
+        <div class="def-label">I/O Subsystem Terms</div>
+        <p><strong>Buffering</strong> = storing data temporarily while it is being transferred (e.g., download buffer).<br>
+        <strong>Caching</strong> = storing parts of data in faster storage for performance (e.g., browser cache).<br>
+        <strong>Spooling</strong> = overlapping output of one job with input of others (e.g., printer spooler — jobs queue up).</p>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ========== CHAPTER 2 ========== -->
+    <section id="ch2">
+      <div class="chapter-header">
+        <span class="chapter-num">Chapter 2</span>
+        <h2 class="chapter-title">Operating-System Structures</h2>
+      </div>
+
+      <h3 class="section-title" id="os-services">2.1 — Operating-System Services</h3>
+
+      <p>The OS provides services that make life easier for both users and programmers. Think of it as a government — provides services (police, roads, postal system) so individual citizens don't have to build their own.</p>
+
+      <h4 class="sub-title">Services for Users</h4>
+      <ul>
+        <li><strong>User Interface (UI)</strong> — CLI (command line), GUI (graphical), touch-screen</li>
+        <li><strong>Program Execution</strong> — Load program into memory and run it</li>
+        <li><strong>I/O Operations</strong> — Handle all I/O since users can't access hardware directly</li>
+        <li><strong>File-System Manipulation</strong> — Read, write, create, delete files and directories</li>
+        <li><strong>Communications</strong> — Between processes (same machine or network), via shared memory or message passing</li>
+        <li><strong>Error Detection</strong> — Detect and handle hardware/software errors</li>
+      </ul>
+
+      <h4 class="sub-title">Services for Efficient System Operation</h4>
+      <ul>
+        <li><strong>Resource Allocation</strong> — When multiple processes run, distribute CPU time, memory, I/O fairly</li>
+        <li><strong>Logging</strong> — Track which users use what resources (accounting)</li>
+        <li><strong>Protection &amp; Security</strong> — Control access to resources, authenticate users, defend against attacks</li>
+      </ul>
+
+      <!-- User Interface -->
+      <h3 class="section-title" id="user-interface">2.2 — User and OS Interface</h3>
+
+      <table>
+        <tr><th>Interface Type</th><th>How It Works</th><th>Example</th></tr>
+        <tr><td><strong>CLI (Command Line)</strong></td><td>User types text commands. Shell interprets and executes. Can be built into kernel or separate program (shell).</td><td>bash, zsh, Windows PowerShell</td></tr>
+        <tr><td><strong>GUI (Graphical UI)</strong></td><td>Desktop metaphor — icons, windows, mouse. Invented at Xerox PARC.</td><td>Windows, macOS, GNOME</td></tr>
+        <tr><td><strong>Touch Interface</strong></td><td>Gesture-based. No mouse needed. Virtual keyboard for text.</td><td>iOS, Android</td></tr>
+      </table>
+
+      <div class="box box-tip">
+        <div class="box-label">💡 Note</div>
+        <p>Modern systems often have both. Unix/Linux = primarily CLI, optional GUI. macOS = "Aqua" GUI with UNIX terminal underneath. Windows = GUI primary with Command Prompt / PowerShell available.</p>
+      </div>
+
+      <!-- System Calls -->
+      <h3 class="section-title" id="system-calls">2.3 — System Calls</h3>
+
+      <p>This is one of the MOST important topics in the entire course.</p>
+
+      <div class="def-box">
+        <div class="def-label">Definition</div>
+        <p>A <strong>System Call</strong> is the programming interface through which application programs request services from the OS. It's the formal "doorbell" a program rings to ask the kernel to do something privileged on its behalf.</p>
+      </div>
+
+      <p>Think of it like ordering from a restaurant menu. You (user program) can't walk into the kitchen (kernel) yourself — you use the menu (API) to request specific dishes (services) from the waiter (system call interface).</p>
+
+      <h4 class="sub-title">System Calls vs. API</h4>
+      <p>Programmers rarely use system calls directly. They use a higher-level <strong>API (Application Programming Interface)</strong> that internally calls the appropriate system call.</p>
+      <ul>
+        <li><strong>Windows</strong> → Win32 API</li>
+        <li><strong>POSIX (Linux/macOS/Unix)</strong> → POSIX API</li>
+        <li><strong>Java</strong> → Java API (goes through JVM)</li>
+      </ul>
+
+<pre data-lang="C"><code><span class="cm">// You write this (API call):</span>
+<span class="fn">printf</span>(<span class="str">"Hello World\n"</span>);
+
+<span class="cm">// Internally, printf() calls the write() system call:</span>
+<span class="fn">write</span>(<span class="num">1</span>, <span class="str">"Hello World\n"</span>, <span class="num">12</span>);
+
+<span class="cm">// write() triggers a software interrupt to switch to kernel mode</span>
+<span class="cm">// The kernel performs the actual I/O to your screen</span>
+<span class="cm">// Then returns to user mode</span></code></pre>
+
+      <h4 class="sub-title">Passing Parameters to System Calls</h4>
+      <p>Three methods exist to pass information to the OS:</p>
+      <ol>
+        <li><strong>Registers</strong> — Pass parameters directly in CPU registers (simplest, but limited)</li>
+        <li><strong>Memory Block/Table</strong> — Store parameters in memory, pass address in a register (used by Linux &amp; Solaris)</li>
+        <li><strong>Stack</strong> — Program pushes parameters onto stack; OS pops them</li>
+      </ol>
+
+      <h4 class="sub-title">Types of System Calls (6 Categories)</h4>
+      <table>
+        <tr><th>Category</th><th>Examples</th></tr>
+        <tr><td><strong>Process Control</strong></td><td>create/terminate process, load/execute, wait, allocate memory — fork(), exit(), wait()</td></tr>
+        <tr><td><strong>File Management</strong></td><td>create/delete file, open, close, read, write — open(), read(), write(), close()</td></tr>
+        <tr><td><strong>Device Management</strong></td><td>request/release device, read/write device — ioctl()</td></tr>
+        <tr><td><strong>Information Maintenance</strong></td><td>get/set time, get system data, process attributes — getpid(), alarm()</td></tr>
+        <tr><td><strong>Communications</strong></td><td>create/delete connection, send/receive messages, shared memory — pipe(), shmget()</td></tr>
+        <tr><td><strong>Protection</strong></td><td>control access, get/set permissions — chmod(), umask()</td></tr>
+      </table>
+
+      <!-- OS Structure -->
+      <h3 class="section-title" id="os-structure">2.8 — Operating-System Structure</h3>
+
+      <p>How should we organize the millions of lines of OS code? Several architectural approaches exist:</p>
+
+      <h4 class="sub-title">1. Monolithic (Simple/Traditional) — Original UNIX</h4>
+      <p>Everything is in one large kernel. All OS services run in kernel space. Fast because no inter-component communication overhead, but hard to maintain and debug.</p>
+
+      <h4 class="sub-title">2. Layered Approach</h4>
+      <p>OS divided into N layers. Layer 0 = hardware. Layer N = user interface. Each layer uses services ONLY from the layer below it. Like an onion — each layer wraps around the one inside it. Clean but can be slow due to overhead of passing through many layers.</p>
+
+      <h4 class="sub-title">3. Microkernel — Mach</h4>
+      <p>Move as much functionality OUT of the kernel and into user space. Kernel only does essential functions (basic scheduling, IPC, memory management). Everything else (file system, device drivers) runs as user-space processes.</p>
+
+      <table>
+        <tr><th></th><th>Benefit</th><th>Cost</th></tr>
+        <tr><td>Microkernel</td><td>Easier to extend, more reliable, more secure</td><td>Performance overhead (user↔kernel communication)</td></tr>
+        <tr><td>Monolithic</td><td>Fast (no IPC needed between components)</td><td>One bug can crash entire OS</td></tr>
+      </table>
+
+      <h4 class="sub-title">4. Modules (LKMs — Loadable Kernel Modules)</h4>
+      <p>Modern approach. Core kernel is minimal. Additional features can be loaded/unloaded at runtime as modules. Linux uses this — you can <code>insmod</code> a driver when you plug in a new device, <code>rmmod</code> when you're done.</p>
+
+      <h4 class="sub-title">5. Hybrid Systems</h4>
+      <p>Most real OSes combine approaches. Linux = monolithic + modular. macOS = microkernel (Mach) + BSD Unix parts + dynamically loadable modules. Windows = mostly monolithic + microkernel personality subsystems.</p>
+
+      <!-- Booting -->
+      <h3 class="section-title" id="booting">2.9 — Building and Booting an OS</h3>
+
+      <p><strong>Boot sequence (what happens when you press the power button):</strong></p>
+      <ol>
+        <li>Power on → CPU starts at a fixed memory address</li>
+        <li><strong>BIOS/UEFI</strong> (firmware in ROM/EEPROM) runs — performs hardware tests (POST)</li>
+        <li>BIOS locates the <strong>boot block</strong> (bootloader) on disk</li>
+        <li><strong>Bootloader</strong> (e.g., GRUB) loads the OS kernel into RAM</li>
+        <li>Kernel initializes hardware, starts system daemons</li>
+        <li>System is ready to use</li>
+      </ol>
+
+      <div class="box box-tip">
+        <div class="box-label">💡 Terminology</div>
+        <p><strong>GRUB</strong> = Grand Unified Bootloader — most common Linux bootloader. Lets you choose between multiple kernels/OSes.<br>
+        <strong>UEFI</strong> = Unified Extensible Firmware Interface — modern replacement for BIOS. Supports larger disks, faster boot, Secure Boot.</p>
+      </div>
+
+      <!-- Debugging -->
+      <h3 class="section-title" id="debugging">2.10 — OS Debugging</h3>
+
+      <p>Debugging = finding and fixing errors ("bugs"). The OS itself generates logs and crash files to help diagnose problems.</p>
+
+      <table>
+        <tr><th>File/Tool</th><th>What It Contains</th></tr>
+        <tr><td><strong>Log files</strong></td><td>Error information generated by OS</td></tr>
+        <tr><td><strong>Core dump</strong></td><td>Snapshot of a crashed application's memory</td></tr>
+        <tr><td><strong>Crash dump</strong></td><td>Snapshot of kernel memory when OS crashes (BSOD on Windows)</td></tr>
+        <tr><td><strong>strace</strong></td><td>Linux tool to trace all system calls made by a process</td></tr>
+        <tr><td><strong>gdb</strong></td><td>Source-level debugger for step-by-step program debugging</td></tr>
+        <tr><td><strong>perf</strong></td><td>Linux performance analysis tools</td></tr>
+      </td></tr>
+      </table>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ========== CHAPTER 3 ========== -->
+    <section id="ch3">
+      <div class="chapter-header">
+        <span class="chapter-num">Chapter 3</span>
+        <h2 class="chapter-title">Processes</h2>
+      </div>
+
+      <h3 class="section-title" id="process-concept">3.1 — Process Concept</h3>
+
+      <div class="def-box">
+        <div class="def-label">Definition</div>
+        <p>A <strong>Process</strong> is a <em>program in execution</em>. A program is a passive entity stored on disk (like a recipe). A process is an active entity — it's when you actually start cooking. One program (recipe) can become multiple processes (multiple chefs cooking simultaneously).</p>
+      </div>
+
+      <h4 class="sub-title">What Does a Process Look Like in Memory?</h4>
+      <p>A process in memory is divided into these sections (from top address to bottom):</p>
+
+      <table>
+        <tr><th>Section</th><th>What's Stored</th><th>Grows Direction</th></tr>
+        <tr><td><strong>Stack</strong></td><td>Temporary data — function parameters, return addresses, local variables</td><td>Downward ↓</td></tr>
+        <tr><td><strong>Heap</strong></td><td>Memory dynamically allocated at runtime (malloc, new)</td><td>Upward ↑</td></tr>
+        <tr><td><strong>Data Section</strong></td><td>Global and static variables</td><td>Fixed</td></tr>
+        <tr><td><strong>Text Section</strong></td><td>The actual program code (machine instructions)</td><td>Fixed (bottom)</td></tr>
+      </table>
+
+<pre data-lang="C"><code><span class="cm">// Example showing which section each variable goes to:</span>
+<span class="kw">#include</span> <span class="str">&lt;stdio.h&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;stdlib.h&gt;</span>
+
+<span class="type">int</span> global_var = <span class="num">10</span>;  <span class="cm">// DATA SECTION (global variable)</span>
+
+<span class="type">int</span> <span class="fn">main</span>() {
+    <span class="type">int</span> local_var = <span class="num">5</span>;           <span class="cm">// STACK (local variable)</span>
+    <span class="type">int</span> *heap_var = <span class="fn">malloc</span>(<span class="num">100</span>); <span class="cm">// HEAP (dynamically allocated)</span>
+    
+    <span class="cm">// The code itself is in the TEXT section</span>
+    <span class="fn">free</span>(heap_var);
+    <span class="kw">return</span> <span class="num">0</span>;
+}</code></pre>
+
+      <!-- Process State -->
+      <h3 class="section-title" id="process-state">3.1 (cont.) — Process States</h3>
+
+      <p>As a process runs, it changes <strong>state</strong>. There are 5 states:</p>
+
+      <table>
+        <tr><th>State</th><th>Meaning</th></tr>
+        <tr><td><strong>New</strong></td><td>Process is being created</td></tr>
+        <tr><td><strong>Ready</strong></td><td>Process is waiting to be assigned to a CPU (it's ready to run but CPU is busy)</td></tr>
+        <tr><td><strong>Running</strong></td><td>Instructions are being executed on the CPU</td></tr>
+        <tr><td><strong>Waiting</strong></td><td>Process is waiting for some event (e.g., I/O completion, signal)</td></tr>
+        <tr><td><strong>Terminated</strong></td><td>Process has finished execution</td></tr>
+      </table>
+
+      <div class="diagram">
+        <svg viewBox="0 0 700 250" style="max-width:100%">
+          <!-- States -->
+          <ellipse cx="60" cy="125" rx="50" ry="28" fill="#1a1d2e" stroke="#6c8eff" stroke-width="1.5"/>
+          <text x="60" y="129" fill="#e8eaf2" font-size="12" text-anchor="middle" font-family="monospace">New</text>
+          
+          <ellipse cx="230" cy="60" rx="55" ry="28" fill="#1a1d2e" stroke="#52e0c4" stroke-width="1.5"/>
+          <text x="230" y="64" fill="#e8eaf2" font-size="12" text-anchor="middle" font-family="monospace">Ready</text>
+          
+          <ellipse cx="420" cy="60" rx="55" ry="28" fill="#1a1d2e" stroke="#ffd166" stroke-width="1.5"/>
+          <text x="420" y="64" fill="#e8eaf2" font-size="12" text-anchor="middle" font-family="monospace">Running</text>
+          
+          <ellipse cx="230" cy="190" rx="55" ry="28" fill="#1a1d2e" stroke="#ff6b9d" stroke-width="1.5"/>
+          <text x="230" y="194" fill="#e8eaf2" font-size="12" text-anchor="middle" font-family="monospace">Waiting</text>
+          
+          <ellipse cx="600" cy="125" rx="65" ry="28" fill="#1a1d2e" stroke="#7a7f9a" stroke-width="1.5"/>
+          <text x="600" y="129" fill="#e8eaf2" font-size="12" text-anchor="middle" font-family="monospace">Terminated</text>
+
+          <!-- Arrows -->
+          <!-- New → Ready (admitted) -->
+          <line x1="110" y1="110" x2="175" y2="76" stroke="#6c8eff" stroke-width="1.5" marker-end="url(#arr)"/>
+          <text x="130" y="88" fill="#7a7f9a" font-size="9" font-family="monospace">admitted</text>
+          
+          <!-- Ready → Running (dispatch) -->
+          <line x1="285" y1="60" x2="365" y2="60" stroke="#52e0c4" stroke-width="1.5" marker-end="url(#arr)"/>
+          <text x="310" y="52" fill="#7a7f9a" font-size="9" font-family="monospace">dispatch</text>
+          
+          <!-- Running → Ready (interrupt) -->
+          <line x1="365" y1="70" x2="285" y2="70" stroke="#ffd166" stroke-width="1.5" marker-end="url(#arr)"/>
+          <text x="310" y="85" fill="#7a7f9a" font-size="9" font-family="monospace">interrupt</text>
+          
+          <!-- Running → Waiting (I/O wait) -->
+          <line x1="400" y1="85" x2="265" y2="165" stroke="#ff6b9d" stroke-width="1.5" marker-end="url(#arr)"/>
+          <text x="360" y="140" fill="#7a7f9a" font-size="9" font-family="monospace">I/O wait</text>
+          
+          <!-- Waiting → Ready (I/O done) -->
+          <line x1="200" y1="165" x2="200" y2="85" stroke="#ff6b6b" stroke-width="1.5" marker-end="url(#arr)"/>
+          <text x="140" y="130" fill="#7a7f9a" font-size="9" font-family="monospace">I/O done</text>
+          
+          <!-- Running → Terminated (exit) -->
+          <line x1="475" y1="60" x2="555" y2="100" stroke="#7a7f9a" stroke-width="1.5" marker-end="url(#arr)"/>
+          <text x="510" y="75" fill="#7a7f9a" font-size="9" font-family="monospace">exit</text>
+          
+          <defs>
+            <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L8,3 z" fill="#7a7f9a"/>
+            </marker>
+          </defs>
+        </svg>
+        <p style="font-size:12px; color:var(--text-muted); margin-top:8px">Process State Transition Diagram</p>
+      </div>
+
+      <div class="box box-exam">
+        <div class="box-label">⚡ Exam Point</div>
+        <p>Only ONE process can be in the RUNNING state per CPU core. Many processes can be READY or WAITING simultaneously. The transition from Ready→Running is called <strong>dispatch</strong>. Running→Waiting happens when a process needs I/O.</p>
+      </div>
+
+      <!-- PCB -->
+      <h3 class="section-title" id="pcb">3.1 (cont.) — Process Control Block (PCB)</h3>
+
+      <div class="def-box">
+        <div class="def-label">Definition</div>
+        <p>The <strong>PCB (Process Control Block)</strong>, also called <em>task control block</em>, is a data structure the OS maintains for each process. It's like the process's "ID card" + "medical record" — everything the OS needs to know about that process.</p>
+      </div>
+
+      <p>PCB contains:</p>
+      <ul>
+        <li><strong>Process State</strong> — new, ready, running, waiting, terminated</li>
+        <li><strong>Process Number (PID)</strong> — unique identifier for this process</li>
+        <li><strong>Program Counter (PC)</strong> — address of the NEXT instruction to execute</li>
+        <li><strong>CPU Registers</strong> — all register contents (saved when process is paused)</li>
+        <li><strong>CPU Scheduling Info</strong> — priority, queue pointers</li>
+        <li><strong>Memory Management Info</strong> — memory limits, page tables</li>
+        <li><strong>Accounting Info</strong> — CPU time used, time since start</li>
+        <li><strong>I/O Status Info</strong> — open files, allocated devices</li>
+      </ul>
+
+      <p>In Linux, the PCB is implemented as the C structure <code>task_struct</code>.</p>
+
+      <!-- Scheduling -->
+      <h3 class="section-title" id="scheduling">3.2 — Process Scheduling</h3>
+
+      <div class="def-box">
+        <div class="def-label">Definition</div>
+        <p>The <strong>Process Scheduler</strong> selects which process from the ready queue gets to run next on the CPU. Goal: maximize CPU utilization — keep the CPU busy as much as possible.</p>
+      </div>
+
+      <h4 class="sub-title">Scheduling Queues</h4>
+      <ul>
+        <li><strong>Ready Queue</strong> — All processes in main memory, ready and waiting to execute. Implemented as a linked list of PCBs.</li>
+        <li><strong>Wait Queue</strong> — Processes waiting for an event (e.g., I/O completion). There's one wait queue per device.</li>
+      </ul>
+
+      <p>Processes <em>migrate</em> between these queues throughout their lifetime. A process starts in the ready queue → gets CPU → may go to wait queue for I/O → returns to ready queue when I/O is done.</p>
+
+      <!-- Context Switch -->
+      <h3 class="section-title" id="context-switch">3.2 (cont.) — Context Switch</h3>
+
+      <div class="def-box">
+        <div class="def-label">Definition</div>
+        <p>A <strong>Context Switch</strong> happens when the CPU switches from running one process to another. The OS must <em>save the state</em> of the old process (into its PCB) and <em>load the state</em> of the new process (from its PCB).</p>
+      </div>
+
+      <p><strong>Step by step:</strong></p>
+      <ol>
+        <li>Process P0 is running; an interrupt/system call occurs</li>
+        <li>OS <strong>saves state of P0</strong> into PCB₀ (registers, PC, etc.)</li>
+        <li>OS <strong>loads state of P1</strong> from PCB₁</li>
+        <li>P1 starts running</li>
+        <li>When P1 is interrupted, reverse the process to restore P0</li>
+      </ol>
+
+      <div class="box box-warn">
+        <div class="box-label">⚠️ Key Fact</div>
+        <p>Context-switch time is <strong>pure overhead</strong> — no useful work is done during the switch. The more complex the OS and PCB, the longer the switch takes. Some hardware provides multiple register sets per CPU to speed this up.</p>
+      </div>
+
+      <!-- Process Creation -->
+      <h3 class="section-title" id="creation">3.3 — Process Creation (C Coding)</h3>
+
+      <p>Processes can create other processes. The creator is the <strong>parent</strong>, the created one is the <strong>child</strong>. This forms a <strong>tree of processes</strong>. Each process has a unique <strong>PID (Process Identifier)</strong>.</p>
+
+      <p>In Linux, the root of this tree is <code>systemd</code> (PID = 1).</p>
+
+      <h4 class="sub-title">Resource Sharing Options</h4>
+      <ul>
+        <li>Parent and children share <em>all</em> resources</li>
+        <li>Children share a <em>subset</em> of parent's resources</li>
+        <li>Parent and child share <em>no</em> resources</li>
+      </ul>
+
+      <h4 class="sub-title">Execution Options</h4>
+      <ul>
+        <li>Parent and children <em>execute concurrently</em></li>
+        <li>Parent <em>waits</em> until children terminate</li>
+      </ul>
+
+      <h4 class="sub-title">UNIX System Calls: fork(), exec(), wait()</h4>
+
+      <table>
+        <tr><th>System Call</th><th>What It Does</th><th>Return Value</th></tr>
+        <tr><td><code>fork()</code></td><td>Creates a new child process that is an exact duplicate of the parent</td><td>Returns PID of child to parent, returns 0 to child, -1 on error</td></tr>
+        <tr><td><code>exec()</code> / <code>execlp()</code></td><td>Replaces the current process's memory image with a new program</td><td>Doesn't return on success (process is replaced!)</td></tr>
+        <tr><td><code>wait()</code></td><td>Parent blocks until a child terminates. Gets child's exit status.</td><td>PID of terminated child</td></tr>
+        <tr><td><code>exit()</code></td><td>Terminates the calling process, sends status to parent</td><td>(no return — process ends)</td></tr>
+      </table>
+
+<pre data-lang="C"><code><span class="kw">#include</span> <span class="str">&lt;sys/types.h&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;stdio.h&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;unistd.h&gt;</span>
+
+<span class="type">int</span> <span class="fn">main</span>() {
+    <span class="type">pid_t</span> pid;
+    
+    <span class="cm">/* Fork a child process */</span>
+    pid = <span class="fn">fork</span>();
+    
+    <span class="kw">if</span> (pid &lt; <span class="num">0</span>) {            <span class="cm">/* Error: fork failed */</span>
+        <span class="fn">fprintf</span>(stderr, <span class="str">"Fork Failed\n"</span>);
+        <span class="kw">return</span> <span class="num">1</span>;
+    }
+    <span class="kw">else if</span> (pid == <span class="num">0</span>) {       <span class="cm">/* This is the CHILD process (pid = 0) */</span>
+        <span class="fn">execlp</span>(<span class="str">"/bin/ls"</span>, <span class="str">"ls"</span>, <span class="num">NULL</span>);
+        <span class="cm">/* execlp replaces child's memory with the 'ls' program */</span>
+        <span class="cm">/* If execlp succeeds, this line is NEVER reached */</span>
+    }
+    <span class="kw">else</span> {                     <span class="cm">/* This is the PARENT process (pid = child's PID) */</span>
+        <span class="fn">wait</span>(<span class="num">NULL</span>);              <span class="cm">/* Parent waits for child to finish */</span>
+        <span class="fn">printf</span>(<span class="str">"Child Complete!\n"</span>);
+    }
+    
+    <span class="kw">return</span> <span class="num">0</span>;
+}</code></pre>
+
+      <div class="box box-exam">
+        <div class="box-label">⚡ Exam: Dry Run of fork()</div>
+        <p>After <code>fork()</code>: TWO processes exist running the SAME code. The ONLY way to tell them apart is by the return value of fork().<br>
+        • Parent gets: <code>pid = &lt;child's actual PID&gt;</code> (a positive number)<br>
+        • Child gets: <code>pid = 0</code><br>
+        • Error: <code>pid = -1</code></p>
+      </div>
+
+      <h4 class="sub-title">execlp() Details</h4>
+      <p><code>execlp(path, arg0, arg1, ..., NULL)</code></p>
+      <ul>
+        <li>Searches for the program in the PATH environment variable</li>
+        <li>First argument = filename of executable</li>
+        <li>Subsequent arguments = command-line arguments to new program</li>
+        <li>Must end with <code>NULL</code></li>
+        <li><strong>If successful, it does NOT return</strong> — the calling process is completely replaced</li>
+        <li>If it fails, it returns -1 and sets errno</li>
+      </ul>
+
+      <!-- Process Termination -->
+      <h3 class="section-title" id="termination">3.3 (cont.) — Process Termination</h3>
+
+      <p>A process terminates when it:</p>
+      <ul>
+        <li>Executes its last statement and calls <code>exit()</code></li>
+        <li>Is killed by its parent via <code>abort()</code></li>
+      </ul>
+
+      <p>When a process exits, its resources are deallocated by the OS.</p>
+
+      <table>
+        <tr><th>Term</th><th>Definition</th></tr>
+        <tr><td><strong>Cascading Termination</strong></td><td>When a parent exits, all children (and grandchildren) are also terminated. Initiated by the OS.</td></tr>
+        <tr><td><strong>Zombie Process</strong></td><td>A child that has terminated but whose parent has NOT yet called wait(). It still has an entry in the process table (parent needs to read exit status).</td></tr>
+        <tr><td><strong>Orphan Process</strong></td><td>A child whose parent has terminated WITHOUT calling wait(). In Unix, orphans are adopted by init/systemd (PID 1).</td></tr>
+      </table>
+
+      <!-- IPC -->
+      <h3 class="section-title" id="ipc">3.4 — Interprocess Communication (IPC)</h3>
+
+      <p>Processes can be <strong>independent</strong> (don't share data) or <strong>cooperating</strong> (share data and communicate). Cooperating processes need IPC.</p>
+
+      <h4 class="sub-title">Why Cooperating Processes?</h4>
+      <ul>
+        <li><strong>Information sharing</strong> — multiple users need same data</li>
+        <li><strong>Computation speedup</strong> — parallelize tasks</li>
+        <li><strong>Modularity</strong> — divide system into separate modules</li>
+        <li><strong>Convenience</strong> — multiple tasks at once</li>
+      </ul>
+
+      <h4 class="sub-title">Two Models of IPC</h4>
+
+      <table>
+        <tr><th>Aspect</th><th>Shared Memory</th><th>Message Passing</th></tr>
+        <tr><td><strong>Mechanism</strong></td><td>Processes share a region of memory; read/write directly</td><td>Processes send/receive messages via OS-managed channel</td></tr>
+        <tr><td><strong>Speed</strong></td><td>Fast (no kernel involvement after setup)</td><td>Slower (every message involves a system call)</td></tr>
+        <tr><td><strong>Synchronization</strong></td><td>Explicit (semaphores/mutexes needed)</td><td>Built-in (send/receive operations)</td></tr>
+        <tr><td><strong>Address Space</strong></td><td>Shared — same memory region</td><td>Separate — no shared memory</td></tr>
+        <tr><td><strong>Best For</strong></td><td>Same machine, large data transfers</td><td>Distributed systems, structured messages</td></tr>
+      </table>
+
+      <h4 class="sub-title">Producer-Consumer Problem (Classic Example of IPC)</h4>
+
+      <p>A <strong>producer</strong> process generates data; a <strong>consumer</strong> process uses it. They share a <strong>buffer</strong>.</p>
+      <ul>
+        <li><strong>Unbounded buffer</strong> — no limit on buffer size → producer never waits, consumer waits only when buffer is empty</li>
+        <li><strong>Bounded buffer</strong> — fixed size → producer waits when buffer full, consumer waits when buffer empty</li>
+      </ul>
+
+<pre data-lang="C"><code><span class="cm">/* Shared variables (in shared memory) */</span>
+<span class="kw">#define</span> BUFFER_SIZE <span class="num">10</span>
+
+<span class="type">typedef struct</span> { <span class="cm">/* ... item data ... */</span> } item;
+
+item buffer[BUFFER_SIZE];
+<span class="type">int</span> in = <span class="num">0</span>;   <span class="cm">/* next free position (producer writes here) */</span>
+<span class="type">int</span> out = <span class="num">0</span>;  <span class="cm">/* first full position (consumer reads here) */</span>
+
+<span class="cm">/* Buffer is EMPTY when: in == out */</span>
+<span class="cm">/* Buffer is FULL when:  ((in + 1) % BUFFER_SIZE) == out */</span>
+
+<span class="cm">/* PRODUCER CODE */</span>
+<span class="type">void</span> <span class="fn">producer</span>() {
+    item next_produced;
+    <span class="kw">while</span> (<span class="num">true</span>) {
+        <span class="cm">/* produce an item */</span>
+        <span class="kw">while</span> (((in + <span class="num">1</span>) % BUFFER_SIZE) == out)
+            ; <span class="cm">/* do nothing — buffer FULL, wait */</span>
+        buffer[in] = next_produced;
+        in = (in + <span class="num">1</span>) % BUFFER_SIZE;
+    }
+}
+
+<span class="cm">/* CONSUMER CODE */</span>
+<span class="type">void</span> <span class="fn">consumer</span>() {
+    item next_consumed;
+    <span class="kw">while</span> (<span class="num">true</span>) {
+        <span class="kw">while</span> (in == out)
+            ; <span class="cm">/* do nothing — buffer EMPTY, wait */</span>
+        next_consumed = buffer[out];
+        out = (out + <span class="num">1</span>) % BUFFER_SIZE;
+        <span class="cm">/* consume the item */</span>
+    }
+}</code></pre>
+
+      <div class="box box-warn">
+        <div class="box-label">⚠️ Shortcoming</div>
+        <p>This basic implementation can only use BUFFER_SIZE - 1 slots (not all 10). It also doesn't handle synchronization — if both producer and consumer run simultaneously, <strong>race conditions</strong> can corrupt data. This is fixed with semaphores (Chapter 6).</p>
+      </div>
+
+      <h4 class="sub-title">POSIX Shared Memory (3.5 — C Coding)</h4>
+      <p>POSIX provides system calls to create and manage shared memory segments:</p>
+
+<pre data-lang="C"><code><span class="cm">/* ====== PRODUCER (Writer) ====== */</span>
+<span class="kw">#include</span> <span class="str">&lt;sys/shm.h&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;sys/mman.h&gt;</span>
+
+<span class="kw">const</span> <span class="type">int</span> SIZE = <span class="num">4096</span>;
+<span class="kw">const</span> <span class="type">char</span> *name = <span class="str">"OS"</span>;
+
+<span class="cm">/* Step 1: Create/open shared memory object */</span>
+<span class="type">int</span> fd = <span class="fn">shm_open</span>(name, O_CREAT | O_RDWR, <span class="num">0666</span>);
+
+<span class="cm">/* Step 2: Set its size */</span>
+<span class="fn">ftruncate</span>(fd, SIZE);
+
+<span class="cm">/* Step 3: Memory-map it into our address space */</span>
+<span class="type">char</span> *ptr = (<span class="type">char</span>*)<span class="fn">mmap</span>(<span class="num">0</span>, SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, <span class="num">0</span>);
+
+<span class="cm">/* Step 4: Write to shared memory */</span>
+<span class="fn">sprintf</span>(ptr, <span class="str">"Hello"</span>);
+
+
+<span class="cm">/* ====== CONSUMER (Reader) ====== */</span>
+<span class="type">int</span> fd = <span class="fn">shm_open</span>(name, O_RDONLY, <span class="num">0666</span>);  <span class="cm">// Open existing</span>
+<span class="type">char</span> *ptr = (<span class="type">char</span>*)<span class="fn">mmap</span>(<span class="num">0</span>, SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, <span class="num">0</span>);
+<span class="fn">printf</span>(<span class="str">"%s"</span>, (<span class="type">char</span>*)ptr);  <span class="cm">// Read from shared memory</span>
+<span class="fn">shm_unlink</span>(name);           <span class="cm">// Remove shared memory object</span></code></pre>
+
+      <!-- Pipes -->
+      <h3 class="section-title" id="pipes">3.7.1 &amp; 3.7.4 — Pipes (C Coding)</h3>
+
+      <div class="def-box">
+        <div class="def-label">Definition</div>
+        <p>A <strong>pipe</strong> is a conduit allowing two processes to communicate. Think of it as an actual pipe — data flows in one end and out the other. They are <em>unidirectional</em> (one-way) communication channels.</p>
+      </div>
+
+      <h4 class="sub-title">Ordinary Pipes (Anonymous Pipes)</h4>
+      <ul>
+        <li>Created with <code>pipe(int fd[2])</code></li>
+        <li><code>fd[0]</code> = read end, <code>fd[1]</code> = write end</li>
+        <li>Require a parent-child relationship (created before fork)</li>
+        <li>Exist only while processes are running</li>
+        <li>Unidirectional (need 2 pipes for bidirectional)</li>
+        <li>Windows calls these <em>anonymous pipes</em></li>
+      </ul>
+
+<pre data-lang="C"><code><span class="kw">#include</span> <span class="str">&lt;stdio.h&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;string.h&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;unistd.h&gt;</span>
+
+<span class="kw">#define</span> BUFFER_SIZE <span class="num">25</span>
+<span class="kw">#define</span> READ_END    <span class="num">0</span>
+<span class="kw">#define</span> WRITE_END   <span class="num">1</span>
+
+<span class="type">int</span> <span class="fn">main</span>() {
+    <span class="type">char</span> write_msg[BUFFER_SIZE] = <span class="str">"Greetings"</span>;
+    <span class="type">char</span> read_msg[BUFFER_SIZE];
+    <span class="type">int</span> fd[<span class="num">2</span>];
+    <span class="type">pid_t</span> pid;
+    
+    <span class="cm">/* Create the pipe */</span>
+    <span class="kw">if</span> (<span class="fn">pipe</span>(fd) == -<span class="num">1</span>) {
+        <span class="fn">fprintf</span>(stderr, <span class="str">"Pipe failed"</span>);
+        <span class="kw">return</span> <span class="num">1</span>;
+    }
+    
+    pid = <span class="fn">fork</span>();  <span class="cm">/* Fork AFTER pipe creation so child inherits it */</span>
+    
+    <span class="kw">if</span> (pid > <span class="num">0</span>) {    <span class="cm">/* PARENT: writes to pipe */</span>
+        <span class="fn">close</span>(fd[READ_END]);   <span class="cm">/* Close unused read end */</span>
+        <span class="fn">write</span>(fd[WRITE_END], write_msg, <span class="fn">strlen</span>(write_msg) + <span class="num">1</span>);
+        <span class="fn">close</span>(fd[WRITE_END]);  <span class="cm">/* Done writing */</span>
+    }
+    <span class="kw">else</span> {            <span class="cm">/* CHILD: reads from pipe */</span>
+        <span class="fn">close</span>(fd[WRITE_END]);  <span class="cm">/* Close unused write end */</span>
+        <span class="fn">read</span>(fd[READ_END], read_msg, BUFFER_SIZE);
+        <span class="fn">printf</span>(<span class="str">"read: %s\n"</span>, read_msg);
+        <span class="fn">close</span>(fd[READ_END]);   <span class="cm">/* Done reading */</span>
+    }
+    <span class="kw">return</span> <span class="num">0</span>;
+}</code></pre>
+
+      <h4 class="sub-title">Named Pipes (FIFOs) — 3.7.4</h4>
+
+      <table>
+        <tr><th>Feature</th><th>Ordinary Pipes</th><th>Named Pipes (FIFOs)</th></tr>
+        <tr><td>Creation</td><td><code>pipe(int fd[2])</code></td><td><code>mkfifo()</code></td></tr>
+        <tr><td>Process Relationship</td><td>Requires parent-child</td><td>No relationship needed</td></tr>
+        <tr><td>Persistence</td><td>Exists only while processes run</td><td>Exists in filesystem until deleted</td></tr>
+        <tr><td>Access</td><td>Via file descriptors</td><td>Via file path (like a regular file)</td></tr>
+        <tr><td>Multiple Writers</td><td>No</td><td>Yes</td></tr>
+      </table>
+
+      <p>Named Pipes provide <strong>synchronization automatically</strong> — reading blocks if pipe is empty, writing blocks if pipe is full.</p>
+
+      <h4 class="sub-title">3.8.2 — Sockets (Basic Theory)</h4>
+      <p>A <strong>socket</strong> is an endpoint for communication. Identified by an IP address + port number. Used for communication between processes on <em>different machines</em> over a network. Pipes only work on the same machine; sockets work anywhere.</p>
+
+      <div class="box box-tip">
+        <div class="box-label">💡 Pipes vs Shared Memory vs Message Passing</div>
+        <p>
+        <strong>Use Pipes when:</strong> Simple, unidirectional data flow. Parent-child or shell piping (ls | grep).<br>
+        <strong>Use Shared Memory when:</strong> High-speed, large data on same machine. Need bidirectional. (Requires synchronization!)<br>
+        <strong>Use Message Passing when:</strong> Structured discrete messages. Different machines. Need built-in synchronization.
+        </p>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ========== CHAPTER 5 ========== -->
+    <section id="ch5">
+      <div class="chapter-header">
+        <span class="chapter-num">Chapter 5</span>
+        <h2 class="chapter-title">CPU Scheduling — FIFO, SJF &amp; SRTF</h2>
+      </div>
+
+      <h3 class="section-title" id="sched-basics">Basic Concepts</h3>
+
+      <p>The CPU is the most valuable resource in a computer. We want to keep it busy 100% of the time. <strong>CPU Scheduling</strong> decides which process gets the CPU and for how long.</p>
+
+      <div class="def-box">
+        <div class="def-label">CPU-I/O Burst Cycle</div>
+        <p>Process execution alternates between <strong>CPU bursts</strong> (actually using the CPU) and <strong>I/O bursts</strong> (waiting for I/O). Short CPU bursts are very common; long ones are rare. The scheduler runs between CPU bursts.</p>
+      </div>
+
+      <h4 class="sub-title">When Does Scheduling Happen?</h4>
+      <p>The CPU scheduler makes decisions when a process:</p>
+      <ol>
+        <li>Switches from <strong>running → waiting</strong> (e.g., I/O request)</li>
+        <li>Switches from <strong>running → ready</strong> (e.g., interrupt)</li>
+        <li>Switches from <strong>waiting → ready</strong> (e.g., I/O completion)</li>
+        <li><strong>Terminates</strong></li>
+      </ol>
+
+      <table>
+        <tr><th>Type</th><th>When It Applies</th><th>Can Be Preempted?</th></tr>
+        <tr><td><strong>Non-preemptive</strong></td><td>Only under conditions 1 &amp; 4. Once CPU is given, process keeps it until it finishes or waits.</td><td>No — process runs until done/waiting</td></tr>
+        <tr><td><strong>Preemptive</strong></td><td>Under all 4 conditions. OS can forcibly take CPU from running process.</td><td>Yes — OS can interrupt at any time</td></tr>
+      </table>
+
+      <h4 class="sub-title">The Dispatcher</h4>
+      <p>The <strong>Dispatcher</strong> is the module that gives control of the CPU to the process selected by the scheduler. It handles: context switching, switching to user mode, jumping to the correct location in the program. <strong>Dispatch latency</strong> = time for dispatcher to stop one and start another.</p>
+
+      <!-- Criteria -->
+      <h3 class="section-title" id="criteria">Scheduling Criteria — How Do We Judge?</h3>
+
+      <table>
+        <tr><th>Criterion</th><th>Definition</th><th>We Want To...</th></tr>
+        <tr><td><strong>CPU Utilization</strong></td><td>% of time CPU is busy</td><td>Maximize ↑</td></tr>
+        <tr><td><strong>Throughput</strong></td><td>Processes completed per time unit</td><td>Maximize ↑</td></tr>
+        <tr><td><strong>Turnaround Time</strong></td><td>Total time from submission to completion</td><td>Minimize ↓</td></tr>
+        <tr><td><strong>Waiting Time</strong></td><td>Total time spent in ready queue</td><td>Minimize ↓</td></tr>
+        <tr><td><strong>Response Time</strong></td><td>Time from request submission to first response</td><td>Minimize ↓</td></tr>
+      </table>
+
+      <div class="formula">
+        Turnaround Time = Completion Time − Arrival Time<br>
+        Waiting Time = Turnaround Time − Burst Time<br>
+        Response Time = First CPU Time − Arrival Time
+      </div>
+
+      <!-- FCFS -->
+      <h3 class="section-title" id="fcfs">FCFS / FIFO — First-Come, First-Served</h3>
+
+      <div class="def-box">
+        <div class="def-label">Algorithm</div>
+        <p><strong>FCFS (FIFO)</strong>: Processes are served in the order they arrive. The first one to request the CPU gets it first. Like a queue at a supermarket checkout. <em>Non-preemptive.</em></p>
+      </div>
+
+      <h4 class="sub-title">Example 1: P1, P2, P3 arrive in order (all at time 0)</h4>
+
+      <table>
+        <tr><th>Process</th><th>Burst Time</th></tr>
+        <tr><td>P1</td><td>24</td></tr>
+        <tr><td>P2</td><td>3</td></tr>
+        <tr><td>P3</td><td>3</td></tr>
+      </table>
+
+      <p>Order of arrival: P1, P2, P3</p>
+      <div class="gantt">
+        <div class="gantt-title">Gantt Chart — FCFS (P1→P2→P3)</div>
+        <div class="gantt-row">
+          <div class="gantt-label">P1</div>
+          <div class="gantt-bar g-p1" style="width:240px">P1 (24)</div>
+        </div>
+        <div class="gantt-row">
+          <div class="gantt-label">P2</div>
+          <div class="gantt-bar" style="width:240px; background:transparent"></div>
+          <div class="gantt-bar g-p2" style="width:30px">P2</div>
+        </div>
+        <div class="gantt-row">
+          <div class="gantt-label">P3</div>
+          <div class="gantt-bar" style="width:270px; background:transparent"></div>
+          <div class="gantt-bar g-p3" style="width:30px">P3</div>
+        </div>
+        <div style="display:flex; margin-left:38px; margin-top:8px; font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--text-dim);">
+          <span>0</span>
+          <span style="margin-left:228px">24</span>
+          <span style="margin-left:18px">27</span>
+          <span style="margin-left:18px">30</span>
+        </div>
+      </div>
+
+      <div class="formula">
+        Waiting Time: P1=0, P2=24, P3=27<br>
+        Average Waiting Time = (0 + 24 + 27) / 3 = <strong>17 ms</strong>
+      </div>
+
+      <h4 class="sub-title">Example 2: P2, P3, P1 arrive in order (all at time 0)</h4>
+      <div class="gantt">
+        <div class="gantt-title">Gantt Chart — FCFS (P2→P3→P1)</div>
+        <div class="gantt-row">
+          <div class="gantt-label">P2</div>
+          <div class="gantt-bar g-p2" style="width:30px">P2</div>
+        </div>
+        <div class="gantt-row">
+          <div class="gantt-label">P3</div>
+          <div class="gantt-bar" style="width:30px; background:transparent"></div>
+          <div class="gantt-bar g-p3" style="width:30px">P3</div>
+        </div>
+        <div class="gantt-row">
+          <div class="gantt-label">P1</div>
+          <div class="gantt-bar" style="width:60px; background:transparent"></div>
+          <div class="gantt-bar g-p1" style="width:240px">P1 (24)</div>
+        </div>
+        <div style="display:flex; margin-left:38px; margin-top:8px; font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--text-dim);">
+          <span>0</span>
+          <span style="margin-left:18px">3</span>
+          <span style="margin-left:18px">6</span>
+          <span style="margin-left:228px">30</span>
+        </div>
+      </div>
+
+      <div class="formula">
+        Waiting Time: P1=6, P2=0, P3=3<br>
+        Average Waiting Time = (6 + 0 + 3) / 3 = <strong>3 ms</strong> ← Much better!
+      </div>
+
+      <div class="box box-warn">
+        <div class="box-label">⚠️ Convoy Effect</div>
+        <p>If a long process arrives first, all short processes get stuck waiting behind it. Like a slow truck on a narrow road. This is the main weakness of FCFS — it's not optimal for average waiting time.</p>
+      </div>
+
+      <!-- SJF -->
+      <h3 class="section-title" id="sjf">SJF — Shortest Job First</h3>
+
+      <div class="def-box">
+        <div class="def-label">Algorithm</div>
+        <p><strong>SJF</strong>: Among all ready processes, pick the one with the <em>shortest next CPU burst</em>. Ties broken by FCFS. <em>Non-preemptive</em> (once started, runs to completion). <strong>Proven optimal</strong> — gives minimum average waiting time.</p>
+      </div>
+
+      <h4 class="sub-title">Example: All arrive at time 0</h4>
+
+      <table>
+        <tr><th>Process</th><th>Burst Time</th></tr>
+        <tr><td>P1</td><td>6</td></tr>
+        <tr><td>P2</td><td>8</td></tr>
+        <tr><td>P3</td><td>7</td></tr>
+        <tr><td>P4</td><td>3</td></tr>
+      </table>
+
+      <p>SJF order: P4(3) → P1(6) → P3(7) → P2(8)</p>
+
+      <div class="gantt">
+        <div class="gantt-title">Gantt Chart — SJF</div>
+        <div class="gantt-row">
+          <div class="gantt-label"></div>
+          <div class="gantt-bar g-p4" style="width:30px; font-size:10px">P4</div>
+          <div class="gantt-bar g-p1" style="width:60px; font-size:10px">P1</div>
+          <div class="gantt-bar g-p3" style="width:70px; font-size:10px">P3</div>
+          <div class="gantt-bar g-p2" style="width:80px; font-size:10px">P2</div>
+        </div>
+        <div style="display:flex; margin-left:38px; margin-top:8px; font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--text-dim);">
+          <span>0</span>
+          <span style="margin-left:20px">3</span>
+          <span style="margin-left:48px">9</span>
+          <span style="margin-left:58px">16</span>
+          <span style="margin-left:68px">24</span>
+        </div>
+      </div>
+
+      <div class="formula">
+        Waiting Time: P1=3, P2=16, P3=9, P4=0<br>
+        Average Waiting Time = (3 + 16 + 9 + 0) / 4 = <strong>7 ms</strong>
+      </div>
+
+      <h4 class="sub-title">The Problem: Predicting Burst Length</h4>
+      <p>We can't know the exact length of the next CPU burst in advance. We <strong>estimate</strong> it using <strong>exponential averaging</strong> of past bursts:</p>
+
+      <div class="formula">
+        τ(n+1) = α × t(n) + (1 − α) × τ(n)<br><br>
+        where: t(n) = actual length of nth CPU burst<br>
+               τ(n) = predicted value for nth burst<br>
+               α = smoothing factor (0 ≤ α ≤ 1)
+      </div>
+
+      <p>Common choice: <strong>α = 0.5</strong> (equal weight to past and recent).</p>
+      <ul>
+        <li>If <strong>α = 0</strong>: recent history ignored, τ(n+1) = τ(n) (old prediction unchanged)</li>
+        <li>If <strong>α = 1</strong>: only last actual burst counts, τ(n+1) = t(n)</li>
+      </ul>
+
+      <div class="box box-exam">
+        <div class="box-label">⚡ Exam Point</div>
+        <p>SJF is <strong>provably optimal</strong> for minimizing average waiting time. However, it can cause <strong>starvation</strong> — a long process might wait forever if short processes keep arriving. The solution is <strong>aging</strong> (gradually increase priority of waiting processes).</p>
+      </div>
+
+      <!-- SRTF -->
+      <h3 class="section-title" id="srtf">SRTF — Shortest Remaining Time First (Preemptive SJF)</h3>
+
+      <div class="def-box">
+        <div class="def-label">Algorithm</div>
+        <p><strong>SRTF (Shortest Remaining Time First)</strong> is the <em>preemptive version</em> of SJF. Whenever a new process arrives in the ready queue, the scheduler compares its burst time with the <em>remaining time</em> of the currently running process. If the new process is shorter, it <strong>preempts</strong> (kicks out) the current one!</p>
+      </div>
+
+      <h4 class="sub-title">Example with Different Arrival Times</h4>
+
+      <table>
+        <tr><th>Process</th><th>Arrival Time</th><th>Burst Time</th></tr>
+        <tr><td>P1</td><td>0</td><td>8</td></tr>
+        <tr><td>P2</td><td>1</td><td>4</td></tr>
+        <tr><td>P3</td><td>2</td><td>9</td></tr>
+        <tr><td>P4</td><td>3</td><td>5</td></tr>
+      </table>
+
+      <p><strong>Step-by-step trace:</strong></p>
+
+      <table>
+        <tr><th>Time</th><th>Event</th><th>Running</th><th>Remaining Times</th></tr>
+        <tr><td>0</td><td>P1 arrives. Only process → starts.</td><td>P1</td><td>P1=8</td></tr>
+        <tr><td>1</td><td>P2 arrives (burst=4). P1 remaining=7. 4 &lt; 7 → PREEMPT! P2 starts.</td><td>P2</td><td>P1=7, P2=4</td></tr>
+        <tr><td>2</td><td>P3 arrives (burst=9). P2 remaining=3. 9 &gt; 3 → no preemption.</td><td>P2</td><td>P1=7, P2=3, P3=9</td></tr>
+        <tr><td>3</td><td>P4 arrives (burst=5). P2 remaining=2. 5 &gt; 2 → no preemption.</td><td>P2</td><td>P1=7, P2=2, P3=9, P4=5</td></tr>
+        <tr><td>5</td><td>P2 finishes! Ready: P1(7), P3(9), P4(5). Shortest = P4 → starts.</td><td>P4</td><td>P1=7, P3=9, P4=5</td></tr>
+        <tr><td>10</td><td>P4 finishes! Ready: P1(7), P3(9). Shortest = P1 → starts.</td><td>P1</td><td>P1=7, P3=9</td></tr>
+        <tr><td>17</td><td>P1 finishes! Only P3 left → starts.</td><td>P3</td><td>P3=9</td></tr>
+        <tr><td>26</td><td>P3 finishes!</td><td>—</td><td>Done</td></tr>
+      </table>
+
+      <div class="gantt">
+        <div class="gantt-title">Gantt Chart — SRTF</div>
+        <div class="gantt-row">
+          <div class="gantt-label"></div>
+          <div class="gantt-bar g-p1" style="width:10px; font-size:9px">P1</div>
+          <div class="gantt-bar g-p2" style="width:40px; font-size:10px">P2 (1→5)</div>
+          <div class="gantt-bar g-p4" style="width:50px; font-size:10px">P4 (5→10)</div>
+          <div class="gantt-bar g-p1" style="width:70px; font-size:10px">P1 (10→17)</div>
+          <div class="gantt-bar g-p3" style="width:90px; font-size:10px">P3 (17→26)</div>
+        </div>
+        <div style="display:flex; margin-left:38px; margin-top:8px; font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--text-dim);">
+          <span>0</span>
+          <span style="margin-left:2px">1</span>
+          <span style="margin-left:30px">5</span>
+          <span style="margin-left:38px">10</span>
+          <span style="margin-left:58px">17</span>
+          <span style="margin-left:78px">26</span>
+        </div>
+      </div>
+
+      <div class="formula">
+        Turnaround Time = Completion Time − Arrival Time<br>
+        P1: 17−0=17, P2: 5−1=4, P3: 26−2=24, P4: 10−3=7<br><br>
+        Waiting Time = Turnaround − Burst<br>
+        P1: 17−8=9, P2: 4−4=0, P3: 24−9=15, P4: 7−5=2<br><br>
+        Average Waiting = (9 + 0 + 15 + 2) / 4 = 26/4 = <strong>6.5 ms</strong>
+      </div>
+
+      <div class="box box-exam">
+        <div class="box-label">⚡ Exam Point — SRTF Formula</div>
+        <p>The book gives this formula for SRTF waiting time:<br>
+        <strong>Average WT = [(Finish−Arrival−Burst) for each process, summed] / N</strong><br>
+        From example: [(17−0−8) + (5−1−4) + (26−2−9) + (10−3−5)] / 4 = [9+0+15+2]/4 = 6.5</p>
+      </div>
+
+      <h4 class="sub-title">SJF vs. SRTF Comparison</h4>
+      <table>
+        <tr><th>Feature</th><th>SJF</th><th>SRTF</th></tr>
+        <tr><td>Type</td><td>Non-preemptive</td><td>Preemptive</td></tr>
+        <tr><td>When to schedule</td><td>Only when CPU becomes free</td><td>Every time a new process arrives</td></tr>
+        <tr><td>Optimality</td><td>Optimal for same-arrival-time processes</td><td>More optimal with different arrivals</td></tr>
+        <tr><td>Starvation</td><td>Long jobs may starve</td><td>Long jobs may starve even more</td></tr>
+        <tr><td>Overhead</td><td>Lower</td><td>Higher (more context switches)</td></tr>
+      </table>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ========== EXAM TIPS ========== -->
+    <section id="exam">
+      <div class="chapter-header">
+        <span class="chapter-num" style="background:rgba(255,107,157,0.1); border-color:rgba(255,107,157,0.3); color:var(--accent2)">Exam Tips</span>
+        <h2 class="chapter-title">⚡ Complete Exam Preparation</h2>
+      </div>
+
+      <h3 class="section-title">Key Formulas to Memorize</h3>
+
+      <div class="formula">
+        <strong>Waiting Time</strong> = Completion Time − Arrival Time − Burst Time<br>
+        <strong>Turnaround Time</strong> = Completion Time − Arrival Time<br>
+        <strong>Response Time</strong> = First CPU Start Time − Arrival Time<br>
+        <strong>Average WT</strong> = Sum of all Waiting Times / Number of Processes
+      </div>
+
+      <h3 class="section-title">Most Likely Exam Questions</h3>
+
+      <h4 class="sub-title">Theory Questions</h4>
+      <ul>
+        <li>What is the difference between a process and a program?</li>
+        <li>List and explain the 5 process states with transitions.</li>
+        <li>What information is stored in a PCB?</li>
+        <li>What is context switching? Why is it pure overhead?</li>
+        <li>Explain the difference between user mode and kernel mode.</li>
+        <li>What is a system call? Give examples from 3 categories.</li>
+        <li>Compare shared memory vs. message passing IPC.</li>
+        <li>Explain zombie and orphan processes.</li>
+        <li>What is the convoy effect in FCFS?</li>
+        <li>Why is SJF optimal? What is its main problem?</li>
+        <li>How does SRTF differ from SJF?</li>
+        <li>What is preemptive vs. non-preemptive scheduling?</li>
+        <li>Explain the producer-consumer problem.</li>
+      </ul>
+
+      <h4 class="sub-title">Calculation Questions (Practice These!)</h4>
+
+      <div class="box box-exam">
+        <div class="box-label">🎯 Practice Problem — FCFS</div>
+        <p>Processes P1(burst=10), P2(burst=5), P3(burst=8), P4(burst=2) all arrive at time 0. Calculate Gantt chart, waiting times, and average WT for FCFS.</p>
+      </div>
+
+      <div class="box box-exam">
+        <div class="box-label">🎯 Practice Problem — SJF</div>
+        <p>Same processes as above (all arrive at t=0). Calculate Gantt chart and average waiting time for SJF. Compare with FCFS answer.</p>
+      </div>
+
+      <div class="box box-exam">
+        <div class="box-label">🎯 Practice Problem — SRTF</div>
+        <p>P1 arrives at t=0 (burst=7), P2 arrives at t=2 (burst=4), P3 arrives at t=4 (burst=1), P4 arrives at t=5 (burst=4). Calculate Gantt chart and average waiting time for SRTF.</p>
+      </div>
+
+      <h4 class="sub-title">Code Questions</h4>
+      <ul>
+        <li>Write the fork() program that creates a child to execute the 'ls' command. Trace the dry run.</li>
+        <li>Explain what happens when fork() is called — how many processes exist? How do they differ?</li>
+        <li>What does execlp() do? What happens if it succeeds?</li>
+        <li>Write producer/consumer code using shared memory bounded buffer.</li>
+        <li>Write ordinary pipe code for parent-child communication.</li>
+        <li>What are zombie and orphan processes in terms of wait()? Show with code.</li>
+      </ul>
+
+      <h3 class="section-title">Common Mistakes to Avoid</h3>
+
+      <table>
+        <tr><th>Mistake</th><th>Correct Understanding</th></tr>
+        <tr><td>Confusing process and program</td><td>Program = passive file on disk. Process = program in execution (active).</td></tr>
+        <tr><td>Thinking fork() creates a thread</td><td>fork() creates a new PROCESS (separate memory space), not a thread.</td></tr>
+        <tr><td>Forgetting to close pipe ends</td><td>Always close the unused end of a pipe in each process, or you get hangs.</td></tr>
+        <tr><td>Wrong FCFS calculation when all arrive at t=0</td><td>P2 waits = P1's burst time. P3 waits = P1+P2 burst times. Etc.</td></tr>
+        <tr><td>Confusing SRTF with SJF</td><td>SJF never preempts. SRTF can preempt a running process when a shorter one arrives.</td></tr>
+        <tr><td>Turnaround vs Waiting time</td><td>Turnaround = total time from arrival to finish. Waiting = time just waiting in queue (Turnaround minus actual burst).</td></tr>
+        <tr><td>Shared memory vs message passing</td><td>Shared memory is faster (no kernel after setup). Message passing is safer (kernel manages sync).</td></tr>
+      </table>
+
+      <h3 class="section-title">30-Second Quick Summary — Everything You Must Know</h3>
+
+      <div class="box box-tip">
+        <div class="box-label">📋 Chapter 1 One-Liners</div>
+        <p>
+        OS = intermediary between user and hardware.<br>
+        Kernel = program always running. Mode bit: 0=kernel, 1=user.<br>
+        Interrupt = hardware/software signal to CPU. Trap = software interrupt.<br>
+        Storage hierarchy: registers→cache→RAM→SSD→HDD (faster→slower, smaller→bigger).<br>
+        DMA = block transfer without CPU per-byte involvement.<br>
+        SMP = all CPUs equal. AMP = one boss CPU. Multicore = multiple cores on one chip.<br>
+        Multiprogramming = multiple jobs in memory (maximize CPU). Multitasking = rapid switching for interaction.
+        </p>
+      </div>
+
+      <div class="box box-tip">
+        <div class="box-label">📋 Chapter 2 One-Liners</div>
+        <p>
+        System call = formal way for user program to request OS service.<br>
+        3 parameter passing methods: registers, memory block/table, stack.<br>
+        6 system call types: process, file, device, info, communication, protection.<br>
+        OS structures: Monolithic (all-in-one), Layered (onion), Microkernel (minimal kernel), Modules (loadable), Hybrid (combination).<br>
+        Boot sequence: BIOS → bootloader (GRUB) → kernel → daemons → ready.
+        </p>
+      </div>
+
+      <div class="box box-tip">
+        <div class="box-label">📋 Chapter 3 One-Liners</div>
+        <p>
+        Process memory: text→data→heap↑ gap ↓stack.<br>
+        5 states: New→Ready→Running→Waiting→Terminated.<br>
+        PCB = all info about a process (state, PID, PC, registers, memory limits, open files).<br>
+        fork() returns: child_PID to parent, 0 to child, -1 on error.<br>
+        execlp() replaces process memory — does NOT return on success.<br>
+        Zombie = finished child, parent hasn't called wait(). Orphan = parent died first.<br>
+        IPC: Shared Memory (fast, needs sync) vs Message Passing (slower, sync built-in).<br>
+        Ordinary pipe: unidirectional, needs parent-child. Named pipe (FIFO): no relationship needed, persists on disk.
+        </p>
+      </div>
+
+      <div class="box box-tip">
+        <div class="box-label">📋 Chapter 5 One-Liners</div>
+        <p>
+        FCFS: non-preemptive, simple, convoy effect, NOT optimal.<br>
+        SJF: non-preemptive, optimal average WT (same arrival), starvation possible.<br>
+        SRTF: preemptive SJF, even more optimal with varied arrivals, more context switches.<br>
+        WT formula: Completion − Arrival − Burst. TT formula: Completion − Arrival.<br>
+        Preemptive = OS can take CPU away. Non-preemptive = process keeps CPU until done/waiting.
+        </p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  // Smooth scrolling
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const el = document.querySelector(a.getAttribute('href'));
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+</script>
+</body>
+</html>
