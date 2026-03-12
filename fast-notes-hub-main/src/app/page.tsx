@@ -96,6 +96,23 @@ const semesters = [
       { value: "CS3006", fullName: "Parallel and Distributed Computing", icon: Code },
     ],
   },
+  {
+    id: 7,
+    title: "Semester 7",
+    subjects: [
+      { value: "MG4011", fullName: "Entrepreneurship", icon: Code },
+      { value: "SE4091", fullName: "Final Year Project – I", icon: Code },
+    ],
+  },
+  {
+    id: 8,
+    title: "Semester 8",
+    subjects: [
+      { value: "SE4092", fullName: "Final Year Project – II", icon: Code },
+      { value: "CS3002", fullName: "Information Security", icon: Code },
+      { value: "CS4001", fullName: "Professional Practices in IT", icon: Code },
+    ],
+  },
 ]
 
 export default function Dashboard() {
@@ -226,6 +243,11 @@ export default function Dashboard() {
     CS3001: "Computer Networks",
     SE4002: "Fundamentals of Software Project Management",
     CS3006: "Parallel and Distributed Computing",
+    MG4011: "Entrepreneurship",
+    SE4091: "Final Year Project – I",
+    SE4092: "Final Year Project – II",
+    CS3002: "Information Security",
+    CS4001: "Professional Practices in IT",
   }
 
   // Helper: highlight search query in text
