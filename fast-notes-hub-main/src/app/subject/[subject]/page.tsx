@@ -7,9 +7,6 @@ import { Analytics } from "@vercel/analytics/react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
-import { Metadata, Viewport } from "next"
-import { Params } from "next/dist/server/request/params"
-
 // Import and initialize Supabase client
 import { createClient } from "@supabase/supabase-js"
 import { subjectFullNames, TABLES, GITHUB } from "@/lib/constants"
@@ -52,13 +49,6 @@ const getFileType = (filename: string): "notes" | "papers" | "slides" => {
   if (lower.includes("slide") || lower.includes("presentation") || lower.includes("ppt")) return "slides"
   if (lower.includes("paper") || lower.includes("exam") || lower.includes("test") || lower.includes("final") || lower.includes("mid") || lower.includes("quiz")) return "papers"
   return "notes"
-}
-
-export async function generateMetadata({ params }: { params: { id: string } }) {
-  return {
-    title: `${params.id.toUpperCase()} | FAST Notes Hub`,
-    description: `Past papers and notes for ${params.id} at FAST University.`,
-  }
 }
 
 // Add a tiny helper to prefetch a URL once
