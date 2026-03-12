@@ -2,11 +2,13 @@
 
 import React from "react"
 import { useEffect, useMemo, useRef, useState } from "react"
-import { BookOpen, Search, Code, Database, Cpu, File, Eye, Presentation } from "lucide-react"
+import { BookOpen, Search, Code, Database, Cpu, File, Eye, Presentation, Bookmark, BookmarkCheck, LogOut, Upload, X } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Analytics } from "@vercel/analytics/react"
+import Fuse from "fuse.js"
+import { supabase } from "@/lib/supabase"
 
 interface SearchResult {
   id: string
@@ -116,11 +118,90 @@ const semesters = [
 ]
 
 export default function Dashboard() {
+  // Search state
   const [searchQuery, setSearchQuery] = useState("")
   const [searchResults, setSearchResults] = useState<SearchResult[]>([])
   const [isSearching, setIsSearching] = useState(false)
   const [showResults, setShowResults] = useState(false)
   const [searchError, setSearchError] = useState("")
+
+  // Auth & bookmark state
+  const [user, setUser] = useState<any>(null)
+  const [bookmarks, setBookmarks] = useState<Set<string>>(new Set())
+  const [showLoginModal, setShowLoginModal] = useState(false)
+  const [showUploadModal, setShowUploadModal] = useState(false)
+  const [bookmarkLoading, setBookmarkLoading] = useState<string | null>(null)
+
+  // Subscribe to auth session changes
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null)
+    })
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null)
+    })
+    return () => subscription.unsubscribe()
+  }, [])
+
+  // Reload bookmarks whenever the logged-in user changes
+  useEffect(() => {
+    if (!user) { setBookmarks(new Set()); return }
+    supabase
+      .from("bookmarks")
+      .select("file_url")
+      .eq("user_id", user.id)
+      .then(({ data }) => {
+        if (data) setBookmarks(new Set(data.map((b: any) => b.file_url as string)))
+      })
+  }, [user])
+
+  const signInWithGoogle = async () => {
+    const { data } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+        skipBrowserRedirect: true,
+      },
+    })
+    if (data?.url) {
+      const popup = window.open(data.url, "google-signin", "width=500,height=640,left=200,top=100")
+      const interval = setInterval(async () => {
+        try {
+          if (popup?.closed) {
+            clearInterval(interval)
+            const { data: { session } } = await supabase.auth.getSession()
+            if (session?.user) {
+              setUser(session.user)
+              setShowLoginModal(false)
+            }
+          }
+        } catch { clearInterval(interval) }
+      }, 600)
+    }
+  }
+
+  const signOut = async () => {
+    await supabase.auth.signOut()
+    setUser(null)
+    setBookmarks(new Set())
+  }
+
+  const toggleBookmark = async (result: SearchResult) => {
+    if (!user) {
+      setShowLoginModal(true)
+      return
+    }
+    const key = result.url
+    setBookmarkLoading(key)
+    if (bookmarks.has(key)) {
+      await supabase.from("bookmarks").delete().eq("user_id", user.id).eq("file_url", key)
+      setBookmarks(prev => { const n = new Set(prev); n.delete(key); return n })
+    } else {
+      await supabase.from("bookmarks").insert({ user_id: user.id, file_url: key, file_name: result.file_name })
+      setBookmarks(prev => new Set([...prev, key]))
+    }
+    setBookmarkLoading(null)
+  }
 
   const handleSearch = async (query: string) => {
     if (!query.trim()) {
@@ -150,13 +231,20 @@ export default function Dashboard() {
       // Ensure files is an array (sometimes GitHub returns object for single files)
       const fileArray = Array.isArray(files) ? files : [files]
 
-      // Filter files by keyword (case-insensitive)
-      const filtered = fileArray.filter((file: any) =>
-        file.name && file.name.toLowerCase().includes(query.toLowerCase())
-      )
+      // Fuzzy search with Fuse.js
+      const fuse = new Fuse(fileArray, {
+        keys: ["name"],
+        threshold: 0.4,       // 0 = perfect match, 1 = match everything
+        distance: 200,        // allow fuzzy match across longer filenames
+        includeScore: true,
+        ignoreLocation: true, // match anywhere in filename, not just prefix
+        minMatchCharLength: 2,
+      })
+
+      const fuseResults = query.trim() ? fuse.search(query) : fileArray.map((f: any) => ({ item: f, score: 1 }))
 
       // Map to SearchResult[] with proper GitHub raw links
-      const results: SearchResult[] = filtered.map((file: any, idx: number) => ({
+      const results: SearchResult[] = fuseResults.map(({ item: file }: any, idx: number) => ({
         id: file.sha || String(idx),
         title: file.name,
         description: "File from GitHub storage.",
@@ -351,7 +439,17 @@ export default function Dashboard() {
                 <Eye className="h-4 w-4 mr-1 inline-block" />
                 Click to view file
               </span>
-              <span className="ml-2 text-xs text-gray-400 group-hover:text-blue-400 transition-colors">{result.file_name}</span>
+              <button
+                onClick={e => { e.stopPropagation(); toggleBookmark(result) }}
+                disabled={bookmarkLoading === result.url}
+                title={bookmarks.has(result.url) ? "Remove bookmark" : "Save bookmark"}
+                className="ml-2 p-1.5 rounded-lg hover:bg-blue-900/60 transition-colors disabled:opacity-50 cursor-pointer"
+              >
+                {bookmarks.has(result.url)
+                  ? <BookmarkCheck className="h-4 w-4 text-blue-400" />
+                  : <Bookmark className="h-4 w-4 text-gray-400 group-hover:text-blue-300" />
+                }
+              </button>
             </div>
           </div>
         </CardContent>
@@ -370,16 +468,55 @@ export default function Dashboard() {
               <BookOpen className="h-8 w-8 text-blue-500" />
               <h1 className="text-2xl font-extrabold text-white tracking-tight">FAST Notes Hub</h1>
             </div>
-            <div className="flex items-center space-x-6">
+            <div className="flex items-center gap-3">
+              {user && (
+                <button
+                  onClick={() => setShowUploadModal(true)}
+                  className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-3 py-2 font-semibold text-sm shadow transition-all duration-200"
+                >
+                  <Upload className="h-4 w-4" />
+                  <span className="hidden sm:inline">Upload Notes</span>
+                </button>
+              )}
               <a
                 href="https://www.linkedin.com/in/badar-ali-07bb36282/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-gray-900 hover:bg-gray-800 text-blue-400 border border-gray-800 rounded-lg px-3 py-2 sm:px-4 sm:py-2 font-semibold shadow transition-all duration-200 w-full sm:w-auto text-center"
-                style={{ minWidth: "120px" }}
+                className="bg-gray-900 hover:bg-gray-800 text-blue-400 border border-gray-800 rounded-lg px-3 py-2 font-semibold text-sm shadow transition-all duration-200 hidden sm:block"
               >
                 About Developer
               </a>
+              {user ? (
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2">
+                    {user.user_metadata?.avatar_url ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={user.user_metadata.avatar_url} alt="avatar" className="h-6 w-6 rounded-full" referrerPolicy="no-referrer" />
+                    ) : (
+                      <div className="h-6 w-6 rounded-full bg-blue-600 flex items-center justify-center text-xs font-bold text-white">
+                        {(user.user_metadata?.name || user.email || "U")[0].toUpperCase()}
+                      </div>
+                    )}
+                    <span className="text-sm text-white hidden sm:inline max-w-[120px] truncate">
+                      {user.user_metadata?.name || user.email}
+                    </span>
+                  </div>
+                  <button
+                    onClick={signOut}
+                    title="Sign out"
+                    className="p-2 rounded-lg bg-gray-800 border border-gray-700 hover:bg-red-900/40 hover:border-red-700 text-gray-400 hover:text-red-400 transition-all"
+                  >
+                    <LogOut className="h-4 w-4" />
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={() => setShowLoginModal(true)}
+                  className="bg-gray-900 hover:bg-gray-800 text-blue-400 border border-gray-800 rounded-lg px-3 py-2 font-semibold text-sm shadow transition-all duration-200"
+                >
+                  Sign In
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -617,6 +754,107 @@ export default function Dashboard() {
             Download Android APK
           </span>
         </a>
+        {/* ── Login Modal ── */}
+        {showLoginModal && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+            onClick={() => setShowLoginModal(false)}
+          >
+            <div
+              className="bg-gray-900 border border-gray-700 rounded-2xl shadow-2xl w-full max-w-md p-8 relative"
+              onClick={e => e.stopPropagation()}
+            >
+              <button
+                onClick={() => setShowLoginModal(false)}
+                className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
+              >
+                <X className="h-5 w-5" />
+              </button>
+
+              <div className="text-center mb-6">
+                <div className="flex items-center justify-center w-14 h-14 rounded-full bg-blue-600/20 border border-blue-600 mx-auto mb-4">
+                  <Bookmark className="h-7 w-7 text-blue-400" />
+                </div>
+                <h2 className="text-xl font-bold text-white mb-2">Sign in to save bookmarks</h2>
+                <p className="text-gray-400 text-sm">
+                  Sign in with Google to bookmark files and access them anytime.
+                </p>
+              </div>
+
+              <button
+                onClick={signInWithGoogle}
+                className="w-full flex items-center justify-center gap-3 bg-white hover:bg-gray-100 text-gray-900 font-semibold rounded-lg py-3 px-4 transition-all duration-200 shadow-lg"
+              >
+                <svg className="h-5 w-5" viewBox="0 0 24 24">
+                  <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                  <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                  <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+                  <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                </svg>
+                Continue with Google
+              </button>
+
+              <p className="text-center text-xs text-gray-500 mt-4">
+                You can browse all content without signing in. Login is only needed to save bookmarks.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* ── Upload Notes Modal ── */}
+        {showUploadModal && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+            onClick={() => setShowUploadModal(false)}
+          >
+            <div
+              className="bg-gray-900 border border-gray-700 rounded-2xl shadow-2xl w-full max-w-lg p-8 relative"
+              onClick={e => e.stopPropagation()}
+            >
+              <button
+                onClick={() => setShowUploadModal(false)}
+                className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
+              >
+                <X className="h-5 w-5" />
+              </button>
+
+              <div className="text-center mb-6">
+                <div className="flex items-center justify-center w-14 h-14 rounded-full bg-green-600/20 border border-green-600 mx-auto mb-4">
+                  <Upload className="h-7 w-7 text-green-400" />
+                </div>
+                <h2 className="text-xl font-bold text-white mb-2">Upload Notes</h2>
+                <p className="text-gray-400 text-sm">
+                  Share your notes, past papers, or slides with other FAST students. Submissions are reviewed before being published.
+                </p>
+              </div>
+
+              <div className="space-y-1 text-sm bg-gray-800 rounded-xl p-4 mb-6">
+                <p className="font-semibold text-white mb-2">What to include in the form:</p>
+                <ul className="list-disc list-inside space-y-1 text-gray-400">
+                  <li>Subject name &amp; semester number</li>
+                  <li>Google Drive link (set sharing to &ldquo;Anyone with the link&rdquo;)</li>
+                  <li>Your name (optional)</li>
+                </ul>
+              </div>
+
+              <a
+                href="https://forms.gle/YOUR_FORM_ID"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setShowUploadModal(false)}
+                className="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg py-3 px-4 transition-all duration-200 shadow-lg"
+              >
+                <Upload className="h-5 w-5" />
+                Open Submission Form
+              </a>
+
+              <p className="text-center text-xs text-gray-500 mt-4">
+                Opens Google Forms in a new tab. We manually review all submissions.
+              </p>
+            </div>
+          </div>
+        )}
+
         <Analytics />
       </main>
     </div>
