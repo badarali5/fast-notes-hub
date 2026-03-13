@@ -3,6 +3,7 @@ import { useState } from "react"
 import type React from "react"
 
 import { supabase } from "@/lib/supabase"
+import { GITHUB, TABLES } from "@/lib/constants"
 
 export default function UploadPage() {
   const [files, setFiles] = useState<File[]>([])
@@ -85,14 +86,14 @@ export default function UploadPage() {
     try {
       // Constants for GitHub
       const GITHUB_TOKEN = process.env.NEXT_PUBLIC_GITHUB_TOKEN;
-      const GITHUB_REPO = process.env.NEXT_PUBLIC_GITHUB_REPO || "badarali5/fast-notes-hub-main";
-      const GITHUB_BRANCH = process.env.NEXT_PUBLIC_GITHUB_BRANCH || "main";
-      const FILES_PATH = "files"; // The folder in the repo where files will be stored
+      const GITHUB_REPO = process.env.NEXT_PUBLIC_GITHUB_REPO || GITHUB.REPO
+      const GITHUB_BRANCH = process.env.NEXT_PUBLIC_GITHUB_BRANCH || GITHUB.BRANCH
+      const FILES_PATH = GITHUB.FILES_PATH
 
       // 0. Check if uploads table exists and has correct structure
       console.log("🔍 Checking database table structure...")
       const { data: tableCheck, error: tableError } = await supabase
-        .from("uploads")
+        .from(TABLES.UPLOADS)
         .select("id, title, description, subject, semester, type, file_name, url, created_at")
         .limit(1)
 
@@ -175,7 +176,7 @@ export default function UploadPage() {
 
           console.log(`Inserting file categorization:`, fileData)
 
-          const { error: insertError } = await supabase.from("uploads").insert([fileData])
+          const { error: insertError } = await supabase.from(TABLES.UPLOADS).insert([fileData])
 
           if (insertError) {
             console.error(`❌ Database categorization failed for ${file.name}:`, insertError)

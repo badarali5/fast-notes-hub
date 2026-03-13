@@ -7,13 +7,8 @@ import { Analytics } from "@vercel/analytics/react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
-// Import and initialize Supabase client
-import { createClient } from "@supabase/supabase-js"
+import { supabase } from "@/lib/supabase"
 import { subjectFullNames, TABLES, GITHUB } from "@/lib/constants"
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "<YOUR_SUPABASE_URL>"
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "<YOUR_SUPABASE_ANON_KEY>"
-const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 // GitHub repository configuration
 const GITHUB_REPO = GITHUB.REPO

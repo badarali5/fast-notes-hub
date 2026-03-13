@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge"
 import { Analytics } from "@vercel/analytics/react"
 import Fuse from "fuse.js"
 import { supabase } from "@/lib/supabase"
+import { GITHUB } from "@/lib/constants"
 
 interface SearchResult {
   id: string
@@ -23,9 +24,9 @@ interface SearchResult {
 }
 
 // GitHub repository configuration
-const GITHUB_REPO = "badarali5/fast-notes-hub"
-const GITHUB_BRANCH = "main"
-const FILES_PATH = "files"
+const GITHUB_REPO = GITHUB.REPO
+const GITHUB_BRANCH = GITHUB.BRANCH
+const FILES_PATH = GITHUB.FILES_PATH
 
 const semesters = [
   {
@@ -503,7 +504,10 @@ export default function Dashboard() {
               ) : (
                 <button
                   onClick={() => setShowLoginModal(true)}
-                  className="inline-flex items-center gap-2 rounded-xl border border-blue-300/30 bg-gradient-to-r from-blue-600 to-indigo-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-blue-950/40 transition-all duration-200 hover:-translate-y-0.5 hover:from-blue-500 hover:to-indigo-400"
+                  
+                  className="inline-flex items-center gap-2 rounded-xl border border-blue-300/30 bg-gradient-to-r from-blue-600 to-indigo-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-blue-950/40 transition-all duration-200 hover:-translate-y-0.5 hover:from-blue-500 hover:to-indigo-400 hover {cursor: pointer;
+}
+"
                 >
                   <LogIn className="h-4 w-4" />
                   Sign In
