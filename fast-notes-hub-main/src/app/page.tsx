@@ -2,7 +2,7 @@
 
 import React from "react"
 import { useEffect, useMemo, useRef, useState } from "react"
-import { BookOpen, Search, Code, Database, Cpu, File, Eye, Presentation, Bookmark, BookmarkCheck, LogOut, Upload, X } from "lucide-react"
+import { BookOpen, Search, Code, Database, Cpu, File, Eye, Presentation, Bookmark, BookmarkCheck, LogOut, Upload, X, LogIn, ExternalLink } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -460,13 +460,16 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-800">
-      <header className="bg-gray-900 shadow-lg border-b border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div className="relative min-h-screen overflow-x-hidden bg-slate-950">
+      <div className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(circle_at_15%_20%,rgba(37,99,235,0.24),transparent_36%),radial-gradient(circle_at_85%_15%,rgba(6,182,212,0.18),transparent_32%),linear-gradient(180deg,#020617_0%,#0b1120_45%,#111827_100%)]" />
+      <header className="sticky top-0 z-40 border-b border-white/10 bg-slate-950/80 shadow-[0_10px_30px_rgba(2,6,23,0.45)] backdrop-blur-xl">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <BookOpen className="h-8 w-8 text-blue-500" />
-              <h1 className="text-2xl font-extrabold text-white tracking-tight">FAST Notes Hub</h1>
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-blue-400/30 bg-blue-500/10">
+                <BookOpen className="h-6 w-6 text-blue-300" />
+              </div>
+              <h1 className="text-2xl font-extrabold tracking-tight text-white">FAST Notes Hub</h1>
             </div>
             <div className="flex items-center gap-3">
               {user && (
@@ -482,8 +485,9 @@ export default function Dashboard() {
                 href="https://www.linkedin.com/in/badar-ali-07bb36282/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-gray-900 hover:bg-gray-800 text-blue-400 border border-gray-800 rounded-lg px-3 py-2 font-semibold text-sm shadow transition-all duration-200 hidden sm:block"
+                className="hidden sm:inline-flex items-center gap-2 rounded-xl border border-cyan-400/25 bg-cyan-500/10 px-4 py-2 text-sm font-semibold text-cyan-200 shadow-lg shadow-cyan-950/30 transition-all duration-200 hover:-translate-y-0.5 hover:border-cyan-300/40 hover:bg-cyan-500/20"
               >
+                <ExternalLink className="h-4 w-4" />
                 About Developer
               </a>
               {user ? (
@@ -512,8 +516,9 @@ export default function Dashboard() {
               ) : (
                 <button
                   onClick={() => setShowLoginModal(true)}
-                  className="bg-gray-900 hover:bg-gray-800 text-blue-400 border border-gray-800 rounded-lg px-3 py-2 font-semibold text-sm shadow transition-all duration-200"
+                  className="inline-flex items-center gap-2 rounded-xl border border-blue-300/30 bg-gradient-to-r from-blue-600 to-indigo-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-blue-950/40 transition-all duration-200 hover:-translate-y-0.5 hover:from-blue-500 hover:to-indigo-400"
                 >
+                  <LogIn className="h-4 w-4" />
                   Sign In
                 </button>
               )}
@@ -526,7 +531,7 @@ export default function Dashboard() {
         {/* Global Search */}
         <section className="text-center mb-14">
           <h2 className="text-3xl font-bold text-white mb-4">
-            Fast Access for FAST University Students 🚀
+            Fast Access for FAST University Students 
           </h2>
           <p className="text-gray-400 mb-6 text-lg">
             Past papers, notes, slides &ndash; all in one place. Search by keyword or browse by semester.
@@ -773,7 +778,7 @@ export default function Dashboard() {
 
               <div className="text-center mb-6">
                 <div className="flex items-center justify-center w-14 h-14 rounded-full bg-blue-600/20 border border-blue-600 mx-auto mb-4">
-                  <Bookmark className="h-7 w-7 text-blue-400" />
+                  <LogIn className="h-7 w-7 text-blue-400" />
                 </div>
                 <h2 className="text-xl font-bold text-white mb-2">Sign in to unlock bookmarks and uploads</h2>
                 <p className="text-gray-400 text-sm">
