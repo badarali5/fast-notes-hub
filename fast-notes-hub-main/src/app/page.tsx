@@ -775,10 +775,31 @@ export default function Dashboard() {
                 <div className="flex items-center justify-center w-14 h-14 rounded-full bg-blue-600/20 border border-blue-600 mx-auto mb-4">
                   <Bookmark className="h-7 w-7 text-blue-400" />
                 </div>
-                <h2 className="text-xl font-bold text-white mb-2">Sign in to save bookmarks</h2>
+                <h2 className="text-xl font-bold text-white mb-2">Sign in to unlock bookmarks and uploads</h2>
                 <p className="text-gray-400 text-sm">
-                  Sign in with Google to bookmark files and access them anytime.
+                  Signing in with Google lets you save bookmarks and upload past papers, notes, and slides for other students.
                 </p>
+              </div>
+
+              <div className="grid gap-3 mb-6">
+                <div className="rounded-xl border border-gray-800 bg-gray-800/70 p-4 text-left">
+                  <div className="flex items-center gap-2 text-white font-semibold mb-1">
+                    <BookmarkCheck className="h-4 w-4 text-blue-400" />
+                    Enable bookmarks
+                  </div>
+                  <p className="text-sm text-gray-400">
+                    Save useful files and come back to them anytime after login.
+                  </p>
+                </div>
+                <div className="rounded-xl border border-gray-800 bg-gray-800/70 p-4 text-left">
+                  <div className="flex items-center gap-2 text-white font-semibold mb-1">
+                    <Upload className="h-4 w-4 text-green-400" />
+                    Upload study material
+                  </div>
+                  <p className="text-sm text-gray-400">
+                    Share past papers, notes, and slides once you are signed in.
+                  </p>
+                </div>
               </div>
 
               <button
@@ -795,7 +816,7 @@ export default function Dashboard() {
               </button>
 
               <p className="text-center text-xs text-gray-500 mt-4">
-                You can browse all content without signing in. Login is only needed to save bookmarks.
+                You can browse all content without signing in. Login is required to save bookmarks and upload past papers, notes, or slides.
               </p>
             </div>
           </div>
