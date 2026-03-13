@@ -504,10 +504,7 @@ export default function Dashboard() {
               ) : (
                 <button
                   onClick={() => setShowLoginModal(true)}
-                  
-                  className="inline-flex items-center gap-2 rounded-xl border border-blue-300/30 bg-gradient-to-r from-blue-600 to-indigo-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-blue-950/40 transition-all duration-200 hover:-translate-y-0.5 hover:from-blue-500 hover:to-indigo-400 hover {cursor: pointer;
-}
-"
+                  className="inline-flex items-center gap-2 rounded-xl border border-blue-300/30 bg-gradient-to-r from-blue-600 to-indigo-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-blue-950/40 transition-all duration-200 hover:-translate-y-0.5 hover:from-blue-500 hover:to-indigo-400"
                 >
                   <LogIn className="h-4 w-4" />
                   Sign In

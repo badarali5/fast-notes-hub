@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     title: 'FAST Notes Hub',
     description: 'Past papers, notes and slides for FAST University students.',
     url: 'https://fast-notes-hub.vercel.app',
-    images: [{ url: '/og-image.png', width: 1200, height: 630 }],
+    images: [{ url: '/favicon.ico', width: 1200, height: 630 }],
   },
   appleWebApp: {
     capable: true,
