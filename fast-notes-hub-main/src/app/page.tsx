@@ -156,28 +156,15 @@ export default function Dashboard() {
   }, [user])
 
   const signInWithGoogle = async () => {
-    const { data } = await supabase.auth.signInWithOAuth({
+    const redirectOrigin = (process.env.NEXT_PUBLIC_SITE_URL || window.location.origin).replace(/\/$/, "")
+    const nextPath = `${window.location.pathname}${window.location.search}${window.location.hash}`
+
+    await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
-        skipBrowserRedirect: true,
+        redirectTo: `${redirectOrigin}/auth/callback?next=${encodeURIComponent(nextPath)}`,
       },
     })
-    if (data?.url) {
-      const popup = window.open(data.url, "google-signin", "width=500,height=640,left=200,top=100")
-      const interval = setInterval(async () => {
-        try {
-          if (popup?.closed) {
-            clearInterval(interval)
-            const { data: { session } } = await supabase.auth.getSession()
-            if (session?.user) {
-              setUser(session.user)
-              setShowLoginModal(false)
-            }
-          }
-        } catch { clearInterval(interval) }
-      }, 600)
-    }
   }
 
   const signOut = async () => {
